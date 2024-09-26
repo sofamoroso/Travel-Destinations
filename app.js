@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import travelRoutes from './Routes/travelRoutes.js';
+import userRoutes from './Routes/userRoutes.js';
 
 
 // Define __dirname for ES modules
@@ -28,6 +29,7 @@ app.use(express.static('client'));
 
 // Your routes here
 app.use(travelRoutes);
+app.use(userRoutes);
 
 
 // Define routes for different HTML pages
