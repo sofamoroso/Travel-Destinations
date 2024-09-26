@@ -1,5 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -17,6 +19,12 @@ const __dirname = path.dirname(__filename);
 
 // Create Express server
 const app = express();
+
+// Enable CORS
+app.use(cors());
+
+// Middleware to parse cookies
+app.use(cookieParser());
 
 // Middleware to parse JSON bodies
 app.use(express.json());
@@ -43,13 +51,14 @@ app.get('/test', (req, res) => {
 
 
 
+const mongoURI = process.env.NODE_ENV === 'development' ? process.env.MONGO_URI_REMOTE : process.env.MONGO_URI_LOCAL;
 
-
-const mongoURI = process.env.MONGO_URI;
 
 const connectToDatabase = async () => {
     try {
         await mongoose.connect(mongoURI);
+        console.log(mongoURI);
+        
         console.log('Mongoose version:', mongoose.version);
         console.log('Connected to MongoDB successfully');
     } catch (error) {
