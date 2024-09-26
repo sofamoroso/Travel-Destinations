@@ -21,6 +21,12 @@ router.post('/api/users', async (req, res) => {
 
         let { username, password, email } = req.body;
 
+        // Check if the user already exists by email or username
+        const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+        if (existingUser) {
+            return res.status(400).json({ error: 'Username or email already exists' });
+        }
+
         const user = new User({
             username,
             password,
@@ -33,5 +39,8 @@ router.post('/api/users', async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 });
+
+
+
 
 export default router;
