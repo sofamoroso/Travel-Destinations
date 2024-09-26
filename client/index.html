@@ -11,14 +11,12 @@
         margin: 0;
         padding: 0;
         width: 100%;
-        /* height: 100%;
-                /* display: flex;
-                flex-direction: column; */
-        background: linear-gradient(
-          to bottom,
-          #c2e7f5,
-          #93c7fa
-        ); /* Light blue gradient */
+        background: wheat;
+      }
+
+      /* Hidden class */
+      .hidden {
+        display: none !important;
       }
 
       /* Style for main content area */
@@ -66,32 +64,43 @@
         border: none;
         zoom: 1.2;
       }
+
+      /* Style the login message */
+      #login-message {
+        text-align: center;
+        font-size: 18px;
+        margin-top: 50px;
+        color: #f00;
+      }
     </style>
   </head>
   <body>
     <div id="navbar"></div>
 
-    <div id="user-buttons"></div>
+    <div id="user-buttons" class="hidden"></div>
 
-    <!-- Log In -->
-    <div class="login-container">
-      <h2>Login</h2>
-      <form id="loginForm">
-        <div class="input-group">
-          <label for="username">Email or Username</label>
-          <input type="text" id="username" name="username" required />
-        </div>
-        <div class="input-group">
-          <label for="password">Password</label>
-          <input type="password" id="password" name="password" required />
-        </div>
-        <button type="submit">Login</button>
-        <div class="error-message" id="errorMessage"></div>
-      </form>
-      <p class="signup-cta">
-        Not a user? <a href="#" id="openSignupModal">Sign up here</a>
-      </p>
+    <div id="login-message" class="hidden">
+      <div class="login-container">
+        <h2>Login</h2>
+        <form id="loginForm">
+          <div class="input-group">
+            <label for="username">Email or Username</label>
+            <input type="text" id="username" name="username" required />
+          </div>
+          <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required />
+          </div>
+          <button type="submit">Login</button>
+          <div class="error-message" id="errorMessage"></div>
+        </form>
+        <p class="signup-cta">
+          Not a user? <a href="#" id="openSignupModal">Sign up here</a>
+        </p>
+      </div>
     </div>
+
+    >
 
     <!-- Sign Up Modal -->
     <div id="signupModal" class="modal">
@@ -122,7 +131,7 @@
       </div>
     </div>
 
-    <!-- <div class="main-content">
+    <div class="main-content hidden">
       <div id="sidebar" class="sidebar">
         <p id="sidebar-content">Sidebar content</p>
         <button id="close-sidebar-button">Close</button>
@@ -130,9 +139,8 @@
 
       <div class="iframe-container">
         <iframe id="worldMapIframe" src="worldMap.html"></iframe>
-        <object id="worldMapIframe" type="text/html" data="worldMap.html"></object>
       </div>
-    </div> -->
+    </div>
 
     <script type="module">
       import {
@@ -142,8 +150,7 @@
         hideSidebar,
       } from "./utils.js";
 
-      // load users and visited places
-      // Load the navbar when the DOM is fully loaded
+      // Load the navbar, data, and set up iframe communication
       document.addEventListener("DOMContentLoaded", () => {
         loadNavbar();
         loadData();
@@ -169,6 +176,7 @@
       //     iframe.contentWindow.postMessage({ action: 'testing' }, '*');
       // };
     </script>
+
     <script src="users.js"></script>
     <script src="formsHandle.js"></script>
     <script src="visitedPlaces.js"></script>

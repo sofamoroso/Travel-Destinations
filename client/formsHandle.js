@@ -1,4 +1,45 @@
+ // Simulating login status (replace with actual login logic)
+let isLoggedIn = false;
 
+ // Check login status and display appropriate content
+        const mainContent = document.querySelector(".main-content");
+        const loginMessage = document.getElementById("login-message");
+        const userButtons = document.getElementById("user-buttons");
+
+// DEBUG: Ensure we see what's happening in the console
+        console.log("Login status:", isLoggedIn);
+
+        if (isLoggedIn) {
+          console.log("User is logged in, showing content");
+          mainContent.classList.remove("hidden");
+          userButtons.classList.remove("hidden");
+          loginMessage.classList.add("hidden");
+        } else {
+          console.log("User is NOT logged in, showing login message");
+          mainContent.classList.add("hidden");
+          userButtons.classList.add("hidden");
+          loginMessage.classList.remove("hidden");
+        }
+
+// Login
+document.getElementById('loginForm').addEventListener('submit', (event) => {
+    event.preventDefault(); // Prevents the default form submission behavior
+    isLoggedIn = true;
+    console.log('User is logged in:', isLoggedIn);
+    // Additional login logic here
+    if (isLoggedIn) {
+        console.log("User is logged in, showing content");
+        mainContent.classList.remove("hidden");
+        userButtons.classList.remove("hidden");
+        loginMessage.classList.add("hidden");
+      } else {
+        console.log("User is NOT logged in, showing login message");
+        mainContent.classList.add("hidden");
+        userButtons.classList.add("hidden");
+        loginMessage.classList.remove("hidden");
+      }
+  });
+  
 // Modal handling
 const signupModal = document.getElementById('signupModal');
 const openSignupModal = document.getElementById('openSignupModal');
@@ -55,4 +96,5 @@ document.getElementById('signupForm').addEventListener('submit', async (event) =
         signupErrorMessage.style.display = 'block';
     }
 });
+
 
