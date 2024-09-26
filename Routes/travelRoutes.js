@@ -2,11 +2,10 @@ import Router from 'express';
 
 const router = Router();
 
-
 import TravelDestination from '../Model/TravelDestination.js';
 
 
-// Get all activities
+// Get all destinations
 router.get('/api/travel-destinations', async (req, res) => {
     try {
         const destinations = await TravelDestination.find();

@@ -34,18 +34,4 @@ router.post('/api/users', async (req, res) => {
     }
 });
 
-
-// // Delete a student
-// router.delete('/api/students/:id', async (req, res) => {
-//     try {
-//         const removedStudent = await Student.findByIdAndDelete({ _id: req.params.id });
-//         res.status(200).json(removedStudent);
-//     } catch (error) {
-//         res.status(400).json({ error: error.message });
-//     }
-// });
-
-
-
-
 export default router;
