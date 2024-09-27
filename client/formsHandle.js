@@ -1,5 +1,5 @@
  // Simulating login status (replace with actual login logic)
-let isLoggedIn = false;
+let isLoggedIn = true;
 
  // Check login status and display appropriate content
         const mainContent = document.querySelector(".main-content");

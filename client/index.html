@@ -1,184 +1,206 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>My HTML Page</title>
-    <link rel="stylesheet" href="./styles/form.css" />
+    <html>
+      <head>
+        <title>My HTML Page</title>
+        <link rel="stylesheet" href="./styles/form.css" />
 
-    <style>
-      /* Ensure the HTML and body take the full height of the viewport */
-      html,
-      body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        background: wheat;
-      }
+        <style>
+            /* Ensure the HTML and body take the full height of the viewport */
+            html,
+            body {
+                background: wheat;
+            }
+          
+            /* Style for sidebar */
+            .right-sidebar {
+                width: 300px;
+                background-color: #edf1f1;
+                padding: 1rem;
+                height: 100vh; /* Full window height */
+                position: fixed;
+                top: 0;
+                right: -400px; /* Initially hidden off-screen */
+                z-index: 1000;
+                transition: right 0.3s ease; /* Transition effect */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                opacity: 0.7;
+            }
 
-      /* Hidden class */
-      .hidden {
-        display: none !important;
-      }
+            .right-sidebar.show {
+                right: 0; /* Slide in */
+            }
 
-      /* Style for main content area */
-      .main-content {
-        display: flex;
-        flex: 1;
-        overflow: hidden;
-      }
+            /* Style for main content area */
+            .main-content {
+                display: flex;
+                flex: 1;
+                overflow: hidden;
+                /* border: 1px solid #000; */
 
-      /* Style for sidebar */
-      .sidebar {
-        width: 300px;
-        background-color: #edf1f1;
-        padding: 1rem;
-        height: 100vh; /* Full window height */
-        position: fixed;
-        top: 0;
-        right: -400px; /* Initially hidden off-screen */
-        z-index: 1000;
-        transition: right 0.3s ease; /* Transition effect */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        opacity: 0.7;
-      }
+            }
 
-      .sidebar.show {
-        right: 0; /* Slide in */
-      }
+            /* Style for iframe container */
+            .iframe-container {
+                flex: 1;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                overflow: hidden;
+                width: 100%;
+                height: calc(100vh - 100px); /* Adjust height based on navbar height */
+                padding: 2rem;
+                box-sizing: border-box;
+            }
 
-      /* Style for iframe container */
-      .iframe-container {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: auto;
-      }
+            /* Style for iframe */
+            iframe{
+                /* width: 1100px;
+                height: 650px;*/
+                width: 100%;
+                height: 100%;
+                border: none;
+            }
 
-      /* Style for iframe */
-      iframe {
-        margin-top: 2rem;
-        width: 1100px;
-        height: 700px;
-        border: none;
-        zoom: 1.2;
-      }
+            .left-sidebar {
+                top: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                height: calc(100vh - 100px);
+                /* border: 2px solid black; */
+            }
 
-      /* Style the login message */
-      #login-message {
-        text-align: center;
-        font-size: 18px;
-        margin-top: 50px;
-        color: #f00;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="navbar"></div>
+            /* Modal styles */
+            dialog {
+                border: none;
+                border-radius: 5px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                padding: 20px;
+                width: 80%;
+                max-width: 500px;
+                margin: auto;
+            }
 
-    <div id="user-buttons" class="hidden"></div>
+            dialog::backdrop {
+                background: rgba(0, 0, 0, 0.4);
+            }
 
-    <div id="login-message" class="hidden">
-      <div class="login-container">
-        <h2>Login</h2>
-        <form id="loginForm">
-          <div class="input-group">
-            <label for="username">Email or Username</label>
-            <input type="text" id="username" name="username" required />
-          </div>
-          <div class="input-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required />
-          </div>
-          <button type="submit">Login</button>
-          <div class="error-message" id="errorMessage"></div>
-        </form>
-        <p class="signup-cta">
-          Not a user? <a href="#" id="openSignupModal">Sign up here</a>
-        </p>
-      </div>
-    </div>
+            .rounded {
+                border-radius: 8px;
+            }
 
-    >
+            /* Blur effect */
+            .blur {
+                filter: blur(5px);
+                pointer-events: none; /* Prevent interaction with blurred content */
+            }
 
-    <!-- Sign Up Modal -->
-    <div id="signupModal" class="modal">
-      <div class="modal-content">
-        <span class="close" id="closeModal">&times;</span>
-        <h2>Sign Up</h2>
-        <form id="signupForm">
-          <div class="input-group">
-            <label for="signupUsername">Username</label>
-            <input type="text" id="signupUsername" name="username" required />
-          </div>
-          <div class="input-group">
-            <label for="signupEmail">Email</label>
-            <input type="email" id="signupEmail" name="email" required />
-          </div>
-          <div class="input-group">
-            <label for="signupPassword">Password</label>
-            <input
-              type="password"
-              id="signupPassword"
-              name="password"
-              required
-            />
-          </div>
-          <button type="submit">Sign Up</button>
-          <div class="error-message" id="signupErrorMessage"></div>
-        </form>
-      </div>
-    </div>
+        </style>
+      </head>
+        <body>
+            <div id="navbar"></div>
 
-    <div class="main-content hidden">
-      <div id="sidebar" class="sidebar">
-        <p id="sidebar-content">Sidebar content</p>
-        <button id="close-sidebar-button">Close</button>
-      </div>
+            <dialog id="modal" class="rounded" onkeydown="if (event.key === 'Escape') event.preventDefault();">
+                <h1>Login!</h1>
+                <p>Please enter your username and password to log in.</p>
+                <form id="loginForm">
+                    <div>
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                    </div>
+                    <div>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                    </div>
+                    <div>
+                    <button type="submit">Login</button>
+                    <button type="button" id="registerButton">No account? - Register</button>
+                    </div>
+                </form>
+            </dialog>
 
-      <div class="iframe-container">
-        <iframe id="worldMapIframe" src="worldMap.html"></iframe>
-      </div>
-    </div>
+            <dialog id="registerModal" class="rounded" onkeydown="if (event.key === 'Escape') event.preventDefault();">
+                <h1>Register</h1>
+                <p>Please enter your details to register.</p>
+                <form id="registerForm">
+                <div>
+                    <label for="regUsername">Username:</label>
+                    <input type="text" id="regUsername" name="regUsername" required>
+                </div>
+                <div>
+                    <label for="regPassword">Password:</label>
+                    <input type="password" id="regPassword" name="regPassword" required>
+                </div>
+                <div>
+                    <label for="regEmail">Email:</label>
+                    <input type="email" id="regEmail" name="regEmail" required>
+                </div>
+                <div>
+                    <button type="submit">Register</button>
+                </div>
+                </form>
+            </dialog>
+    
+          
+        
+            <div class="left-sidebar">
+                <div id="user-buttons"></div>    
+            </div>
+       
+            <div class="main-content">
+                <div id="right-sidebar" class="right-sidebar">
+                    <p id="sidebar-content">Sidebar content</p>
+                <button id="close-sidebar-button">Close</button>
+            </div>
+
+            <div class="iframe-container">
+                <iframe id="worldMapIframe" src="worldMap.html"></iframe>
+                <!-- <object id="worldMapIframe" type="image/svg+xml" data="worldMap.svg"></object> -->
+                </div>
+            </div>
+    
 
     <script type="module">
-      import {
-        loadNavbar,
-        loadData,
-        showSidebar,
-        hideSidebar,
-      } from "./utils.js";
+        import {
+            loadNavbar,
+            loadData,
+            showSidebar,
+            hideSidebar,
+        } from "./utils.js";
 
-      // Load the navbar, data, and set up iframe communication
-      document.addEventListener("DOMContentLoaded", () => {
-        loadNavbar();
-        loadData();
 
-        // Attach the hideSidebar function to the button
-        document
-          .getElementById("close-sidebar-button")
-          .addEventListener("click", hideSidebar);
-      });
+        // Load the navbar, data, and set up iframe communication
+        document.addEventListener("DOMContentLoaded", () => {
+            loadNavbar();
+            loadData();
 
-      // Listen for messages from the iframe (gets info about the path clicked)
-      window.addEventListener("message", (event) => {
-        console.log("Message received from MAP:", event.data);
-        if (event.data && event.data.pathId) {
-          showSidebar(event.data.pathId);
-        }
-      });
+            // Attach the hideSidebar function to the button
+            document
+            .getElementById("close-sidebar-button")
+            .addEventListener("click", hideSidebar);
+        });
 
-      // Send a  test message to the iframe
-      // const iframe = document.getElementById('worldMapIframe');
-      // iframe.onload = () => {
-      //     console.log('Iframe loaded, sending a test message to child html');
-      //     iframe.contentWindow.postMessage({ action: 'testing' }, '*');
-      // };
+        // Listen for messages from the iframe (gets info about the path clicked)
+        window.addEventListener("message", (event) => {
+            console.log("Message received from MAP:", event.data);
+            if (event.data && event.data.pathId) {
+            showSidebar(event.data.pathId);
+            }
+        });
+        
+
+        // Send a  test message to the iframe
+        // const iframe = document.getElementById('worldMapIframe');
+        // iframe.onload = () => {
+        //     console.log('Iframe loaded, sending a test message to child html');
+        //     iframe.contentWindow.postMessage({ action: 'testing' }, '*');
+        // };
     </script>
 
+    <script src="authHandler.js"></script>
     <script src="users.js"></script>
-    <script src="formsHandle.js"></script>
     <script src="visitedPlaces.js"></script>
   </body>
 </html>

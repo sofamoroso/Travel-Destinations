@@ -34,7 +34,7 @@ function loadData() {
 function showSidebar(pathId) {
     console.log(pathId);
 
-    const sidebar = document.getElementById('sidebar');
+    const sidebar = document.getElementById('right-sidebar');
     const sidebarContent = document.getElementById('sidebar-content');
     sidebarContent.textContent = `You clicked on ${pathId}`;
     sidebar.classList.add('show');
@@ -42,7 +42,7 @@ function showSidebar(pathId) {
 }
 
 function hideSidebar() {
-    const sidebar = document.getElementById('sidebar');
+    const sidebar = document.getElementById('right-sidebar');
     sidebar.classList.remove('show');
 }
 
