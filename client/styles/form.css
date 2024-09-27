@@ -1,116 +1,143 @@
-/* styles.css */
-
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f0f2f5;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
+/* Define color variables */
+:root {
+  --primary-color: #3498db; /* Bright blue */
+  --primary-hover-color: #2980b9; /* Darker blue for hover */
+  --secondary-color: #2ecc71; /* Fresh green */
+  --secondary-hover-color: #27ae60; /* Darker green for hover */
+  --accent-color: #f39c12; /* Vibrant orange */
+  --accent-hover-color: #e67e22; /* Darker orange for hover */
+  --background-color: #ecf0f1; /* Light gray for background */
+  --text-color: #2c3e50; /* Dark gray for text */
+  --input-bg-color: #fff; /* White background for input */
+  --input-border-color: #bdc3c7; /* Light gray border for input */
+  --error-color: #e74c3c; /* Bright red for error messages */
 }
 
-.login-container {
-  background-color: #fff;
-  padding: 20px 40px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  max-width: 400px;
+/* Centered modal container styling */
+.modal {
+  border: none;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
+  background-color: var(--background-color);
   width: 100%;
+  max-width: 20%;
+  max-height: 80vh;
+  overflow-y: auto; /* Allows scroll if content overflows */
+  position: fixed;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
 
-h2 {
-  margin-bottom: 20px;
+.modal::backdrop {
+  background: rgba(0, 0, 0, 0.6); /* Slightly darker backdrop */
+}
+
+/* Modal heading styling */
+h1 {
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+  color: var(--text-color);
   text-align: center;
-  color: #333;
+  font-weight: 800;
 }
 
+/* Input group styling */
 .input-group {
-  margin-bottom: 15px;
+  margin-bottom: 0.8rem; /* Reduced margin for compactness */
 }
 
 .input-group label {
   display: block;
-  margin-bottom: 5px;
-  color: #555;
+  margin-bottom: 3px;
+  color: var(--text-color);
+  font-size: 0.85rem;
+  font-weight: 500;
 }
 
 .input-group input {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  box-sizing: border-box;
+  padding: 0.5rem;
+  border: 1px solid var(--input-border-color);
+  background-color: var(--input-bg-color);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: border-color 0.2s;
 }
 
+.input-group input:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+/* Button styling */
 button {
   width: 100%;
   padding: 10px;
-  background-color: #007bff;
+  background-color: var(--primary-color);
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease, transform 0.1s;
+  margin-top: 0.5rem; /* Spacing between buttons */
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: var(--primary-hover-color);
+  transform: translateY(-1px); /* Slight hover lift effect */
 }
 
-.error-message {
-  color: red;
+button:active {
+  transform: translateY(1px); /* Pressed effect */
+}
+
+/* Styling for the "No account? Register" link */
+.signup-cta {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 0.9rem;
+}
+
+.signup-cta a {
+  color: var(--accent-color);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.signup-cta a:hover {
+  text-decoration: underline; /* Underline on hover */
+  color: var(--accent-hover-color);
+}
+
+#error-message {
+  color: var(--error-color);
   margin-top: 10px;
   text-align: center;
   display: none;
 }
 
-/* Modal styles */
-.modal {
-  display: none; /* Hidden by default */
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
-}
-
+/* Centering content */
 .modal-content {
-  background-color: #fff;
-  margin: 10% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-  max-width: 400px;
-  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .modal {
+    width: 95%;
+    padding: 1rem;
+  }
 
-.close:hover,
-.close:focus {
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
-}
+  h1 {
+    font-size: 1.1rem;
+  }
 
-.signup-cta {
-  text-align: center;
-  margin-top: 15px;
-}
-
-.signup-cta a {
-  color: #007bff;
-  text-decoration: none;
-}
-
-.signup-cta a:hover {
-  text-decoration: underline;
+  button {
+    padding: 0.7rem;
+  }
 }
