@@ -1,206 +1,263 @@
 <!DOCTYPE html>
-    <html>
-      <head>
-        <title>My HTML Page</title>
-        <link rel="stylesheet" href="./styles/form.css" />
+<html>
+  <head>
+    <title>My HTML Page</title>
+    <link rel="stylesheet" href="./styles/form.css" />
+    <link rel="stylesheet" href="./styles/addDestination.css" />
 
-        <style>
-            /* Ensure the HTML and body take the full height of the viewport */
-            html,
-            body {
-                background: wheat;
-            }
-          
-            /* Style for sidebar */
-            .right-sidebar {
-                width: 300px;
-                background-color: #edf1f1;
-                padding: 1rem;
-                height: 100vh; /* Full window height */
-                position: fixed;
-                top: 0;
-                right: -400px; /* Initially hidden off-screen */
-                z-index: 1000;
-                transition: right 0.3s ease; /* Transition effect */
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                opacity: 0.7;
-            }
+    <style>
+      /* Ensure the HTML and body take the full height of the viewport */
+      html,
+      body {
+        background: wheat;
+      }
 
-            .right-sidebar.show {
-                right: 0; /* Slide in */
-            }
+      /* Style for sidebar */
+      .right-sidebar {
+        width: 300px;
+        background-color: #edf1f1;
+        padding: 1rem;
+        height: 100vh; /* Full window height */
+        position: fixed;
+        top: 0;
+        right: -400px; /* Initially hidden off-screen */
+        z-index: 1000;
+        transition: right 0.3s ease; /* Transition effect */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0.7;
+      }
 
-            /* Style for main content area */
-            .main-content {
-                display: flex;
-                flex: 1;
-                overflow: hidden;
-                border: 1px solid #000;
+      .right-sidebar.show {
+        right: 0; /* Slide in */
+      }
 
-            }
+      /* Style for main content area */
+      .main-content {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+        border: 1px solid #000;
+      }
 
-            /* Style for iframe container */
-            .iframe-container {
-                flex: 1;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                overflow: hidden;
-                width: 100%;
-                height: calc(100vh - 100px); /* Adjust height based on navbar height */
-                padding: 2rem;
-                box-sizing: border-box;
-            }
+      /* Style for iframe container */
+      .iframe-container {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        width: 100%;
+        height: calc(100vh - 100px); /* Adjust height based on navbar height */
+        padding: 2rem;
+        box-sizing: border-box;
+      }
 
-            /* Style for iframe */
-            iframe{
-                /* width: 1100px;
+      /* Style for iframe */
+      iframe {
+        /* width: 1100px;
                 height: 650px;*/
-                width: 100%;
-                height: 100%;
-                border: none;
-            }
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
 
-            .left-sidebar {
-                top: 0;
-                display: flex;
-                flex-direction: column;
-                align-items: flex-start;
-                height: calc(100vh - 100px);
-                /* border: 2px solid black; */
-            }
+      .left-sidebar {
+        top: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        height: calc(100vh - 100px);
+        /* border: 2px solid black; */
+      }
 
-            /* Modal styles */
-            dialog {
-                border: none;
-                border-radius: 5px;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                padding: 20px;
-                width: 80%;
-                max-width: 500px;
-                margin: auto;
-            }
+      /* Modal styles */
+      dialog {
+        border: none;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: 80%;
+        max-width: 500px;
+        margin: auto;
+      }
 
-            dialog::backdrop {
-                background: rgba(0, 0, 0, 0.4);
-            }
+      dialog::backdrop {
+        background: rgba(0, 0, 0, 0.4);
+      }
 
-            .rounded {
-                border-radius: 8px;
-            }
+      .rounded {
+        border-radius: 8px;
+      }
 
-            /* Blur effect */
-            .blur {
-                filter: blur(5px);
-                pointer-events: none; /* Prevent interaction with blurred content */
-            }
+      /* Blur effect */
+      .blur {
+        filter: blur(5px);
+        pointer-events: none; /* Prevent interaction with blurred content */
+      }
+      /* Styling for destination dialog */
+      #destinationDialog {
+        padding: 20px;
+        width: 600px;
+        height: 700px; /* Increase the height */
+        max-width: 90vw;
+        max-height: 90vh;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* Distribute space */
+      }
+    </style>
+  </head>
+  <body>
+    <div id="navbar"></div>
 
-        </style>
-      </head>
-        <body>
-            <div id="navbar"></div>
+    <dialog
+      id="modal"
+      class="rounded"
+      onkeydown="if (event.key === 'Escape') event.preventDefault();"
+    >
+      <h1>Login!</h1>
+      <p>Please enter your username and password to log in.</p>
+      <form id="loginForm">
+        <div>
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" required />
+        </div>
+        <div>
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <div>
+          <button type="submit">Login</button>
+          <button type="button" id="registerButton">
+            No account? - Register
+          </button>
+        </div>
+      </form>
+    </dialog>
 
-            <dialog id="modal" class="rounded" onkeydown="if (event.key === 'Escape') event.preventDefault();">
-                <h1>Login!</h1>
-                <p>Please enter your username and password to log in.</p>
-                <form id="loginForm">
-                    <div>
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" required>
-                    </div>
-                    <div>
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
-                    </div>
-                    <div>
-                    <button type="submit">Login</button>
-                    <button type="button" id="registerButton">No account? - Register</button>
-                    </div>
-                </form>
-            </dialog>
+    <dialog
+      id="registerModal"
+      class="rounded"
+      onkeydown="if (event.key === 'Escape') event.preventDefault();"
+    >
+      <h1>Register</h1>
+      <p>Please enter your details to register.</p>
+      <form id="registerForm">
+        <div>
+          <label for="regUsername">Username:</label>
+          <input type="text" id="regUsername" name="regUsername" required />
+        </div>
+        <div>
+          <label for="regPassword">Password:</label>
+          <input type="password" id="regPassword" name="regPassword" required />
+        </div>
+        <div>
+          <label for="regEmail">Email:</label>
+          <input type="email" id="regEmail" name="regEmail" required />
+        </div>
+        <div>
+          <button type="submit">Register</button>
+        </div>
+      </form>
+    </dialog>
 
-            <dialog id="registerModal" class="rounded" onkeydown="if (event.key === 'Escape') event.preventDefault();">
-                <h1>Register</h1>
-                <p>Please enter your details to register.</p>
-                <form id="registerForm">
-                <div>
-                    <label for="regUsername">Username:</label>
-                    <input type="text" id="regUsername" name="regUsername" required>
-                </div>
-                <div>
-                    <label for="regPassword">Password:</label>
-                    <input type="password" id="regPassword" name="regPassword" required>
-                </div>
-                <div>
-                    <label for="regEmail">Email:</label>
-                    <input type="email" id="regEmail" name="regEmail" required>
-                </div>
-                <div>
-                    <button type="submit">Register</button>
-                </div>
-                </form>
-            </dialog>
-    
-          
-        
-            <div class="left-sidebar">
-                <div id="user-buttons"></div>    
-            </div>
-       
-            <div class="main-content">
-                <div id="right-sidebar" class="right-sidebar">
-                    <p id="sidebar-content">Sidebar content</p>
-                <button id="close-sidebar-button">Close</button>
-            </div>
+    <!-- Destination dialog -->
+    <dialog id="addDestinationDialog">
+      <form id="addDestinationForm">
+        <h3>Add a new travel destination</h3>
 
-            <div class="iframe-container">
-                <iframe id="worldMapIframe" src="worldMap.html"></iframe>
-                <!-- <object id="worldMapIframe" type="image/svg+xml" data="worldMap.svg"></object> -->
-                </div>
-            </div>
-    
+        <label for="country">Country:</label>
+        <select id="country" name="country" required></select>
+
+        <label for="city">City:</label>
+        <input type="text" id="city" name="city" required />
+
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required />
+
+        <label for="description">Description:</label>
+        <textarea
+          id="description"
+          name="description"
+          rows="3"
+          required
+        ></textarea>
+
+        <label for="rating">Rating:</label>
+        <div id="stars" data-rating="0">
+          <span class="star" data-value="1">★</span>
+          <span class="star" data-value="2">★</span>
+          <span class="star" data-value="3">★</span>
+          <span class="star" data-value="4">★</span>
+          <span class="star" data-value="5">★</span>
+        </div>
+        <input type="hidden" id="rating" name="rating" value="0" />
+
+        <button type="submit">Add</button>
+        <button id="addDestinationDialogClose">Close</button>
+      </form>
+    </dialog>
+
+    <div class="left-sidebar">
+      <div id="user-buttons"></div>
+      <button id="openDestinationDialog">Add New Destination</button>
+    </div>
+
+    <div class="main-content">
+      <div id="right-sidebar" class="right-sidebar">
+        <p id="sidebar-content">Sidebar content</p>
+        <button id="close-sidebar-button">Close</button>
+      </div>
+
+      <div class="iframe-container">
+        <iframe id="worldMapIframe" src="worldMap.html"></iframe>
+        <!-- <object id="worldMapIframe" type="image/svg+xml" data="worldMap.svg"></object> -->
+      </div>
+    </div>
 
     <script type="module">
-        import {
-            loadNavbar,
-            loadData,
-            showSidebar,
-            hideSidebar,
-        } from "./utils.js";
+      import {
+        loadNavbar,
+        loadData,
+        showSidebar,
+        hideSidebar,
+      } from "./utils.js";
 
+      // Load the navbar, data, and set up iframe communication
+      document.addEventListener("DOMContentLoaded", () => {
+        loadNavbar();
+        loadData();
 
-        // Load the navbar, data, and set up iframe communication
-        document.addEventListener("DOMContentLoaded", () => {
-            loadNavbar();
-            loadData();
+        // Attach the hideSidebar function to the button
+        document
+          .getElementById("close-sidebar-button")
+          .addEventListener("click", hideSidebar);
+      });
 
-            // Attach the hideSidebar function to the button
-            document
-            .getElementById("close-sidebar-button")
-            .addEventListener("click", hideSidebar);
-        });
+      // Listen for messages from the iframe (gets info about the path clicked)
+      window.addEventListener("message", (event) => {
+        console.log("Message received from MAP:", event.data);
+        if (event.data && event.data.pathId) {
+          showSidebar(event.data.pathId);
+        }
+      });
 
-        // Listen for messages from the iframe (gets info about the path clicked)
-        window.addEventListener("message", (event) => {
-            console.log("Message received from MAP:", event.data);
-            if (event.data && event.data.pathId) {
-            showSidebar(event.data.pathId);
-            }
-        });
-        
-
-        // Send a  test message to the iframe
-        // const iframe = document.getElementById('worldMapIframe');
-        // iframe.onload = () => {
-        //     console.log('Iframe loaded, sending a test message to child html');
-        //     iframe.contentWindow.postMessage({ action: 'testing' }, '*');
-        // };
+      // Send a  test message to the iframe
+      // const iframe = document.getElementById('worldMapIframe');
+      // iframe.onload = () => {
+      //     console.log('Iframe loaded, sending a test message to child html');
+      //     iframe.contentWindow.postMessage({ action: 'testing' }, '*');
+      // };
     </script>
 
     <script src="authHandler.js"></script>
     <script src="users.js"></script>
     <script src="visitedPlaces.js"></script>
+    <script src="addDestination.js"></script>
   </body>
 </html>
