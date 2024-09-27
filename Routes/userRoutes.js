@@ -79,17 +79,11 @@ router.post("/api/login", async (req, res) => {
                 { expiresIn: "5h" }
             );
 
-            // create cookie
-            res.cookie('jwt-TravelDestination', token, {
-                httpOnly: true,
-                maxAge: 5 * 60 * 60 * 1000 // 5 hours
-                
-            })
-    
-            
-            return res.status(200).json(user);
+  
+            const { password, ...userWithoutPassword } = user._doc;
+            return res.status(200).json({...userWithoutPassword, token});
         }
-        return res.status(400).send("Invalid Credentials");
+        return res.status(400).json({ message: "Invalid Credentials" });
     } catch (error) {
         return res.status(400).json({ error: error.message })
     }    

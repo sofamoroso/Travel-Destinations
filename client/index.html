@@ -8,7 +8,7 @@
             /* Ensure the HTML and body take the full height of the viewport */
             html,
             body {
-                background: wheat;
+                background: linear-gradient(to bottom, #c2e7f5, #93c7fa); /* Light blue gradient */
             }
           
             /* Style for sidebar */
@@ -169,7 +169,8 @@
             showSidebar,
             hideSidebar,
         } from "./utils.js";
-
+        
+        // TO DO: Call the API that returns the user's authentication status based on the presence of the token
 
         // Load the navbar, data, and set up iframe communication
         document.addEventListener("DOMContentLoaded", () => {

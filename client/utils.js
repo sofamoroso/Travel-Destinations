@@ -1,3 +1,6 @@
+// Define global variables
+// window.globalUsername = null;
+
 // Function to load the navbar
 function loadNavbar() {
     fetch('navbar.html')
