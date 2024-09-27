@@ -1,40 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Navbar</title>
     <style>
-        .navbar {
-            /* height: 30px;
-            background-color: #6e6b6b;
-            color: white;
-            display: flex;
-            align-items: center;
-            padding: 0 20px; */
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background-color: #a59f9f;
-            color: white;
-            padding: 10px 0;
-            text-align: center;
-            opacity: 0.7;
-            z-index: 1000; /* Ensure it stays on top of other elements */
-        }
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-        }
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      img {
+        height: 2rem; /* Adjusted height for better visibility */
+        margin-right: 10px; /* Space between logo and title */
+      }
+
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: var(--primary-color);
+        color: white;
+        padding: 0.2rem 1rem;
+        opacity: 0.9;
+        z-index: 1000;
+        box-sizing: border-box; /* Include padding in total width */
+      }
+
+      .navbar-left {
+        display: flex;
+        align-items: center; /* Center items vertically in the left section */
+      }
+
+      .navbar-right {
+        display: flex; /* Use flexbox for right section */
+        align-items: center; /* Center items vertically */
+      }
+
+      .navbar a {
+        color: white;
+        text-decoration: none;
+        margin: 0 15px; /* Space between links */
+        font-weight: bold; /* Make text bold */
+      }
+
+      .navbar button {
+        background-color: var(
+          --accent-color
+        ); /* Use a variable for button color */
+        color: white;
+        border: none;
+        border-radius: 5px; /* Rounded corners */
+        padding: 5px 10px; /* Button padding */
+        cursor: pointer; /* Change cursor on hover */
+      }
+
+      .navbar button:hover {
+        background-color: var(--accent-hover-color); /* Darker on hover */
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="navbar">
+      <div class="navbar-left">
+        <img src="assets/globe.png" alt="logo" />
+        <h3>Pin it!</h3>
+      </div>
+      <div class="navbar-right">
         <a href="/">Home</a>
         <a href="/test">Test</a>
         <a href="#contact">Contact</a>
+        <button id="logoutButton">Logout</button>
+      </div>
     </div>
-</body>
+
+    <script>
+      // Get the logout button element
+      const logoutButton = document.getElementById("logoutButton");
+
+      // Handle logout functionality
+      logoutButton.addEventListener("click", function (event) {
+        event.preventDefault(); // Prevent default anchor link behavior
+        localStorage.removeItem("loggedIn"); // Remove logged-in status from localStorage
+        loggedIn = false; // Set loggedIn variable to false
+
+        // Show the login modal again and blur the background
+        loginModal.showModal();
+        leftSidebar.classList.add("blur");
+        mainContent.classList.add("blur");
+      });
+    </script>
+  </body>
 </html>

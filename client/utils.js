@@ -4,6 +4,15 @@ function loadNavbar() {
         .then(response => response.text())
         .then(data => {
             document.getElementById('navbar').innerHTML = data;
+
+            // Attach logout event listener after the navbar has been loaded
+            const logoutButton = document.getElementById("logoutButton");
+            if (logoutButton) {
+                logoutButton.addEventListener('click', (event) => {
+                    event.preventDefault(); // Prevent default link behavior
+                    handleLogout(); // Call the global logout function
+                });
+            }
         })
         .catch(error => console.error('Error loading navbar:', error));
 }

@@ -44,6 +44,9 @@ loginForm.addEventListener('submit', function(event) {
         console.log('User logged in:', { username, password });
         loggedIn = true;
         loginModal.close();
+        
+        leftSidebar.classList.remove('blur');
+        mainContent.classList.remove('blur');
     } else {
         alert("Please fill in both fields.");
     }
@@ -65,6 +68,7 @@ registerForm.addEventListener('submit', function(event) {
         alert("Please fill in all fields.");
     }
 });
+
 
 // If the user presses "Escape" on the register modal, bring them back to the login modal
 registerModal.addEventListener('cancel', function() {

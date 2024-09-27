@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>My HTML Page</title>
+    <link rel="stylesheet" href="./styles/variables.css" />
     <link rel="stylesheet" href="./styles/form.css" />
     <link rel="stylesheet" href="./styles/index.css" />
   </head>
@@ -79,11 +80,28 @@
         showSidebar,
         hideSidebar,
       } from "./utils.js";
+      let loggedIn = false;
+
+      // Function to handle logout
+      window.handleLogout = function () {
+        loggedIn = false; // Set loggedIn variable to false
+        localStorage.removeItem("loggedIn"); // Clear logged-in state
+        loginModal.showModal(); // Show the login modal again
+        leftSidebar.classList.add("blur"); // Add blur effect
+        mainContent.classList.add("blur");
+      };
 
       // Load the navbar, data, and set up iframe communication
       document.addEventListener("DOMContentLoaded", () => {
         loadNavbar();
         loadData();
+
+        // Show login modal if not logged in
+        if (!loggedIn) {
+          loginModal.showModal();
+          leftSidebar.classList.add("blur");
+          mainContent.classList.add("blur");
+        }
 
         // Attach the hideSidebar function to the button
         document
@@ -91,13 +109,21 @@
           .addEventListener("click", hideSidebar);
       });
 
-      // Listen for messages from the iframe (gets info about the path clicked)
+      // Listen for messages from the iframe
       window.addEventListener("message", (event) => {
         console.log("Message received from MAP:", event.data);
         if (event.data && event.data.pathId) {
           showSidebar(event.data.pathId);
         }
       });
+
+      // Optional: Persist the loggedIn state using localStorage
+      if (localStorage.getItem("loggedIn") === "true") {
+        loggedIn = true;
+        loginModal.close();
+        leftSidebar.classList.remove("blur");
+        mainContent.classList.remove("blur");
+      }
 
       // Send a  test message to the iframe
       // const iframe = document.getElementById('worldMapIframe');
