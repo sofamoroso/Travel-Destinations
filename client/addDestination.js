@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const addDestination = async (country, city, date, description, rating) => {
         //Get user id from session storage
-        const userId = sessionStorage.getItem("_id");
+        const userId = sessionStorage.getItem("logged-_id");
 
         try {
             const response = await fetch("/api/travel-destinations", {
@@ -48,6 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 addDestinationDialog.close();
                 alert(`Destination added ${country}`);
                 console.log("Destination added:", data);
+                location.reload();
             } else {
                 console.error("Error adding destination:", data);
             }

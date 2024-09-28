@@ -127,6 +127,11 @@
         flex-direction: column;
         justify-content: space-between; /* Distribute space */
       }
+
+      #user-buttons button.active {
+        background-color: rgb(69, 121, 27);
+      }
+      
     </style>
   </head>
   <body>
@@ -240,34 +245,36 @@
     <script type="module">
         import {
             loadNavbar,
-            loadData,
+            loadData2,
             showSidebar,
             hideSidebar,
         } from "./utils.js";
         
-        // TO DO: Call the API that returns the user's authentication status based on the presence of the token
+        const iframe = document.getElementById('worldMapIframe');
 
-      // Load the navbar, data, and set up iframe communication
-      document.addEventListener("DOMContentLoaded", () => {
-        loadNavbar();
-        loadData();
+        // Load the navbar, data, and set up iframe communication
+        document.addEventListener("DOMContentLoaded", () => {
+            loadNavbar();
+            loadData2();  
+        });
 
         // Attach the hideSidebar function to the button
-        document
-          .getElementById("close-sidebar-button")
-          .addEventListener("click", hideSidebar);
-      });
+        document.getElementById("close-sidebar-button").addEventListener("click", () => {
+            hideSidebar();
+            console.log("Close button clicked");
 
-      // Listen for messages from the iframe (gets info about the path clicked)
-      window.addEventListener("message", (event) => {
-        console.log("Message received from MAP:", event.data);
-        if (event.data && event.data.pathId) {
-          showSidebar(event.data.pathId);
-        }
-      });
+            iframe.contentWindow.postMessage({ action: "removeClickedClass" }, "*"); 
+        });
+
+        // Listen for messages from the iframe (gets info about the path clicked)
+        window.addEventListener("message", (event) => {
+            console.log("Message received from MAP:", event.data);
+            if (event.data && event.data.pathId) {
+                showSidebar(event.data.pathId);
+            }
+        });
 
       // Send a  test message to the iframe
-      // const iframe = document.getElementById('worldMapIframe');
       // iframe.onload = () => {
       //     console.log('Iframe loaded, sending a test message to child html');
       //     iframe.contentWindow.postMessage({ action: 'testing' }, '*');

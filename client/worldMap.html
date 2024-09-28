@@ -26,6 +26,12 @@
       fill: green;
    }
 
+   .clicked {
+      fill: #f0cc89;
+      stroke-width: 3;
+      stroke: #333333;
+   }
+
 </style>
 
 <script>
@@ -50,7 +56,17 @@
             const country = path.getAttribute('title');
             path.addEventListener('click', () => {
                 console.log('Path clicked:', country);
-                
+
+                // Remove the 'clicked' class from any previously clicked path
+                const previouslyClickedPath = svg.querySelector('path.clicked');
+                if (previouslyClickedPath) {
+                    previouslyClickedPath.classList.remove('clicked');
+                }
+
+                // Add the 'clicked' class to the newly clicked path
+                path.classList.add('clicked');
+
+                // Send a message to the parent window with the country information
                 //window.parent.postMessage({ pathId: this.id }, '*');
                 window.parent.postMessage({ pathId: country }, '*');
             });
@@ -62,11 +78,22 @@
         addClickListenersToCountries();
     });
 
-    // Listen for messages from the parent window (Selecting User)    
+    // Listen for visitedPlaces from the parent window (Selecting User)    
     window.addEventListener('message', (event) => {
         if (event.data && event.data.action === 'visitedPlaces') {
             console.log('Received message from Parent HTML:', event.data);
             highlightVisitedPlaces(event.data.travelDestinations);
+        }
+    });
+
+    // Listen for removeClickedClass from the parent window when the sidebar is closed
+    window.addEventListener('message', (event) => {
+        if (event.data && event.data.action === 'removeClickedClass') {
+            // Find the path with the .clicked class and remove the class
+            const clickedPath = document.querySelector('.clicked');
+            if (clickedPath) {
+                clickedPath.classList.remove('clicked');
+            }
         }
     });
 </script>
