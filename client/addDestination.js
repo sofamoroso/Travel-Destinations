@@ -48,7 +48,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 addDestinationDialog.close();
                 alert(`Destination added ${country}`);
                 console.log("Destination added:", data);
-                location.reload();
+
+                // Dispatch custom event destinationAdded
+                const event = new CustomEvent("destinationAdded");
+                document.dispatchEvent(event);
             } else {
                 console.error("Error adding destination:", data);
             }

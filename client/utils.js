@@ -140,11 +140,14 @@ async function loadData2() {
     // Fetch users from the backend
     const [users, travelDestinations] = await Promise.all([fetchUsers(), fetchTravelDestinations()]);
 
+    const userButtonsContainer = document.getElementById('user-buttons');
+    const childFrame = document.getElementById('worldMapIframe');
+
+    //Clean previous users
+    userButtonsContainer.innerHTML = '';
+
     // Check if users are defined
     if (users.length > 0) {
-        const userButtonsContainer = document.getElementById('user-buttons');
-        const childFrame = document.getElementById('worldMapIframe');
-
         // Get the logged-in user ID
         const loggedInUserId = sessionStorage.getItem('logged-_id');
 

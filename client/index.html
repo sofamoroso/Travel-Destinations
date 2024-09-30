@@ -158,6 +158,11 @@
         loadData2();
       });
 
+        // Listen for the custom event destinationAdded
+        document.addEventListener("destinationAdded", () => {
+            loadData2();
+        });
+
       // Attach the hideSidebar function to the button
       document
         .getElementById("close-sidebar-button")
