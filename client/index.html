@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="./styles/form.css" />
     <link rel="stylesheet" href="./styles/index.css" />
     <link rel="stylesheet" href="./styles/addDestination.css" />
+    <link rel="stylesheet" href="./styles/rightSidebar.css" />
   </head>
   <style>
     /* Styling for destination dialog */
@@ -123,9 +124,19 @@
 
     <div class="main-content">
       <div id="right-sidebar" class="right-sidebar">
-        <p id="sidebar-content">Sidebar content</p>
-        <button id="close-sidebar-button">Close</button>
+          <div id="sidebar-header">
+              <h3 id="sidebar-title">You clicked on <span id="path-id"></span>.</h3>
+              <p id="sidebar-subtitle"></p>
+            <img id="sidebar-flag" src="" alt="">
+          </div>
+          <div id="sidebar-content">
+              <!-- Dynamic content (cards) will be inserted here -->
+          </div>
+          <button id="close-sidebar-button">Close</button>
       </div>
+  </div>
+  
+  
 
       <div class="iframe-container">
         <iframe id="worldMapIframe" src="worldMap.html"></iframe>
@@ -158,10 +169,10 @@
         loadData2();
       });
 
-        // Listen for the custom event destinationAdded
-        document.addEventListener("destinationAdded", () => {
-            loadData2();
-        });
+      // Listen for the custom event destinationAdded
+      document.addEventListener("destinationAdded", () => {
+        loadData2();
+      });
 
       // Attach the hideSidebar function to the button
       document
@@ -179,8 +190,8 @@
       // Listen for messages from the iframe (gets info about the path clicked)
       window.addEventListener("message", (event) => {
         console.log("Message received from MAP:", event.data);
-        if (event.data && event.data.pathId) {
-          showSidebar(event.data.pathId);
+        if (event.data && event.data.path) {
+          showSidebar(event.data.path, event.data.countryCode);
         }
       });
 

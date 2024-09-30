@@ -1,0 +1,87 @@
+.right-sidebar {
+  width: 300px;
+  background-color: var(--input-bg-color);
+  padding: 1rem;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  right: -400px;
+  z-index: 1000;
+  transition: right 0.3s ease;
+  opacity: 0.9;
+  display: flex;
+  flex-direction: column;
+}
+
+#sidebar-header {
+  margin-bottom: 1rem;
+}
+
+#sidebar-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-right: 10px;
+  max-height: calc(100vh - 120px);
+}
+
+#close-sidebar-button {
+  margin: 1rem;
+  padding: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: calc(100% - 20px);
+  position: relative;
+  z-index: 1;
+}
+
+#close-sidebar-button:hover {
+  background-color: #0056b3;
+}
+
+.destination-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 1rem 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 280px;
+}
+
+.destination-card h4 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--text-color);
+  font-weight: bold;
+}
+
+.destination-card p {
+  margin: 0.5rem 0;
+  color: var(--text-color);
+  font-size: 0.9rem;
+}
+
+.rating {
+  margin-top: 0.5rem;
+}
+
+.rating .star {
+  font-size: 1.2rem;
+  color: #ddd;
+  margin-right: 0.1rem;
+}
+
+.rating .star.filled {
+  color: #f0c420;
+}
+
+.right-sidebar.show {
+  right: 0;
+}
