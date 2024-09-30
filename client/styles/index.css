@@ -8,7 +8,6 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh; /* Full viewport height */
-  overflow: hidden; /* Prevent scrollbars */
 }
 
 .right-sidebar {
@@ -44,17 +43,18 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
   width: 100%;
   height: calc(100vh - 100px);
-  padding: 2rem;
+  padding: 0; /* Remove padding if causing issues */
   box-sizing: border-box;
+  position: relative;
 }
 
 iframe {
   width: 100%;
   height: 100%;
-  border: none;
+  border: none; /* You can remove this if you don't need a border */
+  display: block; /* Make sure it's treated as a block element */
 }
 
 .left-sidebar {
