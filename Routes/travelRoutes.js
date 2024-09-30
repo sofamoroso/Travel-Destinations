@@ -15,6 +15,16 @@ router.get('/api/travel-destinations', async (req, res) => {
     }
 });
 
+// Get all destinations for a specific user and country
+router.get('/api/travel-destinations/:userId/:country', async (req, res) => {
+    const { userId, country } = req.params;
+    try {
+        const destinations = await TravelDestination.find({ userId, country });
+        res.status(200).json(destinations);
+    } catch (error) {
+        res.status(404).json({ error: error.message });
+    }
+});
 
 // Create a new travel destination
 router.post('/api/travel-destinations', async (req, res) => {

@@ -22,6 +22,10 @@
       flex-direction: column;
       justify-content: space-between; /* Distribute space */
     }
+
+    #user-buttons button.active {
+      background-color: rgb(69, 121, 27);
+    }
   </style>
   <body>
     <div id="navbar"></div>
@@ -132,12 +136,12 @@
     <script type="module">
       import {
         loadNavbar,
-        loadData,
+        loadData2,
         showSidebar,
         hideSidebar,
       } from "./utils.js";
 
-      // TO DO: Call the API that returns the user's authentication status based on the presence of the token
+      const iframe = document.getElementById("worldMapIframe");
 
       // Function to handle logout
       // window.handleLogout = function () {
@@ -151,13 +155,21 @@
       // Load the navbar, data, and set up iframe communication
       document.addEventListener("DOMContentLoaded", () => {
         loadNavbar();
-        loadData();
-
-        // Attach the hideSidebar function to the button
-        document
-          .getElementById("close-sidebar-button")
-          .addEventListener("click", hideSidebar);
+        loadData2();
       });
+
+      // Attach the hideSidebar function to the button
+      document
+        .getElementById("close-sidebar-button")
+        .addEventListener("click", () => {
+          hideSidebar();
+          console.log("Close button clicked");
+
+          iframe.contentWindow.postMessage(
+            { action: "removeClickedClass" },
+            "*"
+          );
+        });
 
       // Listen for messages from the iframe (gets info about the path clicked)
       window.addEventListener("message", (event) => {
@@ -168,7 +180,6 @@
       });
 
       // Send a  test message to the iframe
-      // const iframe = document.getElementById('worldMapIframe');
       // iframe.onload = () => {
       //     console.log('Iframe loaded, sending a test message to child html');
       //     iframe.contentWindow.postMessage({ action: 'testing' }, '*');

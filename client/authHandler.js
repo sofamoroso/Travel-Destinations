@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const token = sessionStorage.getItem('jwt-TravelDestination');
-    const username = sessionStorage.getItem('username');
-    const _id = sessionStorage.getItem('_id');
+    const username = sessionStorage.getItem('logged-username');
+    const _id = sessionStorage.getItem('logged-_id');
   
     let loggedIn = token ? true : false;
 
@@ -86,8 +86,12 @@ registerModal.addEventListener('cancel', function() {
                 
                 // Store JWT token in session storage
                 sessionStorage.setItem('jwt-TravelDestination', data.token);
-                sessionStorage.setItem('username', data.username);
-                sessionStorage.setItem('_id', data._id);
+                sessionStorage.setItem('logged-username', data.username);
+                sessionStorage.setItem('logged-_id', data._id);
+                
+                sessionStorage.setItem("selectedUser", data.username);
+                sessionStorage.setItem("selectedUserId", data._id);
+
                 
                 window.location.reload();
                 //loginModal.close();
