@@ -6,15 +6,19 @@
   box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
   background-color: var(--background-color);
   width: 100%;
-  max-width: 20%;
-  max-height: 80vh;
+  max-width: 300px; /* Updated max-width for better responsiveness */
+  max-height: 80vh; /* Limit height */
   overflow-y: auto; /* Allows scroll if content overflows */
-  position: fixed;
+  position: fixed; /* Ensures modal stays in place */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Shift back to truly center */
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
 
+/* Modal backdrop styling */
 .modal::backdrop {
-  background: rgba(0, 0, 0, 0.6); /* Slightly darker backdrop */
+  background: rgba(0, 0, 0, 0.6); /* Dark backdrop */
 }
 
 /* Modal heading styling */
@@ -41,7 +45,7 @@ h1 {
 
 .input-group input {
   width: 100%;
-  box-sizing: border-box;
+  box-sizing: border-box; /* Ensures padding is included in width */
   padding: 0.5rem;
   border: 1px solid var(--input-border-color);
   background-color: var(--input-bg-color);
@@ -52,25 +56,25 @@ h1 {
 
 .input-group input:focus {
   border-color: var(--primary-color);
-  outline: none;
+  outline: none; /* Remove default outline */
 }
 
 /* Button styling */
-button {
-  width: 100%;
-  padding: 10px;
+#button-container button {
+  width: 40%; /* Button takes content width */
+  margin-top: 1rem;
+  padding: 1rem 1.2rem;
   background-color: var(--primary-color);
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: background-color 0.2s ease, transform 0.1s;
-  margin-top: 0.5rem; /* Spacing between buttons */
+  color: #fff; /* White text */
+  border: none; /* No border */
+  border-radius: 1rem; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor */
+  font-size: 1.2rem; /* Font size */
+  transition: background-color 0.2s ease, transform 0.1s; /* Animation effects */
 }
 
 button:hover {
-  background-color: var(--primary-hover-color);
+  background-color: var(--primary-hover-color); /* Change on hover */
   transform: translateY(-1px); /* Slight hover lift effect */
 }
 
@@ -78,51 +82,56 @@ button:active {
   transform: translateY(1px); /* Pressed effect */
 }
 
+#button-container {
+  text-align: center; /* Center button and text */
+  margin-top: 1rem; /* Space above button */
+}
+
 /* Styling for the "No account? Register" link */
 .signup-cta {
-  text-align: center;
-  margin-top: 15px;
-  font-size: 0.9rem;
+  text-align: center; /* Center link */
+  margin-top: 15px; /* Space above */
+  font-size: 0.9rem; /* Font size */
 }
 
 .signup-cta a {
-  color: var(--accent-color);
-  text-decoration: none;
-  font-weight: bold;
+  color: var(--accent-color); /* Link color */
+  text-decoration: none; /* No underline */
+  font-weight: bold; /* Bold link */
 }
 
 .signup-cta a:hover {
   text-decoration: underline; /* Underline on hover */
-  color: var(--accent-hover-color);
+  color: var(--accent-hover-color); /* Change color on hover */
 }
 
 #error-message {
-  color: var(--error-color);
-  margin-top: 10px;
-  text-align: center;
-  display: none;
+  color: var(--error-color); /* Error color */
+  margin-top: 10px; /* Space above */
+  text-align: center; /* Center text */
+  display: none; /* Hidden by default */
 }
 
 /* Centering content */
 .modal-content {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column; /* Stack elements vertically */
+  justify-content: center; /* Center items */
+  align-items: center; /* Center items */
 }
 
 /* Responsive adjustments */
 @media (max-width: 600px) {
   .modal {
-    width: 95%;
-    padding: 1rem;
+    width: 95%; /* Full width on small screens */
+    padding: 1rem; /* Padding for small screens */
   }
 
   h1 {
-    font-size: 1.1rem;
+    font-size: 1.1rem; /* Smaller heading */
   }
 
   button {
-    padding: 0.7rem;
+    padding: 0.7rem; /* Smaller button padding */
   }
 }
