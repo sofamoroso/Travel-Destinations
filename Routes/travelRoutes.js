@@ -18,8 +18,8 @@ router.get('/api/travel-destinations', async (req, res) => {
 
 // Create a new travel destination
 router.post('/api/travel-destinations', async (req, res) => {
-    const { city, country } = req.body;
-    const newDestination = new TravelDestination({ city, country });
+    const { userId, country, city, date, description, rating } = req.body;
+    const newDestination = new TravelDestination({ userId, country, city, date, description, rating });
     try {
         await newDestination.save();
         res.status(201).json({ message: 'Travel destination created successfully' });

@@ -1,15 +1,24 @@
-let loggedIn = false;
+document.addEventListener('DOMContentLoaded', () => {
+    const token = sessionStorage.getItem('jwt-TravelDestination');
+    const username = sessionStorage.getItem('username');
+    const _id = sessionStorage.getItem('_id');
+  
+    let loggedIn = token ? true : false;
+
+    console.log(loggedIn, username, _id);
+    
 
 // Get the modal elements
 const loginModal = document.getElementById('modal');
 const registerModal = document.getElementById('registerModal');
 const registerLink = document.getElementById('registerLink');
 
-const loginForm = document.getElementById('loginForm');
-const registerForm = document.getElementById('registerForm');
 
-const leftSidebar = document.querySelector('.left-sidebar');
-const mainContent = document.querySelector('.main-content');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+
+    const leftSidebar = document.querySelector('.left-sidebar');
+    const mainContent = document.querySelector('.main-content');
 
 // Show the login modal if the user is not logged in
 if (!loggedIn) {
@@ -39,17 +48,8 @@ loginForm.addEventListener('submit', function(event) {
     const username = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value.trim();
     
-    // Basic validation check
-    if (username && password) {
-        console.log('User logged in:', { username, password });
-        loggedIn = true;
-        loginModal.close();
-        
-        leftSidebar.classList.remove('blur');
-        mainContent.classList.remove('blur');
-    } else {
-        alert("Please fill in both fields.");
-    }
+    login(username, password);
+
 });
 
 // Handle the register form submission
@@ -59,14 +59,7 @@ registerForm.addEventListener('submit', function(event) {
     const password = document.getElementById('regPassword').value.trim();
     const email = document.getElementById('regEmail').value.trim();
     
-    // Basic validation check
-    if (username && password && email) {
-        console.log('User registered with:', { username, password, email });
-        registerModal.close();
-        loginModal.showModal(); // Return to the login modal after successful registration
-    } else {
-        alert("Please fill in all fields.");
-    }
+    register(username, password, email);
 });
 
 
@@ -75,21 +68,65 @@ registerModal.addEventListener('cancel', function() {
     loginModal.showModal();
 });
 
-// Optional: Persist the loggedIn state using localStorage
-if (localStorage.getItem('loggedIn') === 'true') {
-    loggedIn = true;
-    loginModal.close();
-    leftSidebar.classList.remove('blur');
-    mainContent.classList.remove('blur');
-}
 
-if (loggedIn) {
-    leftSidebar.classList.remove('blur');
-    mainContent.classList.remove('blur');
-}
 
-// Save the state when user logs in
-loginForm.addEventListener('submit', () => {
-    localStorage.setItem('loggedIn', 'true');
+    const login = async (username, password) => {
+        try{
+            const response = await fetch('http://localhost:3000/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+            });
+            const data = await response.json();
+    
+            if(response.ok){
+                loggedIn = true;
+                
+                // Store JWT token in session storage
+                sessionStorage.setItem('jwt-TravelDestination', data.token);
+                sessionStorage.setItem('username', data.username);
+                sessionStorage.setItem('_id', data._id);
+                
+                window.location.reload();
+                //loginModal.close();
+            } else {
+                alert(data.message);   
+            }
+        } catch(error){
+            console.error('Error logging in:', error);
+        }
+    }
+
+    const logout = () => {
+        sessionStorage.removeItem('jwt-TravelDestination');
+        loggedIn = false;
+    }
+
+    const register = async (username, password, email) => {
+        try{
+            const response = await fetch('http://localhost:3000/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password, email }),
+            });
+            const data = await response.json();
+    
+            if(response.ok){
+                console.log('User registered:', data);
+                registerModal.close();
+                loginModal.showModal();
+            } else {
+                alert(data.message);   
+            }
+            
+        } catch(error){
+            console.error('Error registering user:', error);
+        }
+    }
 });
+
 

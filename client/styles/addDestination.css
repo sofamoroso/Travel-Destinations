@@ -1,0 +1,40 @@
+/* Form styling to make each field take a new row */
+#addDestinationForm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* Add space between form elements */
+}
+
+/* Ensure each input takes the full width */
+#addDestinationForm label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+#addDestinationForm input,
+#addDestinationForm select,
+#addDestinationForm textarea {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+/* Style for the star rating */
+.star {
+  font-size: 2rem;
+  cursor: pointer;
+  color: #ccc;
+}
+
+.star.selected {
+  color: gold;
+}
+
+/* Add/Cancel buttons at the bottom */
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+}
