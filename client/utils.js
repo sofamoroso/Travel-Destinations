@@ -1,23 +1,30 @@
 // Define global variables
 // window.globalUsername = null;
 
-// Function to load the navbar
-function loadNavbar() {
-    fetch('navbar.html')
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('navbar').innerHTML = data;
+document.addEventListener('DOMContentLoaded', () => {
+    const logoutButton = document.getElementById("logoutButton");
 
-            // Attach logout event listener after the navbar has been loaded
-            const logoutButton = document.getElementById("logoutButton");
-            if (logoutButton) {
-                logoutButton.addEventListener('click', (event) => {
-                    event.preventDefault(); // Prevent default link behavior
-                    handleLogout(); // Call the global logout function
-                });
-            }
-        })
-        .catch(error => console.error('Error loading navbar:', error));
+    // Display the button if the user is logged in or not
+    if (sessionStorage.getItem("jwt-TravelDestination")) {
+        logoutButton.style.display = "block";
+    } else {
+        logoutButton.style.display = "none";
+    }
+
+    // Attach logout event listener after the navbar has been loaded
+    logoutButton.addEventListener('click', (event) => {
+        event.preventDefault(); // Prevent default link behavior
+        handleLogout();
+    });
+});
+
+function handleLogout() {
+    sessionStorage.removeItem("jwt-TravelDestination"); // Remove logged-in status from sessionStorage
+    sessionStorage.removeItem("logged-_id");
+    sessionStorage.removeItem("selectedUserId");
+    sessionStorage.removeItem("logged-username");
+    sessionStorage.removeItem("selectedUser");
+    location.reload();
 }
 
 function loadData() {
@@ -99,6 +106,10 @@ async function showSidebar(pathId) {
 function hideSidebar() {
     const sidebar = document.getElementById('right-sidebar');
     sidebar.classList.remove('show');
+
+    // Send message to iframe to removeClickedClass
+    const iframe = document.getElementById('worldMapIframe'); 
+    iframe.contentWindow.postMessage({ action: "removeClickedClass" },"*");
 }
 
 // Function to fetch users from the backend
@@ -170,6 +181,10 @@ async function loadData2() {
                 // Highlight the clicked button
                 document.querySelectorAll('#user-buttons button').forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active');
+
+                //Hide the sidebar if it is open/active when switching between users.
+                hideSidebar();
+
             });
             userButtonsContainer.appendChild(button);
 
@@ -190,4 +205,4 @@ async function loadData2() {
 
 
 
-export { loadNavbar, loadData2, showSidebar, hideSidebar };
+export { loadData2, showSidebar, hideSidebar };

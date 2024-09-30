@@ -136,7 +136,6 @@
 
     <script type="module">
       import {
-        loadNavbar,
         loadData2,
         showSidebar,
         hideSidebar,
@@ -144,38 +143,21 @@
 
       const iframe = document.getElementById("worldMapIframe");
 
-      // Function to handle logout
-      // window.handleLogout = function () {
-      //   loggedIn = false; // Set loggedIn variable to false
-      //   localStorage.removeItem("loggedIn"); // Clear logged-in state
-      //   loginModal.showModal(); // Show the login modal again
-      //   leftSidebar.classList.add("blur"); // Add blur effect
-      //   mainContent.classList.add("blur");
-      // };
-
       // Load the navbar, data, and set up iframe communication
       document.addEventListener("DOMContentLoaded", () => {
-        loadNavbar();
         loadData2();
       });
 
-      // Listen for the custom event destinationAdded
-      document.addEventListener("destinationAdded", () => {
-        loadData2();
-      });
+        // Listen for the custom event destinationAdded to refresh the data
+        document.addEventListener("destinationAdded", () => {
+            loadData2();
+        });
 
       // Attach the hideSidebar function to the button
-      document
-        .getElementById("close-sidebar-button")
-        .addEventListener("click", () => {
+      document.getElementById("close-sidebar-button").addEventListener("click", () => {
           hideSidebar();
           console.log("Close button clicked");
-
-          iframe.contentWindow.postMessage(
-            { action: "removeClickedClass" },
-            "*"
-          );
-        });
+      });
 
       // Listen for messages from the iframe (gets info about the path clicked)
       window.addEventListener("message", (event) => {
@@ -190,21 +172,6 @@
       //     console.log('Iframe loaded, sending a test message to child html');
       //     iframe.contentWindow.postMessage({ action: 'testing' }, '*');
       // };
-
-      // Get the logout button element
-      const logoutButton = document.getElementById("logoutButton");
-
-      // Handle logout functionality
-      logoutButton.addEventListener("click", function (event) {
-        event.preventDefault(); // Prevent default anchor link behavior
-        localStorage.removeItem("loggedIn"); // Remove logged-in status from localStorage
-        loggedIn = false; // Set loggedIn variable to false
-
-        // Show the login modal again and blur the background
-        loginModal.showModal();
-        leftSidebar.classList.add("blur");
-        mainContent.classList.add("blur");
-      });
     </script>
 
     <script src="authHandler.js"></script>
