@@ -77,22 +77,5 @@
         <button id="logoutButton">Logout</button>
       </div>
     </div>
-
-    <script>
-      // Get the logout button element
-      const logoutButton = document.getElementById("logoutButton");
-
-      // Handle logout functionality
-      logoutButton.addEventListener("click", function (event) {
-        event.preventDefault(); // Prevent default anchor link behavior
-        localStorage.removeItem("loggedIn"); // Remove logged-in status from localStorage
-        loggedIn = false; // Set loggedIn variable to false
-
-        // Show the login modal again and blur the background
-        loginModal.showModal();
-        leftSidebar.classList.add("blur");
-        mainContent.classList.add("blur");
-      });
-    </script>
   </body>
 </html>

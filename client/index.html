@@ -135,7 +135,6 @@
 
     <script type="module">
       import {
-        loadNavbar,
         loadData2,
         showSidebar,
         hideSidebar,
@@ -154,27 +153,19 @@
 
       // Load the navbar, data, and set up iframe communication
       document.addEventListener("DOMContentLoaded", () => {
-        loadNavbar();
         loadData2();
       });
 
-        // Listen for the custom event destinationAdded
+        // Listen for the custom event destinationAdded to refresh the data
         document.addEventListener("destinationAdded", () => {
             loadData2();
         });
 
       // Attach the hideSidebar function to the button
-      document
-        .getElementById("close-sidebar-button")
-        .addEventListener("click", () => {
+      document.getElementById("close-sidebar-button").addEventListener("click", () => {
           hideSidebar();
           console.log("Close button clicked");
-
-          iframe.contentWindow.postMessage(
-            { action: "removeClickedClass" },
-            "*"
-          );
-        });
+      });
 
       // Listen for messages from the iframe (gets info about the path clicked)
       window.addEventListener("message", (event) => {
