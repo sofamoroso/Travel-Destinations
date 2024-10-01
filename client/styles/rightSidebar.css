@@ -33,7 +33,7 @@
   padding-bottom: 2rem;
 }
 
-#add-destination-button {
+#add-destination-button-rightSidebar {
   position: absolute;
   bottom: 0;
   right: 0;
@@ -52,7 +52,7 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-#add-destination-button:hover {
+#add-destination-button-rightSidebar:hover {
   background-color: #0056b3;
 }
 

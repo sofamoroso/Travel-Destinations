@@ -1,8 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
+  sessionStorage.getItem("selectedCountry") ? sessionStorage.removeItem("selectedCountry") : null;
   const addDestinationForm = document.getElementById("addDestinationForm");
   const addDestinationDialog = document.getElementById("addDestinationDialog");
   const addDestinationDialogClose = document.getElementById("addDestinationDialogClose");
   const addDestinationButton = document.getElementById("openDestinationDialog");
+
+  const addDestinationButtons = document.querySelectorAll(".addDestinationBtn");
 
   const countrySelect = document.getElementById("country");
   const cityInput = document.getElementById("city");
@@ -12,15 +15,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const starElements = document.querySelectorAll("#stars .star");
 
-  addDestinationButton.addEventListener("click", () => {
-    //Clean up the inputs
-    countrySelect.value = "";
-    cityInput.value = "";
-    dateInput.value = "";
-    descriptionInput.value = "";
-    ratingInput.value = "";
+  addDestinationButtons.forEach(button => {
+    button.addEventListener("click", () => {
 
-    addDestinationDialog.showModal();
+      const selectedCountry = sessionStorage.getItem("selectedCountry");
+
+      //Clean up the inputs
+      countrySelect.value = selectedCountry ? selectedCountry : "";
+      cityInput.value = "";
+      dateInput.value = "";
+      descriptionInput.value = "";
+      ratingInput.value = 0;
+      document.querySelector("#stars").setAttribute("data-rating", "0");
+
+      // Remove the selected class from all stars
+      starElements.forEach(star => {
+        star.classList.remove("selected");
+      });
+
+      // Disable the countrySelect if selectedCountry exists
+      if (selectedCountry) {
+        countrySelect.disabled = true;
+      } else {
+        countrySelect.disabled = false;
+      }
+
+      addDestinationDialog.showModal();
+    });
   });
 
   addDestinationDialogClose.addEventListener("click", (event) => {

@@ -78,6 +78,8 @@ async function showSidebar(path, countryCode) {
   const userId = sessionStorage.getItem("selectedUserId");
   const username = sessionStorage.getItem("selectedUser");
 
+  sessionStorage.setItem("selectedCountry", path);
+
   const travelDestinations = await fetchTravelDestinationsByUserAndCountry(
     userId,
     path
@@ -109,6 +111,8 @@ async function showSidebar(path, countryCode) {
 function hideSidebar() {
   const sidebar = document.getElementById("right-sidebar");
   sidebar.classList.remove("show");
+
+  sessionStorage.removeItem("selectedCountry");
 
   // Send message to iframe to removeClickedClass
   const iframe = document.getElementById("worldMapIframe");
