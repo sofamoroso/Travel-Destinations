@@ -9,27 +9,63 @@
     <link rel="stylesheet" href="./styles/rightSidebar.css" />
   </head>
   <style>
-    /* Styling for destination dialog */
-    #destinationDialog {
-      padding: 20px;
-      width: 600px;
-      height: 700px; /* Increase the height */
-      max-width: 90vw;
-      max-height: 90vh;
-      border-radius: 10px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      margin: auto;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between; /* Distribute space */
-    }
-
     #user-buttons button.active {
       background-color: rgb(69, 121, 27);
     }
   </style>
   <body>
-    <div id="navbar"></div>
+    <header class="navbar">
+      <div class="navbar-left">
+        <img src="assets/globe.png" alt="logo" />
+        <h3>Pin it!</h3>
+      </div>
+      <div class="navbar-right">
+        <a href="/">Home</a>
+        <a href="/test">Test</a>
+        <a href="#contact">Contact</a>
+        <button id="logoutButton">Logout</button>
+      </div>
+    </header>
+    <main>
+      <div class="left-sidebar">
+        <h2>Explore Travel Histories</h2>
+        <div id="user-buttons"></div>
+        <!-- <button id="openDestinationDialog">Add New Destination</button> -->
+      </div>
+
+      <div class="main-content">
+        <div id="right-sidebar" class="right-sidebar">
+          <div id="sidebar-header">
+            <h3 id="sidebar-title">You clicked on <span id="path-id"></span>.</h3>
+            <p id="sidebar-subtitle"></p>
+            <img id="sidebar-flag" src="" alt="Country Flag">
+            <button id="add-destination-button">+</button>
+          </div>
+          <div id="sidebar-content">
+            <!-- Dynamic content (cards) will be inserted here -->
+          </div>
+          <button id="close-sidebar-button">Close</button>
+        </div>
+
+        <!-- Template for destination cards -->
+        <template id="destination-card-template">
+          <div class="card">
+            <p class="city-name"></p>
+            <p class="city-description"></p>
+            <p class="date-visited"></p>
+            <div class="rating"></div>
+          </div>
+        </template>
+
+        <div class="iframe-container">
+          <button id="openDestinationDialog">+ Add New Destination</button>
+
+          <iframe id="worldMapIframe" src="worldMap.html"></iframe>
+          <!-- <object id="worldMapIframe" type="image/svg+xml" data="worldMap.svg"></object> -->
+        </div>
+      </div>
+    </main>
+
     <!-- Login Modal -->
     <dialog id="modal" class="modal rounded">
       <h1>Login</h1>
@@ -45,7 +81,7 @@
           <label for="password">Password</label>
           <input type="password" id="password" name="password" required />
         </div>
-        <div>
+        <div id="button-container">
           <button type="submit">Login</button>
           <p class="signup-cta">
             <span>No account?</span>
@@ -81,9 +117,9 @@
     </dialog>
 
     <!-- Destination dialog -->
-    <dialog id="addDestinationDialog">
+    <dialog id="addDestinationDialog" class="modal rounded">
       <form id="addDestinationForm">
-        <h3>Add a new travel destination</h3>
+        <h1>Add a new travel destination</h3>
 
         <label for="country">Country:</label>
         <select id="country" name="country" required></select>
@@ -117,48 +153,8 @@
       </form>
     </dialog>
 
-    <div class="left-sidebar">
-      <div id="user-buttons"></div>
-      <button id="openDestinationDialog">Add New Destination</button>
-    </div>
-
-    <div class="main-content">
-      <div id="right-sidebar" class="right-sidebar">
-        <div id="sidebar-header">
-          <h3 id="sidebar-title">You clicked on <span id="path-id"></span>.</h3>
-          <p id="sidebar-subtitle"></p>
-          <img id="sidebar-flag" src="" alt="Country Flag">
-          <button id="add-destination-button">+</button>
-        </div>
-        <div id="sidebar-content">
-          <!-- Dynamic content (cards) will be inserted here -->
-        </div>
-        <button id="close-sidebar-button">Close</button>
-      </div>
-    
-      <!-- Template for destination cards -->
-      <template id="destination-card-template">
-        <div class="card">
-          <p class="city-name"></p>
-          <p class="city-description"></p>
-          <p class="date-visited"></p>
-          <div class="rating"></div>
-        </div>
-      </template>
-    </div>
-    
-    
-  
-
-      <div class="iframe-container">
-        <iframe id="worldMapIframe" src="worldMap.html"></iframe>
-        <!-- <object id="worldMapIframe" type="image/svg+xml" data="worldMap.svg"></object> -->
-      </div>
-    </div>
-
     <script type="module">
       import {
-        loadNavbar,
         loadData2,
         showSidebar,
         hideSidebar,
@@ -166,38 +162,21 @@
 
       const iframe = document.getElementById("worldMapIframe");
 
-      // Function to handle logout
-      // window.handleLogout = function () {
-      //   loggedIn = false; // Set loggedIn variable to false
-      //   localStorage.removeItem("loggedIn"); // Clear logged-in state
-      //   loginModal.showModal(); // Show the login modal again
-      //   leftSidebar.classList.add("blur"); // Add blur effect
-      //   mainContent.classList.add("blur");
-      // };
-
       // Load the navbar, data, and set up iframe communication
       document.addEventListener("DOMContentLoaded", () => {
-        loadNavbar();
         loadData2();
       });
 
-      // Listen for the custom event destinationAdded
-      document.addEventListener("destinationAdded", () => {
-        loadData2();
-      });
+        // Listen for the custom event destinationAdded to refresh the data
+        document.addEventListener("destinationAdded", () => {
+            loadData2();
+        });
 
       // Attach the hideSidebar function to the button
-      document
-        .getElementById("close-sidebar-button")
-        .addEventListener("click", () => {
+      document.getElementById("close-sidebar-button").addEventListener("click", () => {
           hideSidebar();
           console.log("Close button clicked");
-
-          iframe.contentWindow.postMessage(
-            { action: "removeClickedClass" },
-            "*"
-          );
-        });
+      });
 
       // Listen for messages from the iframe (gets info about the path clicked)
       window.addEventListener("message", (event) => {

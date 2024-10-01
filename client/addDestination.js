@@ -1,16 +1,25 @@
 document.addEventListener("DOMContentLoaded", () => {
   const addDestinationForm = document.getElementById("addDestinationForm");
   const addDestinationDialog = document.getElementById("addDestinationDialog");
-  const addDestinationDialogClose = document.getElementById(
-    "addDestinationDialogClose"
-  );
+  const addDestinationDialogClose = document.getElementById("addDestinationDialogClose");
   const addDestinationButton = document.getElementById("openDestinationDialog");
 
   const countrySelect = document.getElementById("country");
-  const starElements = document.querySelectorAll("#stars .star");
+  const cityInput = document.getElementById("city");
+  const dateInput = document.getElementById("date");
+  const descriptionInput = document.getElementById("description");
   const ratingInput = document.getElementById("rating");
 
+  const starElements = document.querySelectorAll("#stars .star");
+
   addDestinationButton.addEventListener("click", () => {
+    //Clean up the inputs
+    countrySelect.value = "";
+    cityInput.value = "";
+    dateInput.value = "";
+    descriptionInput.value = "";
+    ratingInput.value = "";
+
     addDestinationDialog.showModal();
   });
 
@@ -21,12 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   addDestinationForm.addEventListener("submit", (event) => {
     event.preventDefault();
-    const country = document.getElementById("country").value;
-    const city = document.getElementById("city").value;
-    const date = document.getElementById("date").value;
-    const description = document.getElementById("description").value;
-    const rating = document.getElementById("rating").value;
-    addDestination(country, city, date, description, rating);
+    addDestination(countrySelect.value, cityInput.value, dateInput.value, descriptionInput.value, ratingInput.value)
   });
 
   const addDestination = async (country, city, date, description, rating) => {

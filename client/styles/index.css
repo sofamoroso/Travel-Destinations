@@ -1,14 +1,84 @@
 /* * General styles * */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+h2 {
+  padding: 1rem 0;
+}
+
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: var(--background-color); /* Light gray for background */
-  margin: 0;
-  padding: 0;
+  color: var(--text-color);
+}
+
+main {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  gap: 2rem;
+  padding: 1rem 2rem;
+}
+
+button {
+  width: auto; /* Full width of the sidebar */
+  padding: 10px 15px; /* Padding for comfort */
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none; /* No border */
+  border-radius: 1rem; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  font-size: 0.9rem; /* Font size */
+  transition: background-color 0.3s ease, transform 0.2s; /* Smooth transitions */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+.navbar img {
+  height: 2rem; /* Adjusted height for better visibility */
+  margin-right: 10px; /* Space between logo and title */
+}
+
+.navbar {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  min-height: 100vh; /* Full viewport height */
-  overflow: hidden; /* Prevent scrollbars */
+  width: 100%;
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.5rem 2rem;
+  opacity: 0.9;
+  box-sizing: border-box; /* Include padding in total width */
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center; /* Center items vertically in the left section */
+}
+
+.navbar-right {
+  display: flex; /* Use flexbox for right section */
+  align-items: center; /* Center items vertically */
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  margin: 0 15px; /* Space between links */
+  font-weight: bold; /* Make text bold */
+}
+
+.navbar button {
+  background-color: var(--accent-color); /* Use a variable for button color */
+  color: white;
+  border: none;
+  border-radius: 5px; /* Rounded corners */
+  padding: 5px 10px; /* Button padding */
+  cursor: pointer; /* Change cursor on hover */
+}
+
+.navbar button:hover {
+  background-color: var(--accent-hover-color); /* Darker on hover */
 }
 
 .iframe-container {
@@ -16,25 +86,29 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
   width: 100%;
   height: calc(100vh - 100px);
-  padding: 2rem;
+  padding: 0; /* Remove padding if causing issues */
   box-sizing: border-box;
+  position: relative;
 }
 
 iframe {
   width: 100%;
   height: 100%;
-  border: none;
+  border: none; /* You can remove this if you don't need a border */
+  display: block; /* Make sure it's treated as a block element */
 }
 
-.left-sidebar {
-  top: 0;
+#user-buttons {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  height: calc(100vh - 100px);
+  gap: 0.5rem;
+}
+
+#user-buttons button {
+  width: 100%;
 }
 
 /* Blur effect */

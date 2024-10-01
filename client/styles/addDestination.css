@@ -5,6 +5,21 @@
   gap: 8px; /* Add space between form elements */
 }
 
+/* Styling for destination dialog */
+#destinationDialog {
+  padding: 20px;
+  width: 600px;
+  height: 700px; /* Increase the height */
+  max-width: 90vw;
+  max-height: 90vh;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Distribute space */
+}
+
 /* Ensure each input takes the full width */
 #addDestinationForm label {
   font-weight: bold;
@@ -37,4 +52,17 @@
 .form-buttons {
   display: flex;
   justify-content: space-between;
+}
+
+#openDestinationDialog {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  transform: translateX(-10%) translateY(-10%);
+  background-color: var(--accent-color);
+}
+
+#addDestinationDialog {
+  max-width: 400px;
+  max-height: 80%;
 }
