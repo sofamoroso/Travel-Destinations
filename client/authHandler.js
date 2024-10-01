@@ -11,14 +11,14 @@ document.addEventListener('DOMContentLoaded', () => {
 // Get the modal elements
 const loginModal = document.getElementById('modal');
 const registerModal = document.getElementById('registerModal');
-const registerLink = document.getElementById('registerLink');
 
+const authLinks = document.querySelectorAll('.authLink');
 
-    const loginForm = document.getElementById('loginForm');
-    const registerForm = document.getElementById('registerForm');
+const loginForm = document.getElementById('loginForm');
+const registerForm = document.getElementById('registerForm');
 
-    const leftSidebar = document.querySelector('.left-sidebar');
-    const mainContent = document.querySelector('.main-content');
+const leftSidebar = document.querySelector('.left-sidebar');
+const mainContent = document.querySelector('.main-content');
 
 // Show the login modal if the user is not logged in
 if (!loggedIn) {
@@ -35,11 +35,24 @@ loginModal.addEventListener('close', function() {
     }
 });
 
-// Handle the register link click to show the register modal and hide the login modal
-registerLink.addEventListener('click', function(event) {
-    event.preventDefault(); // Prevent default anchor link behavior
-    loginModal.close();
-    registerModal.showModal();
+// --> SWITCH BETWEEN LOGIN MODAL AND REGISTER MODAL <--
+authLinks.forEach(authLink => {
+    authLink.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent default anchor link behavior
+
+        if (loginModal.hasAttribute('open')) {
+            loginModal.close();       
+            registerModal.showModal(); 
+        } else {
+            loginModal.showModal();    
+            registerModal.close();    
+        }
+    });
+});
+
+// If the user presses "Escape" on the register modal, bring them back to the login modal
+registerModal.addEventListener('cancel', function() {
+    loginModal.showModal();
 });
 
 // Handle the login form submission
@@ -63,14 +76,10 @@ registerForm.addEventListener('submit', function(event) {
 });
 
 
-// If the user presses "Escape" on the register modal, bring them back to the login modal
-registerModal.addEventListener('cancel', function() {
-    loginModal.showModal();
-});
 
 
 
-    const login = async (username, password) => {
+const login = async (username, password) => {
         try{
             const response = await fetch('http://localhost:3000/api/login', {
                 method: 'POST',
@@ -92,7 +101,6 @@ registerModal.addEventListener('cancel', function() {
                 sessionStorage.setItem("selectedUser", data.username);
                 sessionStorage.setItem("selectedUserId", data._id);
 
-                
                 window.location.reload();
                 //loginModal.close();
             } else {

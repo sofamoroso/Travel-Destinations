@@ -2,50 +2,8 @@
 <!-- Created for MapSVG plugin: http://mapsvg.com -->
 <head>
   <link rel="stylesheet" href="./styles/variables.css" />
+  <link rel="stylesheet" href="./styles/worldmap.css" />
 </head>
-<style>
-  body {
-    /* display: flex;
-    justify-content: center;
-    align-items: center;*/
-    /* padding: 2rem; */
-    overflow: hidden;
-    cursor: grab; /* Shows the grabbing cursor */
-  }
-
-  svg {
-    border: 1px solid #09ec2f;
-    width: 100%;
-    height: 100%;
-    /* transform: scale(1.5); 
-    transform-origin: center center;  */
-  }
-
-  path {
-    fill: #dbd9d9;
-    stroke-width: 0.5;
-    pointer-events: all;
-    stroke: var(--text-color);
-    /* filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5)); */
-  }
-  path:hover {
-    fill: var(--primary-color);
-    stroke-width: 0.8;
-    stroke: var(--text-color);
-    /* filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.9)); */
-  }
-
-  .visited {
-    fill: var(--secondary-color);
-  }
-
-  .clicked {
-    fill: var(--accent-color);
-    stroke-width: 1;
-    stroke: var(--text-color);
-  }
-</style>
-
 <script>
   // SVG Pan Implementation
   document.addEventListener("DOMContentLoaded", () => {

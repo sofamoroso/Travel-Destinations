@@ -56,10 +56,14 @@
 
 #openDestinationDialog {
   position: absolute;
-  top: 5%;
-  left: 5%;
-  transform: translateX(-10%) translateY(-10%);
+  top: 10%;
+  left: 10%;
+  transform: translateX(-20%);
   background-color: var(--accent-color);
+}
+
+#openDestinationDialog:hover {
+  background-color: var(--accent-hover-color);
 }
 
 #addDestinationDialog {

@@ -21,6 +21,12 @@
   background: rgba(0, 0, 0, 0.6); /* Dark backdrop */
 }
 
+.modal p {
+  text-align: center;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
 /* Modal heading styling */
 h1 {
   font-size: 1.6rem;
