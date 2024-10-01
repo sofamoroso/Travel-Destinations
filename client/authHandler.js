@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Get the modal elements
 const loginModal = document.getElementById('modal');
 const registerModal = document.getElementById('registerModal');
+
 const authLinks = document.querySelectorAll('.authLink');
 
 const loginForm = document.getElementById('loginForm');
