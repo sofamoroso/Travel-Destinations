@@ -4,14 +4,14 @@
   padding: 0;
 }
 
-h2 {
-  padding: 1rem 0;
-}
-
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: var(--background-color); /* Light gray for background */
   color: var(--text-color);
+}
+
+h2 {
+  padding: 1rem 0;
 }
 
 main {
@@ -34,11 +34,6 @@ button {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
 }
 
-.navbar img {
-  height: 2rem; /* Adjusted height for better visibility */
-  margin-right: 10px; /* Space between logo and title */
-}
-
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -50,42 +45,44 @@ button {
   opacity: 0.9;
   box-sizing: border-box; /* Include padding in total width */
 }
+.navbar img {
+  height: 2rem;
+  margin-right: 10px;
+}
 
 .navbar-left {
   display: flex;
-  align-items: center; /* Center items vertically in the left section */
+  align-items: center;
 }
 
 .navbar-right {
-  display: flex; /* Use flexbox for right section */
-  align-items: center; /* Center items vertically */
+  display: flex;
+  align-items: center;
 }
 
 .navbar a {
   color: white;
   text-decoration: none;
-  margin: 0 15px; /* Space between links */
-  font-weight: bold; /* Make text bold */
+  margin: 0 1.2rem;
+  font-weight: bold;
 }
 
 .navbar button {
-  background-color: var(--accent-color); /* Use a variable for button color */
+  background-color: var(--accent-color);
   color: white;
   border: none;
-  border-radius: 5px; /* Rounded corners */
-  padding: 5px 10px; /* Button padding */
-  cursor: pointer; /* Change cursor on hover */
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
 }
 
 .navbar button:hover {
-  background-color: var(--accent-hover-color); /* Darker on hover */
+  background-color: var(--accent-hover-color);
 }
 
 .right-sidebar {
   width: 300px;
-  background-color: var(
-    --input-bg-color
-  ); /* White background for the sidebar */
+  background-color: var(--input-bg-color);
   padding: 1rem;
   height: 100vh;
   position: fixed;
@@ -116,7 +113,7 @@ button {
   align-items: center;
   width: 100%;
   height: calc(100vh - 100px);
-  padding: 0; /* Remove padding if causing issues */
+  padding: 0;
   box-sizing: border-box;
   position: relative;
 }
@@ -124,7 +121,7 @@ button {
 iframe {
   width: 100%;
   height: 100%;
-  border: none; /* You can remove this if you don't need a border */
+  border: none;
   display: block; /* Make sure it's treated as a block element */
 }
 
@@ -139,7 +136,10 @@ iframe {
   width: 100%;
 }
 
-/* Blur effect */
+#user-buttons button.active {
+  background-color: var(--accent-color);
+}
+
 .blur {
   filter: blur(5px);
   pointer-events: none;

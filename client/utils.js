@@ -1,24 +1,3 @@
-// Define global variables
-// window.globalUsername = null;
-
-// Function to load the navbar
-function loadNavbar() {
-    fetch('navbar.html')
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('navbar').innerHTML = data;
-
-            // Attach logout event listener after the navbar has been loaded
-            const logoutButton = document.getElementById("logoutButton");
-            if (logoutButton) {
-                logoutButton.addEventListener('click', (event) => {
-                    event.preventDefault(); // Prevent default link behavior
-                    handleLogout(); // Call the global logout function
-                });
-            }
-        })
-        .catch(error => console.error('Error loading navbar:', error));
-}
 
 function loadData() {
     // Check if users and visitedPlaces arrays are defined
@@ -190,4 +169,4 @@ async function loadData2() {
 
 
 
-export { loadNavbar, loadData2, showSidebar, hideSidebar };
+export { loadData2, showSidebar, hideSidebar };

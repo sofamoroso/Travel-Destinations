@@ -7,11 +7,7 @@
     <link rel="stylesheet" href="./styles/index.css" />
     <link rel="stylesheet" href="./styles/addDestination.css" />
   </head>
-  <style>
-    #user-buttons button.active {
-      background-color: rgb(69, 121, 27);
-    }
-  </style>
+
   <body>
     <header class="navbar">
       <div class="navbar-left">
@@ -25,6 +21,7 @@
         <button id="logoutButton">Logout</button>
       </div>
     </header>
+    
     <main>
       <div class="left-sidebar">
         <h2>Explore Travel Histories</h2>
@@ -50,7 +47,7 @@
     <!-- Login Modal -->
     <dialog id="modal" class="modal rounded">
       <h1>Login</h1>
-      <p style="text-align: center; color: #666; margin-bottom: 1rem">
+      <p>
         Please enter your username and password
       </p>
       <form id="loginForm">
@@ -66,7 +63,7 @@
           <button type="submit">Login</button>
           <p class="signup-cta">
             <span>No account?</span>
-            <a href="#" id="registerLink">Register</a>
+            <a href="#" id="registerLink" class="authLink">Register</a>
           </p>
         </div>
       </form>
@@ -75,7 +72,7 @@
     <!-- Register Modal -->
     <dialog id="registerModal" class="modal rounded">
       <h1>Register</h1>
-      <p style="text-align: center; color: #666; margin-bottom: 1rem">
+      <p>
         Please enter your details to register.
       </p>
       <form id="registerForm">
@@ -91,8 +88,12 @@
           <label for="regEmail">Email</label>
           <input type="email" id="regEmail" name="regEmail" required />
         </div>
-        <div>
+        <div id="button-container">
           <button type="submit">Register</button>
+          <p class="signup-cta">
+            <span>Already a user?</span>
+            <a href="#" id="loginLink" class="authLink">Login</a>
+          </p>
         </div>
       </form>
     </dialog>
@@ -136,7 +137,6 @@
 
     <script type="module">
       import {
-        loadNavbar,
         loadData2,
         showSidebar,
         hideSidebar,
@@ -155,7 +155,6 @@
 
       // Load the navbar, data, and set up iframe communication
       document.addEventListener("DOMContentLoaded", () => {
-        loadNavbar();
         loadData2();
       });
 
