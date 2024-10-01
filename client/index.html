@@ -124,18 +124,30 @@
 
     <div class="main-content">
       <div id="right-sidebar" class="right-sidebar">
-          <div id="sidebar-header">
-              <h3 id="sidebar-title">You clicked on <span id="path-id"></span>.</h3>
-              <p id="sidebar-subtitle"></p>
-            <img id="sidebar-flag" src="" alt="">
-          </div>
-          <div id="sidebar-content">
-              <!-- Dynamic content (cards) will be inserted here -->
-          </div>
-          <button id="close-sidebar-button">Close</button>
+        <div id="sidebar-header">
+          <h3 id="sidebar-title">You clicked on <span id="path-id"></span>.</h3>
+          <p id="sidebar-subtitle"></p>
+          <img id="sidebar-flag" src="" alt="Country Flag">
+          <button id="add-destination-button">+</button>
+        </div>
+        <div id="sidebar-content">
+          <!-- Dynamic content (cards) will be inserted here -->
+        </div>
+        <button id="close-sidebar-button">Close</button>
       </div>
-  </div>
-  
+    
+      <!-- Template for destination cards -->
+      <template id="destination-card-template">
+        <div class="card">
+          <p class="city-name"></p>
+          <p class="city-description"></p>
+          <p class="date-visited"></p>
+          <div class="rating"></div>
+        </div>
+      </template>
+    </div>
+    
+    
   
 
       <div class="iframe-container">

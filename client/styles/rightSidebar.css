@@ -8,13 +8,13 @@
   right: -400px;
   z-index: 1000;
   transition: right 0.3s ease;
-  opacity: 0.9;
+  opacity: 0.95;
   display: flex;
   flex-direction: column;
 }
 
-#sidebar-header {
-  margin-bottom: 1rem;
+.right-sidebar.show {
+  right: 0;
 }
 
 #sidebar-content {
@@ -28,10 +28,39 @@
   max-height: calc(100vh - 120px);
 }
 
-#close-sidebar-button {
-  margin: 1rem;
-  padding: 1rem;
+#sidebar-header {
+  position: relative;
+  padding-bottom: 2rem;
+}
+
+#add-destination-button {
+  position: absolute;
+  bottom: 0;
+  right: 0;
   background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#add-destination-button:hover {
+  background-color: #0056b3;
+}
+
+#close-sidebar-button {
+  margin-inline: 1rem;
+  margin-block: 2rem;
+  padding: 1rem;
+  background-color: var(--primary-color);
   color: white;
   border: none;
   border-radius: 5px;
@@ -42,10 +71,10 @@
 }
 
 #close-sidebar-button:hover {
-  background-color: #0056b3;
+  background-color: var(--primary-hover-color);
 }
 
-.destination-card {
+.card {
   background-color: #ffffff;
   border-radius: 10px;
   padding: 1rem;
@@ -55,14 +84,20 @@
   max-width: 280px;
 }
 
-.destination-card h4 {
+.city-name {
   margin: 0;
   font-size: 1.5rem;
   color: var(--text-color);
   font-weight: bold;
 }
 
-.destination-card p {
+.city-description {
+  margin: 0.5rem 0;
+  color: var(--text-color);
+  font-size: 0.9rem;
+}
+
+.date-visited {
   margin: 0.5rem 0;
   color: var(--text-color);
   font-size: 0.9rem;
@@ -80,8 +115,4 @@
 
 .rating .star.filled {
   color: #f0c420;
-}
-
-.right-sidebar.show {
-  right: 0;
 }

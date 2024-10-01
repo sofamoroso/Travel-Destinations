@@ -87,27 +87,22 @@ async function showSidebar(path, countryCode) {
   const sidebarTitle = document.getElementById("sidebar-title");
   const sidebarSubtitle = document.getElementById("sidebar-subtitle");
   const sideBarFlag = document.getElementById("sidebar-flag");
+  const sidebarContent = document.getElementById("sidebar-content");
 
   sideBarFlag.src = `https://flagsapi.com/${countryCode}/shiny/64.png`;
-  //   sideBarFlag.style.width = "100px";
-  //   sideBarFlag.style.height = "100px";
 
   sidebarContent.innerHTML = "";
-
   sidebarTitle.innerHTML = `You clicked on ${path}.`;
   sidebarSubtitle.innerHTML = `${username} visited ${travelDestinations.length} places in this country.`;
 
   if (travelDestinations.length > 0) {
-    travelDestinations.forEach((destination) => {
-      displayDestinationCards(destination);
-    });
+    travelDestinations.forEach(displayDestinationCards);
   } else {
     const noCitiesMessage = document.createElement("p");
     noCitiesMessage.textContent = "No cities visited in this country.";
     sidebarContent.appendChild(noCitiesMessage);
   }
 
-  // Show the sidebar
   sidebar.classList.add("show");
 }
 
@@ -116,28 +111,21 @@ function hideSidebar() {
   sidebar.classList.remove("show");
 }
 
-async function displayDestinationCards(destination) {
-  const card = document.createElement("div");
-  card.classList.add("destination-card");
+function displayDestinationCards(destination) {
+  const template = document.getElementById("destination-card-template");
+  const card = template.content.cloneNode(true);
+  const sidebarContent = document.getElementById("sidebar-content");
+  const cityName = card.querySelector(".city-name");
+  const cityDescription = card.querySelector(".city-description");
+  const dateVisited = card.querySelector(".date-visited");
+  const ratingDiv = card.querySelector(".rating");
+  const maxStars = 5;
 
-  const cityName = document.createElement("h4");
   cityName.textContent = destination.city;
-  card.appendChild(cityName);
-
-  const cityDescription = document.createElement("p");
-  cityDescription.textContent =
-    destination.description || "No description available";
-  card.appendChild(cityDescription);
-
-  const dateVisited = document.createElement("p");
+  cityDescription.textContent = destination.description;
   dateVisited.textContent = `Visited on: ${new Date(
     destination.date
   ).toLocaleDateString()}`;
-  card.appendChild(dateVisited);
-
-  const rating = document.createElement("div");
-  rating.classList.add("rating");
-  const maxStars = 5;
 
   for (let i = 0; i < maxStars; i++) {
     const star = document.createElement("span");
@@ -146,9 +134,8 @@ async function displayDestinationCards(destination) {
       star.classList.add("filled");
     }
     star.textContent = "★";
-    rating.appendChild(star);
+    ratingDiv.appendChild(star);
   }
-  card.appendChild(rating);
 
   sidebarContent.appendChild(card);
 }
