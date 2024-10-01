@@ -66,6 +66,8 @@ async function fetchTravelDestinationsByUserAndCountry(userId, country) {
   }
 }
 
+const sidebarContent = document.getElementById("sidebar-content");
+
 // Function to show the sidebar with the clicked path = country name
 async function showSidebar(path, countryCode) {
   const userId = sessionStorage.getItem("selectedUserId");
@@ -84,7 +86,6 @@ async function showSidebar(path, countryCode) {
   const sidebar = document.getElementById("right-sidebar");
   const sidebarTitle = document.getElementById("sidebar-title");
   const sidebarSubtitle = document.getElementById("sidebar-subtitle");
-  const sidebarContent = document.getElementById("sidebar-content");
   const sideBarFlag = document.getElementById("sidebar-flag");
 
   sideBarFlag.src = `https://flagsapi.com/${countryCode}/shiny/64.png`;
@@ -98,40 +99,7 @@ async function showSidebar(path, countryCode) {
 
   if (travelDestinations.length > 0) {
     travelDestinations.forEach((destination) => {
-      const card = document.createElement("div");
-      card.classList.add("destination-card");
-
-      const cityName = document.createElement("h4");
-      cityName.textContent = destination.city;
-      card.appendChild(cityName);
-
-      const cityDescription = document.createElement("p");
-      cityDescription.textContent =
-        destination.description || "No description available";
-      card.appendChild(cityDescription);
-
-      const dateVisited = document.createElement("p");
-      dateVisited.textContent = `Visited on: ${new Date(
-        destination.date
-      ).toLocaleDateString()}`;
-      card.appendChild(dateVisited);
-
-      const rating = document.createElement("div");
-      rating.classList.add("rating");
-      const maxStars = 5;
-
-      for (let i = 0; i < maxStars; i++) {
-        const star = document.createElement("span");
-        star.classList.add("star");
-        if (i < destination.rating) {
-          star.classList.add("filled");
-        }
-        star.textContent = "★";
-        rating.appendChild(star);
-      }
-      card.appendChild(rating);
-
-      sidebarContent.appendChild(card);
+      displayDestinationCards(destination);
     });
   } else {
     const noCitiesMessage = document.createElement("p");
@@ -146,6 +114,43 @@ async function showSidebar(path, countryCode) {
 function hideSidebar() {
   const sidebar = document.getElementById("right-sidebar");
   sidebar.classList.remove("show");
+}
+
+async function displayDestinationCards(destination) {
+  const card = document.createElement("div");
+  card.classList.add("destination-card");
+
+  const cityName = document.createElement("h4");
+  cityName.textContent = destination.city;
+  card.appendChild(cityName);
+
+  const cityDescription = document.createElement("p");
+  cityDescription.textContent =
+    destination.description || "No description available";
+  card.appendChild(cityDescription);
+
+  const dateVisited = document.createElement("p");
+  dateVisited.textContent = `Visited on: ${new Date(
+    destination.date
+  ).toLocaleDateString()}`;
+  card.appendChild(dateVisited);
+
+  const rating = document.createElement("div");
+  rating.classList.add("rating");
+  const maxStars = 5;
+
+  for (let i = 0; i < maxStars; i++) {
+    const star = document.createElement("span");
+    star.classList.add("star");
+    if (i < destination.rating) {
+      star.classList.add("filled");
+    }
+    star.textContent = "★";
+    rating.appendChild(star);
+  }
+  card.appendChild(rating);
+
+  sidebarContent.appendChild(card);
 }
 
 // Function to fetch users from the backend
