@@ -1,146 +1,148 @@
 /* * General styles * */
 * {
-  margin: 0;
-  padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: var(--background-color); /* Light gray for background */
-  color: var(--text-color);
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	background-color: var(--background-color); /* Light gray for background */
+	color: var(--text-color);
 }
 
 h2 {
-  padding: 1rem 0;
+	padding: 1rem 0;
 }
 
 main {
-  display: grid;
-  grid-template-columns: 1fr 4fr;
-  gap: 2rem;
-  padding: 1rem 2rem;
+	display: grid;
+	grid-template-columns: 1fr 4fr;
+	gap: 2rem;
+	padding: 1rem 2rem;
 }
 
 button {
-  width: auto; /* Full width of the sidebar */
-  padding: 10px 15px; /* Padding for comfort */
-  background-color: var(--primary-color);
-  color: #fff;
-  border: none; /* No border */
-  border-radius: 1rem; /* Rounded corners */
-  cursor: pointer; /* Pointer cursor on hover */
-  font-size: 0.9rem; /* Font size */
-  transition: background-color 0.3s ease, transform 0.2s; /* Smooth transitions */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+	width: auto; /* Full width of the sidebar */
+	padding: 10px 15px; /* Padding for comfort */
+	background-color: var(--primary-color);
+	color: #fff;
+	border: none; /* No border */
+	border-radius: 1rem; /* Rounded corners */
+	cursor: pointer; /* Pointer cursor on hover */
+	font-size: 0.9rem; /* Font size */
+	transition:
+		background-color 0.3s ease,
+		transform 0.2s; /* Smooth transitions */
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
 }
 
 .navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  background-color: var(--primary-color);
-  color: white;
-  padding: 0.5rem 2rem;
-  opacity: 0.9;
-  box-sizing: border-box; /* Include padding in total width */
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	background-color: var(--primary-color);
+	color: white;
+	padding: 0.5rem 2rem;
+	opacity: 0.9;
+	box-sizing: border-box; /* Include padding in total width */
 }
 .navbar img {
-  height: 2rem;
-  margin-right: 10px;
+	height: 2rem;
+	margin-right: 10px;
 }
 
 .navbar-left {
-  display: flex;
-  align-items: center;
+	display: flex;
+	align-items: center;
 }
 
 .navbar-right {
-  display: flex;
-  align-items: center;
+	display: flex;
+	align-items: center;
 }
 
 .navbar a {
-  color: white;
-  text-decoration: none;
-  margin: 0 1.2rem;
-  font-weight: bold;
+	color: white;
+	text-decoration: none;
+	margin: 0 1.2rem;
+	font-weight: bold;
 }
 
 .navbar button {
-  background-color: var(--accent-color);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 5px 10px;
-  cursor: pointer;
+	background-color: var(--accent-color);
+	color: white;
+	border: none;
+	border-radius: 5px;
+	padding: 5px 10px;
+	cursor: pointer;
 }
 
 .navbar button:hover {
-  background-color: var(--accent-hover-color);
+	background-color: var(--accent-hover-color);
 }
 
 .right-sidebar {
-  width: 300px;
-  background-color: var(--input-bg-color);
-  padding: 1rem;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  right: -400px;
-  z-index: 1000;
-  transition: right 0.3s ease;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 0.7;
+	width: 300px;
+	background-color: var(--input-bg-color);
+	padding: 1rem;
+	height: 100vh;
+	position: fixed;
+	top: 0;
+	right: -400px;
+	z-index: 1000;
+	transition: right 0.3s ease;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	opacity: 0.7;
 }
 
 .right-sidebar.show {
-  right: 0;
+	right: 0;
 }
 
 .main-content {
-  display: flex;
-  flex: 1;
-  overflow: hidden;
+	display: flex;
+	flex: 1;
+	overflow: hidden;
 }
 
 .iframe-container {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: calc(100vh - 100px);
-  padding: 0;
-  box-sizing: border-box;
-  position: relative;
+	flex: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: calc(100vh - 100px);
+	padding: 0;
+	box-sizing: border-box;
+	position: relative;
 }
 
 iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  display: block; /* Make sure it's treated as a block element */
+	width: 100%;
+	height: 100%;
+	border: none;
+	display: block; /* Make sure it's treated as a block element */
 }
 
 #user-buttons {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.5rem;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.5rem;
 }
 
 #user-buttons button {
-  width: 100%;
+	width: 100%;
 }
 
 #user-buttons button.active {
-  background-color: var(--accent-color);
+	background-color: var(--accent-color);
 }
 
 .blur {
-  filter: blur(5px);
-  pointer-events: none;
+	filter: blur(5px);
+	pointer-events: none;
 }

@@ -1,72 +1,72 @@
 /* Form styling to make each field take a new row */
 #addDestinationForm {
-  display: flex;
-  flex-direction: column;
-  gap: 8px; /* Add space between form elements */
+	display: flex;
+	flex-direction: column;
+	gap: 8px; /* Add space between form elements */
 }
 
 /* Styling for destination dialog */
 #destinationDialog {
-  padding: 20px;
-  width: 600px;
-  height: 700px; /* Increase the height */
-  max-width: 90vw;
-  max-height: 90vh;
-  border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; /* Distribute space */
+	padding: 20px;
+	width: 600px;
+	height: 700px; /* Increase the height */
+	max-width: 90vw;
+	max-height: 90vh;
+	border-radius: 10px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+	margin: auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between; /* Distribute space */
 }
 
 /* Ensure each input takes the full width */
 #addDestinationForm label {
-  font-weight: bold;
-  margin-bottom: 5px;
+	font-weight: bold;
+	margin-bottom: 5px;
 }
 
 #addDestinationForm input,
 #addDestinationForm select,
 #addDestinationForm textarea {
-  width: 100%;
-  padding: 10px;
-  box-sizing: border-box;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 16px;
+	width: 100%;
+	padding: 10px;
+	box-sizing: border-box;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	font-size: 16px;
 }
 
 /* Style for the star rating */
 .star {
-  font-size: 2rem;
-  cursor: pointer;
-  color: #ccc;
+	font-size: 2rem;
+	cursor: pointer;
+	color: #ccc;
 }
 
 .star.selected {
-  color: gold;
+	color: gold;
 }
 
 /* Add/Cancel buttons at the bottom */
 .form-buttons {
-  display: flex;
-  justify-content: space-between;
+	display: flex;
+	justify-content: space-between;
 }
 
 #openDestinationDialog {
-  position: absolute;
-  top: 10%;
-  left: 10%;
-  transform: translateX(-20%);
-  background-color: var(--accent-color);
+	position: absolute;
+	top: 10%;
+	left: 10%;
+	transform: translateX(-20%);
+	background-color: var(--accent-color);
 }
 
 #openDestinationDialog:hover {
-  background-color: var(--accent-hover-color);
+	background-color: var(--accent-hover-color);
 }
 
 #addDestinationDialog {
-  max-width: 400px;
-  max-height: 80%;
+	max-width: 400px;
+	max-height: 80%;
 }

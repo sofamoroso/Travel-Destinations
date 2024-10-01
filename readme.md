@@ -4,12 +4,12 @@ Welcome to the Travel Destinations Project! This project aims to provide informa
 
 ## Table of Contents
 
-- [Introduction](#introduction)
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+-   [Introduction](#introduction)
+-   [Features](#features)
+-   [Installation](#installation)
+-   [Usage](#usage)
+-   [Contributing](#contributing)
+-   [License](#license)
 
 ## Introduction
 
@@ -17,10 +17,10 @@ Discover amazing travel destinations, learn about their attractions, and plan yo
 
 ## Features
 
-- Detailed information about various travel destinations
-- User reviews and ratings
-- Travel tips and guides
-- Interactive maps
+-   Detailed information about various travel destinations
+-   User reviews and ratings
+-   Travel tips and guides
+-   Interactive maps
 
 ## Installation
 

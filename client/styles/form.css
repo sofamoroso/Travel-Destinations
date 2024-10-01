@@ -1,143 +1,147 @@
 /* Centered modal container styling */
 .modal {
-  border: none;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
-  background-color: var(--background-color);
-  width: 100%;
-  max-width: 300px; /* Updated max-width for better responsiveness */
-  max-height: 80vh; /* Limit height */
-  overflow-y: auto; /* Allows scroll if content overflows */
-  position: fixed; /* Ensures modal stays in place */
-  top: 50%; /* Center vertically */
-  left: 50%; /* Center horizontally */
-  transform: translate(-50%, -50%); /* Shift back to truly center */
-  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+	border: none;
+	padding: 20px;
+	border-radius: 12px;
+	box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
+	background-color: var(--background-color);
+	width: 100%;
+	max-width: 300px; /* Updated max-width for better responsiveness */
+	max-height: 80vh; /* Limit height */
+	overflow-y: auto; /* Allows scroll if content overflows */
+	position: fixed; /* Ensures modal stays in place */
+	top: 50%; /* Center vertically */
+	left: 50%; /* Center horizontally */
+	transform: translate(-50%, -50%); /* Shift back to truly center */
+	transition:
+		transform 0.3s ease-in-out,
+		opacity 0.3s ease-in-out;
 }
 
 /* Modal backdrop styling */
 .modal::backdrop {
-  background: rgba(0, 0, 0, 0.6); /* Dark backdrop */
+	background: rgba(0, 0, 0, 0.6); /* Dark backdrop */
 }
 
 .modal p {
-  text-align: center;
-  color: #666;
-  margin-bottom: 1rem;
+	text-align: center;
+	color: #666;
+	margin-bottom: 1rem;
 }
 
 /* Modal heading styling */
 h1 {
-  font-size: 1.6rem;
-  margin-bottom: 1rem;
-  color: var(--text-color);
-  text-align: center;
-  font-weight: 800;
+	font-size: 1.6rem;
+	margin-bottom: 1rem;
+	color: var(--text-color);
+	text-align: center;
+	font-weight: 800;
 }
 
 /* Input group styling */
 .input-group {
-  margin-bottom: 0.8rem; /* Reduced margin for compactness */
+	margin-bottom: 0.8rem; /* Reduced margin for compactness */
 }
 
 .input-group label {
-  display: block;
-  margin-bottom: 3px;
-  color: var(--text-color);
-  font-size: 0.85rem;
-  font-weight: 500;
+	display: block;
+	margin-bottom: 3px;
+	color: var(--text-color);
+	font-size: 0.85rem;
+	font-weight: 500;
 }
 
 .input-group input {
-  width: 100%;
-  box-sizing: border-box; /* Ensures padding is included in width */
-  padding: 0.5rem;
-  border: 1px solid var(--input-border-color);
-  background-color: var(--input-bg-color);
-  border-radius: 6px;
-  font-size: 0.9rem;
-  transition: border-color 0.2s;
+	width: 100%;
+	box-sizing: border-box; /* Ensures padding is included in width */
+	padding: 0.5rem;
+	border: 1px solid var(--input-border-color);
+	background-color: var(--input-bg-color);
+	border-radius: 6px;
+	font-size: 0.9rem;
+	transition: border-color 0.2s;
 }
 
 .input-group input:focus {
-  border-color: var(--primary-color);
-  outline: none; /* Remove default outline */
+	border-color: var(--primary-color);
+	outline: none; /* Remove default outline */
 }
 
 /* Button styling */
 #button-container button {
-  width: 40%; /* Button takes content width */
-  margin-top: 1rem;
-  padding: 1rem 1.2rem;
-  background-color: var(--primary-color);
-  color: #fff; /* White text */
-  border: none; /* No border */
-  border-radius: 1rem; /* Rounded corners */
-  cursor: pointer; /* Pointer cursor */
-  font-size: 1.2rem; /* Font size */
-  transition: background-color 0.2s ease, transform 0.1s; /* Animation effects */
+	width: 40%; /* Button takes content width */
+	margin-top: 1rem;
+	padding: 1rem 1.2rem;
+	background-color: var(--primary-color);
+	color: #fff; /* White text */
+	border: none; /* No border */
+	border-radius: 1rem; /* Rounded corners */
+	cursor: pointer; /* Pointer cursor */
+	font-size: 1.2rem; /* Font size */
+	transition:
+		background-color 0.2s ease,
+		transform 0.1s; /* Animation effects */
 }
 
 button:hover {
-  background-color: var(--primary-hover-color); /* Change on hover */
-  transform: translateY(-1px); /* Slight hover lift effect */
+	background-color: var(--primary-hover-color); /* Change on hover */
+	transform: translateY(-1px); /* Slight hover lift effect */
 }
 
 button:active {
-  transform: translateY(1px); /* Pressed effect */
+	transform: translateY(1px); /* Pressed effect */
 }
 
 #button-container {
-  text-align: center; /* Center button and text */
-  margin-top: 1rem; /* Space above button */
+	text-align: center; /* Center button and text */
+	margin-top: 1rem; /* Space above button */
 }
 
 /* Styling for the "No account? Register" link */
 .signup-cta {
-  text-align: center; /* Center link */
-  margin-top: 15px; /* Space above */
-  font-size: 0.9rem; /* Font size */
+	text-align: center; /* Center link */
+	margin-top: 15px; /* Space above */
+	font-size: 0.9rem; /* Font size */
 }
 
 .signup-cta a {
-  color: var(--accent-color); /* Link color */
-  text-decoration: none; /* No underline */
-  font-weight: bold; /* Bold link */
+	color: var(--accent-color); /* Link color */
+	text-decoration: none; /* No underline */
+	font-weight: bold; /* Bold link */
 }
 
 .signup-cta a:hover {
-  text-decoration: underline; /* Underline on hover */
-  color: var(--accent-hover-color); /* Change color on hover */
+	text-decoration: underline; /* Underline on hover */
+	color: var(--accent-hover-color); /* Change color on hover */
 }
 
 #error-message {
-  color: var(--error-color); /* Error color */
-  margin-top: 10px; /* Space above */
-  text-align: center; /* Center text */
-  display: none; /* Hidden by default */
+	color: var(--error-color); /* Error color */
+	margin-top: 10px; /* Space above */
+	text-align: center; /* Center text */
+	display: none; /* Hidden by default */
 }
 
 /* Centering content */
 .modal-content {
-  display: flex;
-  flex-direction: column; /* Stack elements vertically */
-  justify-content: center; /* Center items */
-  align-items: center; /* Center items */
+	display: flex;
+	flex-direction: column; /* Stack elements vertically */
+	justify-content: center; /* Center items */
+	align-items: center; /* Center items */
 }
 
 /* Responsive adjustments */
 @media (max-width: 600px) {
-  .modal {
-    width: 95%; /* Full width on small screens */
-    padding: 1rem; /* Padding for small screens */
-  }
+	.modal {
+		width: 95%; /* Full width on small screens */
+		padding: 1rem; /* Padding for small screens */
+	}
 
-  h1 {
-    font-size: 1.1rem; /* Smaller heading */
-  }
+	h1 {
+		font-size: 1.1rem; /* Smaller heading */
+	}
 
-  button {
-    padding: 0.7rem; /* Smaller button padding */
-  }
+	button {
+		padding: 0.7rem; /* Smaller button padding */
+	}
 }

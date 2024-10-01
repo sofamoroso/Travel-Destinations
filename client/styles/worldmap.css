@@ -1,34 +1,34 @@
 body {
-  padding: 2rem;
-  overflow: hidden;
-  cursor: grab;
+	padding: 2rem;
+	overflow: hidden;
+	cursor: grab;
 }
 
 svg {
-  border-radius: 1rem;
-  width: 100%;
-  height: 100%;
-  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
+	border-radius: 1rem;
+	width: 100%;
+	height: 100%;
+	box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
 }
 
 path {
-  fill: #dbd9d9;
-  stroke-width: 0.5;
-  pointer-events: all;
-  stroke: var(--text-color);
+	fill: #dbd9d9;
+	stroke-width: 0.5;
+	pointer-events: all;
+	stroke: var(--text-color);
 }
 path:hover {
-  fill: var(--primary-color);
-  stroke-width: 0.8;
-  stroke: var(--text-color);
+	fill: var(--primary-color);
+	stroke-width: 0.8;
+	stroke: var(--text-color);
 }
 
 .visited {
-  fill: var(--secondary-color);
+	fill: var(--secondary-color);
 }
 
 .clicked {
-  fill: var(--accent-color);
-  stroke-width: 1;
-  stroke: var(--text-color);
+	fill: var(--accent-color);
+	stroke-width: 1;
+	stroke: var(--text-color);
 }
