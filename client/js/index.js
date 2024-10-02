@@ -14,7 +14,15 @@ function initializeEventListeners() {
 	});
 
 	// Listen for the custom event destinationAdded to refresh the data
-    document.addEventListener('destinationAdded', loadData);
+    document.addEventListener('destinationAdded', () => {
+		loadData();
+
+		// Dynamically update the sidebar content when a destination is added
+		const sidebar = document.getElementById('right-sidebar');
+		if (sidebar.classList.contains('show')) {
+			updateSidebarContent();
+		}
+	});
 }
 
 // Function to load data and create user buttons
@@ -87,38 +95,25 @@ function highlightLoggedInUser(button, travelDestinations, iframe, loggedInUserI
     iframe.contentWindow.postMessage({ action: 'visitedPlaces', travelDestinations: myTravelDestinations }, '*');
 }
 
-// Fetch all destinations for a specific user and country
-async function fetchTravelDestinationsByUserAndCountry(userId, country) {
-	try {
-		const response = await fetch(
-			`/api/travel-destinations/${userId}/${country}`
-		);
-		if (!response.ok) {
-			throw new Error('Network response was not ok');
-		}
-		const travelDestinations = await response.json();
-		console.log('trvDestinationsByUserAndCountry', travelDestinations);
-
-		return travelDestinations;
-	} catch (error) {
-		console.error('Error fetching visited places:', error);
-		return [];
-	}
-}
-
 // Function to show the sidebar with the clicked path = country name
 async function showSidebar(path, countryCode) {
     const userId = sessionStorage.getItem('selectedUserId');
     const username = sessionStorage.getItem('selectedUser');
 
     sessionStorage.setItem('selectedCountry', path);
+	sessionStorage.setItem('selectedCountryCode', countryCode);
 
     const travelDestinations = await fetchTravelDestinationsByUserAndCountry(userId, path);
 
-    updateSidebarContent(path, countryCode, username, travelDestinations);
+	if (!travelDestinations) {
+		console.error('Failed to fetch travel destinations.');
+		return;
+	}
+
+    initializeSidebarContent(path, countryCode, username, travelDestinations);
 }
 
-function updateSidebarContent(path, countryCode, username, travelDestinations) {
+function initializeSidebarContent(path, countryCode, username, travelDestinations) {
     const sidebar = document.getElementById('right-sidebar');
     const sidebarTitle = document.getElementById('sidebar-title');
     const sidebarSubtitle = document.getElementById('sidebar-subtitle');
@@ -185,6 +180,25 @@ function displayDestinationCards(destination) {
 	sidebarContent.appendChild(card);
 }
 
+// Fetch all destinations for a specific user and country
+async function fetchTravelDestinationsByUserAndCountry(userId, country) {
+	try {
+		const response = await fetch(
+			`/api/travel-destinations/${userId}/${country}`
+		);
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+		const travelDestinations = await response.json();
+		console.log('trvDestinationsByUserAndCountry', travelDestinations);
+
+		return travelDestinations;
+	} catch (error) {
+		console.error('Error fetching visited places:', error);
+		return [];
+	}
+}
+
 // Function to fetch users from the backend
 async function fetchUsers() {
 	try {
@@ -219,3 +233,12 @@ async function fetchTravelDestinations() {
 	}
 }
 
+async function updateSidebarContent() {
+	const selectedCountry = sessionStorage.getItem('selectedCountry');
+	const selectedCountryCode = sessionStorage.getItem('selectedCountryCode');
+	const username = sessionStorage.getItem('logged-username');
+	const userId = sessionStorage.getItem('logged-_id');
+	const travelDestinations = await fetchTravelDestinationsByUserAndCountry(userId, selectedCountry);
+
+	initializeSidebarContent(selectedCountry, selectedCountryCode, username, travelDestinations);
+}
