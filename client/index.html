@@ -27,7 +27,6 @@
 			<div class="left-sidebar">
 				<h2>Explore Travel Histories</h2>
 				<div id="user-buttons"></div>
-				<!-- <button id="openDestinationDialog">Add New Destination</button> -->
 			</div>
 
 			<div class="main-content">
@@ -194,47 +193,9 @@
 			</form>
 		</dialog>
 
-		<script type="module">
-			import { loadData2, showSidebar, hideSidebar } from './utils.js';
-
-			const iframe = document.getElementById('worldMapIframe');
-
-			// Load the navbar, data, and set up iframe communication
-			document.addEventListener('DOMContentLoaded', () => {
-				loadData2();
-			});
-
-			// Listen for the custom event destinationAdded to refresh the data
-			document.addEventListener('destinationAdded', () => {
-				loadData2();
-			});
-
-			// Attach the hideSidebar function to the button
-			document
-				.getElementById('close-sidebar-button')
-				.addEventListener('click', () => {
-					hideSidebar();
-					console.log('Close button clicked');
-				});
-
-			// Listen for messages from the iframe (gets info about the path clicked)
-			window.addEventListener('message', (event) => {
-				console.log('Message received from MAP:', event.data);
-				if (event.data && event.data.path) {
-					showSidebar(event.data.path, event.data.countryCode);
-				}
-			});
-
-			// Send a  test message to the iframe
-			// iframe.onload = () => {
-			//     console.log('Iframe loaded, sending a test message to child html');
-			//     iframe.contentWindow.postMessage({ action: 'testing' }, '*');
-			// };
-		</script>
-
-		<script src="authHandler.js"></script>
-		<script src="users.js"></script>
-		<script src="visitedPlaces.js"></script>
-		<script src="addDestination.js"></script>
+		
+		<script src="js/index.js"></script>
+		<script src="js/authHandler.js"></script>
+		<script src="js/addDestination.js"></script>
 	</body>
 </html>

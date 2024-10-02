@@ -9,9 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	const addDestinationDialogClose = document.getElementById(
 		'addDestinationDialogClose'
 	);
-	const addDestinationButton = document.getElementById(
-		'openDestinationDialog'
-	);
 
 	const addDestinationButtons =
 		document.querySelectorAll('.addDestinationBtn');
@@ -107,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	};
 
 	// Fetch country data from a JSON file and populate the dropdown
-	fetch('countries.json')
+	fetch('data/countries.json')
 		.then((response) => response.json())
 		.then((countries) => {
 			// Add an empty first option to the dropdown
