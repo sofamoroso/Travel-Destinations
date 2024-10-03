@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	initializeSVGPan();
 	initializeSVGZoom();
 	addClickListenersToCountries();
+	setupEventListener();
 });
 
 function highlightVisitedPlaces(uniqueCountries) {
@@ -41,19 +42,21 @@ function addClickListenersToCountries() {
 	});
 }
 
-// Listen for messages from the parent window
-window.addEventListener('message', (event) => {
-	if (event.data && event.data.action === 'visitedPlaces') {
-		highlightVisitedPlaces(event.data.travelDestinations);
-	}
+// Listen for messages (travelDestinations) from the parent window
+function setupEventListener() {
+    window.addEventListener('message', (event) => {
+        if (event.data && event.data.action === 'visitedPlaces') {
+            highlightVisitedPlaces(event.data.travelDestinations);
+        }
 
-	if (event.data && event.data.action === 'removeClickedClass') {
-		const clickedPath = document.querySelector('.clicked');
-		if (clickedPath) {
-			clickedPath.classList.remove('clicked');
-		}
-	}
-});
+        if (event.data && event.data.action === 'removeClickedClass') {
+            const clickedPath = document.querySelector('.clicked');
+            if (clickedPath) {
+                clickedPath.classList.remove('clicked');
+            }
+        }
+    });
+}
 
 function initializeSVGPan() {
 	const svg = document.querySelector('svg');
