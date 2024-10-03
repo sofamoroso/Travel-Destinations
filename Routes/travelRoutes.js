@@ -46,4 +46,18 @@ router.post('/api/travel-destinations', async (req, res) => {
 	}
 });
 
+router.delete('/api/travel-destinations/:id', async (req, res) => {
+	const { id } = req.params;
+	try {
+		const deletedDestination =
+			await TravelDestination.findByIdAndDelete(id);
+		if (!deletedDestination) {
+			return res.status(404).json({ message: 'Destination not found' });
+		}
+		res.status(200).json({ message: 'Destination deleted successfully' });
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
+});
+
 export default router;
