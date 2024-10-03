@@ -3,88 +3,88 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initializeAuth() {
-    const token = sessionStorage.getItem('jwt-TravelDestination');
-    const username = sessionStorage.getItem('logged-username');
-    const _id = sessionStorage.getItem('logged-_id');
+	const token = sessionStorage.getItem('jwt-TravelDestination');
+	const username = sessionStorage.getItem('logged-username');
+	const _id = sessionStorage.getItem('logged-_id');
 
-    const loggedIn = !!token;
+	const loggedIn = !!token;
 
-    console.log(loggedIn, username, _id);
+	console.log(loggedIn, username, _id);
 
-    const loginModal = document.getElementById('modal');
-    const registerModal = document.getElementById('registerModal');
-    const authLinks = document.querySelectorAll('.authLink');
-    const loginForm = document.getElementById('loginForm');
-    const registerForm = document.getElementById('registerForm');
-    const leftSidebar = document.querySelector('.left-sidebar');
-    const mainContent = document.querySelector('.main-content');
+	const loginModal = document.getElementById('modal');
+	const registerModal = document.getElementById('registerModal');
+	const authLinks = document.querySelectorAll('.authLink');
+	const loginForm = document.getElementById('loginForm');
+	const registerForm = document.getElementById('registerForm');
+	const leftSidebar = document.querySelector('.left-sidebar');
+	const mainContent = document.querySelector('.main-content');
 	const logoutButton = document.getElementById('logoutButton');
 
-    if (!loggedIn) {
-        showLoginModal(loginModal, leftSidebar, mainContent);
-    }
+	if (!loggedIn) {
+		showLoginModal(loginModal, leftSidebar, mainContent);
+	}
 
-    handleLoginModalClose(loginModal, loggedIn, leftSidebar, mainContent);
-    switchAuthModals(authLinks, loginModal, registerModal);
-    handleRegisterModalCancel(registerModal, loginModal);
-    handleLoginFormSubmit(loginForm);
-    handleRegisterFormSubmit(registerForm);
+	handleLoginModalClose(loginModal, loggedIn, leftSidebar, mainContent);
+	switchAuthModals(authLinks, loginModal, registerModal);
+	handleRegisterModalCancel(registerModal, loginModal);
+	handleLoginFormSubmit(loginForm);
+	handleRegisterFormSubmit(registerForm);
 	initializeLogoutButton(logoutButton);
 }
 
 function showLoginModal(loginModal, leftSidebar, mainContent) {
-    loginModal.showModal();
-    leftSidebar.classList.add('blur');
-    mainContent.classList.add('blur');
+	loginModal.showModal();
+	leftSidebar.classList.add('blur');
+	mainContent.classList.add('blur');
 }
 
 function handleLoginModalClose(loginModal, loggedIn, leftSidebar, mainContent) {
-    loginModal.addEventListener('close', () => {
-        if (loggedIn) {
-            leftSidebar.classList.remove('blur');
-            mainContent.classList.remove('blur');
-        }
-    });
+	loginModal.addEventListener('close', () => {
+		if (loggedIn) {
+			leftSidebar.classList.remove('blur');
+			mainContent.classList.remove('blur');
+		}
+	});
 }
 
 function switchAuthModals(authLinks, loginModal, registerModal) {
-    authLinks.forEach((authLink) => {
-        authLink.addEventListener('click', (event) => {
-            event.preventDefault();
-            if (loginModal.hasAttribute('open')) {
-                loginModal.close();
-                registerModal.showModal();
-            } else {
-                loginModal.showModal();
-                registerModal.close();
-            }
-        });
-    });
+	authLinks.forEach((authLink) => {
+		authLink.addEventListener('click', (event) => {
+			event.preventDefault();
+			if (loginModal.hasAttribute('open')) {
+				loginModal.close();
+				registerModal.showModal();
+			} else {
+				loginModal.showModal();
+				registerModal.close();
+			}
+		});
+	});
 }
 
 function handleRegisterModalCancel(registerModal, loginModal) {
-    registerModal.addEventListener('cancel', () => {
-        loginModal.showModal();
-    });
+	registerModal.addEventListener('cancel', () => {
+		loginModal.showModal();
+	});
 }
 
 function handleLoginFormSubmit(loginForm) {
-    loginForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const username = document.getElementById('username').value.trim();
-        const password = document.getElementById('password').value.trim();
-        login(username, password);
-    });
+	loginForm.addEventListener('submit', (event) => {
+		event.preventDefault();
+		const username = document.getElementById('username').value.trim();
+		const password = document.getElementById('password').value.trim();
+		login(username, password);
+	});
 }
 
 function handleRegisterFormSubmit(registerForm) {
-    registerForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const username = document.getElementById('regUsername').value.trim();
-        const password = document.getElementById('regPassword').value.trim();
-        const email = document.getElementById('regEmail').value.trim();
-        register(username, password, email);
-    });
+	registerForm.addEventListener('submit', (event) => {
+		event.preventDefault();
+		const username = document.getElementById('regUsername').value.trim();
+		const password = document.getElementById('regPassword').value.trim();
+		const email = document.getElementById('regEmail').value.trim();
+		register(username, password, email);
+	});
 }
 
 function initializeLogoutButton() {
@@ -109,7 +109,7 @@ const handleLogout = () => {
 	sessionStorage.removeItem('logged-username');
 	sessionStorage.removeItem('selectedUser');
 	location.reload();
-}
+};
 
 const login = async (username, password) => {
 	try {

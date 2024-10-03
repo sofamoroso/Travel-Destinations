@@ -1,11 +1,15 @@
 // Load the navbar, data, and set up iframe communication
 document.addEventListener('DOMContentLoaded', () => {
-	loadData();
-	initializeEventListeners();
+	const token = sessionStorage.getItem('jwt-TravelDestination');
+
+	if (token) {
+		loadData();
+		initializeEventListeners();
+	}
 });
 
 function initializeEventListeners() {
-    // Listen for messages from the iframe (gets info about the path clicked)
+	// Listen for messages from the iframe (gets info about the path clicked)
 	window.addEventListener('message', (event) => {
 		console.log('Message received from MAP:', event.data);
 		if (event.data && event.data.action === 'countryClicked') {
@@ -14,7 +18,7 @@ function initializeEventListeners() {
 	});
 
 	// Listen for the custom event destinationAdded to refresh the data
-    document.addEventListener('destinationAdded', () => {
+	document.addEventListener('destinationAdded', () => {
 		loadData();
 
 		// Dynamically update the sidebar content when a destination is added
@@ -27,114 +31,166 @@ function initializeEventListeners() {
 
 // Function to load data and create user buttons
 async function loadData() {
-    const [users, travelDestinations] = await fetchData();
-    const userButtonsContainer = document.getElementById('user-buttons');
-    const iframe = document.getElementById('worldMapIframe');
+	const [users, travelDestinations] = await fetchData();
+	const userButtonsContainer = document.getElementById('user-buttons');
+	const iframe = document.getElementById('worldMapIframe');
 
-    clearUserButtons(userButtonsContainer);
+	clearUserButtons(userButtonsContainer);
 
-    if (users.length > 0) {
-        const loggedInUserId = sessionStorage.getItem('logged-_id');
-        sortUsers(users, loggedInUserId);
-        createUserButtons(users, travelDestinations, userButtonsContainer, iframe, loggedInUserId);
-    } else {
-        console.error('users array is not defined');
-    }
+	if (users.length > 0) {
+		const loggedInUserId = sessionStorage.getItem('logged-_id');
+		sortUsers(users, loggedInUserId);
+		createUserButtons(
+			users,
+			travelDestinations,
+			userButtonsContainer,
+			iframe,
+			loggedInUserId
+		);
+	} else {
+		console.error('users array is not defined');
+	}
 }
 
 // Function to fetch users and travel destinations from the backend
 async function fetchData() {
-    const [users, travelDestinations] = await Promise.all([
-        fetchUsers(),
-        fetchTravelDestinations(),
-    ]);
-    return [users, travelDestinations];
+	const [users, travelDestinations] = await Promise.all([
+		fetchUsers(),
+		fetchTravelDestinations(),
+	]);
+	return [users, travelDestinations];
 }
 
 function clearUserButtons(container) {
-    container.innerHTML = '';
+	container.innerHTML = '';
 }
 
 function sortUsers(users, loggedInUserId) {
-    users.sort((a, b) =>
-        a._id === loggedInUserId ? -1 : b._id === loggedInUserId ? 1 : 0
-    );
+	users.sort((a, b) =>
+		a._id === loggedInUserId ? -1 : b._id === loggedInUserId ? 1 : 0
+	);
 }
 
 // Function to create user buttons and send travel destinations to the iframe
-function createUserButtons(users, travelDestinations, container, iframe, loggedInUserId) {
-    users.forEach((user) => {
-        const button = document.createElement('button');
-        button.textContent = user.username;
-        button.addEventListener('click', () => handleUserButtonClick(user, travelDestinations, iframe, button));
-        container.appendChild(button);
+function createUserButtons(
+	users,
+	travelDestinations,
+	container,
+	iframe,
+	loggedInUserId
+) {
+	users.forEach((user) => {
+		const button = document.createElement('button');
+		button.textContent = user.username;
+		button.addEventListener('click', () =>
+			handleUserButtonClick(user, travelDestinations, iframe, button)
+		);
+		container.appendChild(button);
 
-        if (user._id === loggedInUserId) {
-            highlightLoggedInUser(button, travelDestinations, iframe, loggedInUserId);
-        }
-    });
+		if (user._id === loggedInUserId) {
+			highlightLoggedInUser(
+				button,
+				travelDestinations,
+				iframe,
+				loggedInUserId
+			);
+		}
+	});
 }
 
 function handleUserButtonClick(user, travelDestinations, iframe, button) {
-    sessionStorage.setItem('selectedUser', user.username);
-    sessionStorage.setItem('selectedUserId', user._id);
+	sessionStorage.setItem('selectedUser', user.username);
+	sessionStorage.setItem('selectedUserId', user._id);
 
-    const filteredDestinations = travelDestinations.filter((destination) => destination.userId === user._id);
-    iframe.contentWindow.postMessage({ action: 'visitedPlaces', travelDestinations: filteredDestinations }, '*');
+	const filteredDestinations = travelDestinations.filter(
+		(destination) => destination.userId === user._id
+	);
 
-    document.querySelectorAll('#user-buttons button').forEach((btn) => btn.classList.remove('active'));
-    button.classList.add('active');
+	const uniqueCountries = new Set(filteredDestinations.map(destination => destination.country));
+	console.log(uniqueCountries); // This will log the Set of unique countries
 
-    hideSidebar();
+	iframe.contentWindow.postMessage(
+		{ action: 'visitedPlaces', travelDestinations: uniqueCountries },
+		'*'
+	);
+
+	document
+		.querySelectorAll('#user-buttons button')
+		.forEach((btn) => btn.classList.remove('active'));
+	button.classList.add('active');
+
+	hideSidebar();
 }
 
 // Highlight the logged in user button and send their travel destinations to the iframe
-function highlightLoggedInUser(button, travelDestinations, iframe, loggedInUserId) {
-    button.classList.add('active');
-    const myTravelDestinations = travelDestinations.filter((destination) => destination.userId === loggedInUserId);
-    iframe.contentWindow.postMessage({ action: 'visitedPlaces', travelDestinations: myTravelDestinations }, '*');
+function highlightLoggedInUser(
+	button,
+	travelDestinations,
+	iframe,
+	loggedInUserId
+) {
+	button.classList.add('active');
+	const myTravelDestinations = travelDestinations.filter(
+		(destination) => destination.userId === loggedInUserId
+	);
+
+	const uniqueCountries = new Set(myTravelDestinations.map(destination => destination.country));
+	console.log(uniqueCountries); // This will log the Set of unique countries
+
+	iframe.contentWindow.postMessage(
+		{ action: 'visitedPlaces', travelDestinations: uniqueCountries },
+		'*'
+	);
 }
 
 // Function to show the sidebar with the clicked path = country name
 async function showSidebar(path, countryCode) {
-    const userId = sessionStorage.getItem('selectedUserId');
-    const username = sessionStorage.getItem('selectedUser');
+	const userId = sessionStorage.getItem('selectedUserId');
+	const username = sessionStorage.getItem('selectedUser');
 
-    sessionStorage.setItem('selectedCountry', path);
+	sessionStorage.setItem('selectedCountry', path);
 	sessionStorage.setItem('selectedCountryCode', countryCode);
 
-    const travelDestinations = await fetchTravelDestinationsByUserAndCountry(userId, path);
+	const travelDestinations = await fetchTravelDestinationsByUserAndCountry(
+		userId,
+		path
+	);
 
 	if (!travelDestinations) {
 		console.error('Failed to fetch travel destinations.');
 		return;
 	}
 
-    initializeSidebarContent(path, countryCode, username, travelDestinations);
+	initializeSidebarContent(path, countryCode, username, travelDestinations);
 }
 
-function initializeSidebarContent(path, countryCode, username, travelDestinations) {
-    const sidebar = document.getElementById('right-sidebar');
-    const sidebarTitle = document.getElementById('sidebar-title');
-    const sidebarSubtitle = document.getElementById('sidebar-subtitle');
-    const sideBarFlag = document.getElementById('sidebar-flag');
-    const sidebarContent = document.getElementById('sidebar-content');
+function initializeSidebarContent(
+	path,
+	countryCode,
+	username,
+	travelDestinations
+) {
+	const sidebar = document.getElementById('right-sidebar');
+	const sidebarTitle = document.getElementById('sidebar-title');
+	const sidebarSubtitle = document.getElementById('sidebar-subtitle');
+	const sideBarFlag = document.getElementById('sidebar-flag');
+	const sidebarContent = document.getElementById('sidebar-content');
 	const sidebarCloseButton = document.getElementById('close-sidebar-button');
 
-    sideBarFlag.src = `https://flagsapi.com/${countryCode}/shiny/64.png`;
+	sideBarFlag.src = `https://flagsapi.com/${countryCode}/shiny/64.png`;
 
-    sidebarContent.innerHTML = '';
-    sidebarTitle.innerHTML = `You clicked on ${path}.`;
-    sidebarSubtitle.innerHTML = `${username} visited ${travelDestinations.length} places in this country.`;
+	sidebarContent.innerHTML = '';
+	sidebarTitle.innerHTML = `You clicked on ${path}.`;
+	sidebarSubtitle.innerHTML = `${username} visited ${travelDestinations.length} places in this country.`;
 
-    if (travelDestinations.length > 0) {
-        travelDestinations.forEach(displayDestinationCards);
-    } else {
-        const noCitiesMessage = document.createElement('p');
+	if (travelDestinations.length > 0) {
+		travelDestinations.forEach(displayDestinationCards);
+	} else {
+		const noCitiesMessage = document.createElement('p');
 		noCitiesMessage.textContent = 'No cities visited in this country.';
 		sidebarContent.appendChild(noCitiesMessage);
-    }
-	
+	}
+
 	sidebarCloseButton.addEventListener('click', hideSidebar);
 	sidebar.classList.add('show');
 }
@@ -238,7 +294,15 @@ async function updateSidebarContent() {
 	const selectedCountryCode = sessionStorage.getItem('selectedCountryCode');
 	const username = sessionStorage.getItem('logged-username');
 	const userId = sessionStorage.getItem('logged-_id');
-	const travelDestinations = await fetchTravelDestinationsByUserAndCountry(userId, selectedCountry);
+	const travelDestinations = await fetchTravelDestinationsByUserAndCountry(
+		userId,
+		selectedCountry
+	);
 
-	initializeSidebarContent(selectedCountry, selectedCountryCode, username, travelDestinations);
+	initializeSidebarContent(
+		selectedCountry,
+		selectedCountryCode,
+		username,
+		travelDestinations
+	);
 }
