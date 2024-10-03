@@ -2,7 +2,35 @@ document.addEventListener('DOMContentLoaded', () => {
 	initializeSVGPan();
 	initializeSVGZoom();
 	addClickListenersToCountries();
-	setupEventListener();
+});
+
+// Listen for messages (travelDestinations) from the parent window
+window.addEventListener('message', (event) => {
+    if (event.data && event.data.action === 'visitedPlaces') {
+        const uniqueCountries = event.data.travelDestinations;
+
+        const svg = document.querySelector('svg');
+        if (svg) {
+            // Ensure the SVG is fully loaded
+            if (document.readyState === 'complete' || document.readyState === 'interactive') {
+				console.log("Document state (SVG):", document.readyState);
+				
+                highlightVisitedPlaces(uniqueCountries);
+            } else {
+                window.addEventListener('load', () => {
+                    highlightVisitedPlaces(uniqueCountries);
+                });
+            }
+        } else {
+            console.error('SVG element not found');
+        }
+    }
+    if (event.data && event.data.action === 'removeClickedClass') {
+        const clickedPath = document.querySelector('.clicked');
+        if (clickedPath) {
+            clickedPath.classList.remove('clicked');
+        }
+    }
 });
 
 function highlightVisitedPlaces(uniqueCountries) {
@@ -40,22 +68,6 @@ function addClickListenersToCountries() {
 			);
 		});
 	});
-}
-
-// Listen for messages (travelDestinations) from the parent window
-function setupEventListener() {
-    window.addEventListener('message', (event) => {
-        if (event.data && event.data.action === 'visitedPlaces') {
-            highlightVisitedPlaces(event.data.travelDestinations);
-        }
-
-        if (event.data && event.data.action === 'removeClickedClass') {
-            const clickedPath = document.querySelector('.clicked');
-            if (clickedPath) {
-                clickedPath.classList.remove('clicked');
-            }
-        }
-    });
 }
 
 function initializeSVGPan() {
