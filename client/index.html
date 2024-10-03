@@ -1,8 +1,8 @@
 <!doctype html>
-	<html lang="en">
+<html lang="en">
 	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>My HTML Page</title>
 		<link rel="stylesheet" href="./styles/variables.css" />
 		<link rel="stylesheet" href="./styles/form.css" />
@@ -39,12 +39,8 @@
 						</h3>
 						<p id="sidebar-subtitle"></p>
 						<img id="sidebar-flag" src="" alt="Country Flag" />
-						<button
-							class="addDestinationBtn"
-							id="add-destination-button-rightSidebar"
-						>
-							+
-						</button>
+						<!-- prettier-ignore -->
+						<button class="addDestinationBtn" id="add-destination-button-rightSidebar">+</button>
 					</div>
 					<div id="sidebar-content">
 						<!-- Dynamic content (cards) will be inserted here -->
@@ -55,6 +51,12 @@
 				<!-- Template for destination cards -->
 				<template id="destination-card-template">
 					<div class="card">
+						<div class="card-actions">
+							<!-- prettier-ignore -->
+							<button class="edit-btn" aria-label="Edit destination">✏️</button>
+							<!-- prettier-ignore -->
+							<button class="delete-btn" aria-label="Delete destination">🗑️</button>
+						</div>
 						<p class="city-name"></p>
 						<p class="city-description"></p>
 						<p class="date-visited"></p>
@@ -65,11 +67,16 @@
 				<div class="iframe-container">
 					<button
 						class="addDestinationBtn"
-						id="openDestinationDialog">
+						id="openDestinationDialog"
+					>
 						+ Add New Destination
 					</button>
 
-					<iframe id="worldMapIframe" src="worldMap.html" title="map"></iframe>
+					<iframe
+						id="worldMapIframe"
+						src="worldMap.html"
+						title="map"
+					></iframe>
 					<!-- <object id="worldMapIframe" type="image/svg+xml" data="worldMap.svg"></object> -->
 				</div>
 			</div>
@@ -102,9 +109,8 @@
 					<button type="submit">Login</button>
 					<p class="signup-cta">
 						<span>No account?</span>
-						<a href="#" id="registerLink" class="authLink"
-							>Register</a
-						>
+						<!-- prettier-ignore -->
+						<a href="#" id="registerLink" class="authLink">Register</a>
 					</p>
 				</div>
 			</form>
@@ -194,7 +200,6 @@
 			</form>
 		</dialog>
 
-		
 		<script src="js/index.js"></script>
 		<script src="js/authHandler.js"></script>
 		<script src="js/addDestination.js"></script>
