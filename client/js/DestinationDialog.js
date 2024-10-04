@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	let isEditMode = false;
 	let currentDestinationId = null;
+
 	const addDestinationForm = document.getElementById('addDestinationForm');
 	const addDestinationDialog = document.getElementById('addDestinationDialog');
 	const addDestinationDialogClose = document.getElementById('addDestinationDialogClose');
@@ -13,10 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	const dateInput = document.getElementById('date');
 	const descriptionInput = document.getElementById('description');
 	const ratingInput = document.getElementById('rating');
-
 	const starElements = document.querySelectorAll('#stars .star');
 
-	//Elements for dynamic title and buttons in deifferent dialogs
 	const destinationDialogTitle = document.getElementById('destinationDialogTitle');
 	const destinationDialogSubmitButton = document.getElementById('destinationDialogSubmitButton');
 
@@ -69,9 +68,8 @@ document.addEventListener('DOMContentLoaded', () => {
 						city,
 						date,
 						description,
-						rating,
-					}),
-				}
+						rating,}),
+					}
 			);
 
 			const data = await response.json();
@@ -191,15 +189,12 @@ document.addEventListener('DOMContentLoaded', () => {
 		isEditMode = true;
 		currentDestinationId = destination._id;
 
-		// Populate form fields with existing data
 		countrySelect.value = destination.country;
 		cityInput.value = destination.city;
 		dateInput.value = destination.date.split('T')[0]; // Format date
 		descriptionInput.value = destination.description;
 		ratingInput.value = destination.rating;
-		document
-			.querySelector('#stars')
-			.setAttribute('data-rating', destination.rating);
+		document.querySelector('#stars').setAttribute('data-rating', destination.rating);
 
 		// Update stars display
 		starElements.forEach((star) => {
