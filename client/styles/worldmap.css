@@ -2,6 +2,8 @@ body {
 	padding: 2rem;
 	overflow: hidden;
 	cursor: grab;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
 }
 
 svg {
@@ -17,6 +19,7 @@ path {
 	pointer-events: all;
 	stroke: var(--text-color);
 }
+
 path:hover {
 	fill: var(--primary-color);
 	stroke-width: 0.8;
@@ -31,4 +34,15 @@ path:hover {
 	fill: var(--accent-color);
 	stroke-width: 1;
 	stroke: var(--text-color);
+}
+
+#country-name {
+	position: absolute;
+	background-color: var(--text-color);
+	color: #fff;
+	padding: 5px;
+	border-radius: 3px;
+	pointer-events: none; 
+	display: none; 
+	z-index: 1000; 
 }

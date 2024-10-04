@@ -1,7 +1,10 @@
+// const { text } = require("express");
+
 document.addEventListener('DOMContentLoaded', () => {
     initializeSVGPan();
     initializeSVGZoom();
     addClickListenersToCountries();
+    showCountryName();
 });
 
 
@@ -34,6 +37,32 @@ function addClickListenersToCountries() {
         });
     });
 }
+
+// Show Country Name
+function showCountryName() {
+    const svg = document.querySelector('svg');
+    const paths = svg.querySelectorAll('path');
+    const textContainer = document.getElementById('country-name');
+
+    paths.forEach((path) => {
+        const country = path.getAttribute('title');
+        path.addEventListener('mousemove', (event) => {
+            const x = event.clientX;
+            const y = event.clientY;
+            
+            console.log(`Country: ${country}`);
+            textContainer.textContent = country;
+            textContainer.style.left = `${x}px`; 
+            textContainer.style.top = `${y}px`;
+            textContainer.style.display = 'block'; 
+        });
+
+         path.addEventListener('mouseout', () => {
+            textContainer.style.display = 'none';
+        });
+    });
+}
+
 
 // Listen for messages from the parent window
 window.addEventListener('message', (event) => {
