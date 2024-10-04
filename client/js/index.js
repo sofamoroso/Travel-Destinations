@@ -30,16 +30,27 @@ async function loadData() {
     const [users, travelDestinations] = await fetchData();
     const userButtonsContainer = document.getElementById('user-buttons');
     const iframe = document.getElementById('worldMapIframe');
+	const loggedInUserId = sessionStorage.getItem('logged-_id');
 
     clearUserButtons(userButtonsContainer);
 
     if (users.length > 0) {
-        const loggedInUserId = sessionStorage.getItem('logged-_id');
-        sortUsers(users, loggedInUserId);
-        createUserButtons(users, travelDestinations, userButtonsContainer, iframe, loggedInUserId);
+		const loggedInUserName = sessionStorage.getItem('logged-username');
+		const profileCard = document.getElementById('profile-card');
+
+		const updatedUsers = users.filter(user => user._id !== loggedInUserId);
+        // sortUsers(users);
+        // createUserButtons(users, travelDestinations, userButtonsContainer, iframe, loggedInUserId);
+		createUserButtons(updatedUsers, travelDestinations, userButtonsContainer, iframe);
+		populateUserCard(loggedInUserName, loggedInUserId, travelDestinations, profileCard, iframe);
+
     } else {
         console.error('users array is not defined');
     }
+
+
+	loadLoggedInUserDestinations(travelDestinations, iframe, loggedInUserId);
+
 }
 
 // Function to fetch users and travel destinations from the backend
@@ -55,26 +66,22 @@ function clearUserButtons(container) {
     container.innerHTML = '';
 }
 
-function sortUsers(users, loggedInUserId) {
-    users.sort((a, b) =>
-        a._id === loggedInUserId ? -1 : b._id === loggedInUserId ? 1 : 0
-    );
-}
+// function sortUsers(users, loggedInUserId) {
+//     users.sort((a, b) =>
+//         a._id === loggedInUserId ? -1 : b._id === loggedInUserId ? 1 : 0
+//     );
+// }
 
 // Function to create user buttons and send travel destinations to the iframe
-function createUserButtons(users, travelDestinations, container, iframe, loggedInUserId) {
+function createUserButtons(users, travelDestinations, container, iframe) {
+	
     users.forEach((user) => {
         const button = document.createElement('button');
         button.textContent = user.username;
         button.addEventListener('click', () => handleUserButtonClick(user, travelDestinations, iframe, button));
         container.appendChild(button);
-
-        if (user._id === loggedInUserId) {
-            highlightLoggedInUser(button, travelDestinations, iframe, loggedInUserId);
-        }
     });
 }
-
 function handleUserButtonClick(user, travelDestinations, iframe, button) {
     sessionStorage.setItem('selectedUser', user.username);
     sessionStorage.setItem('selectedUserId', user._id);
@@ -88,9 +95,33 @@ function handleUserButtonClick(user, travelDestinations, iframe, button) {
     hideSidebar();
 }
 
+function populateUserCard(loggedInUserName, loggedInUserId, travelDestinations, card, iframe){
+	const profileName = document.querySelector('#profile-data h3');
+	const profileCountryCount = document.querySelector('#country-count span');
+	
+	const filteredDestinations = travelDestinations.filter(destination => destination.userId === loggedInUserId);
+
+	profileName.textContent = loggedInUserName;
+	profileCountryCount.textContent = filteredDestinations.length;
+
+	card.addEventListener('click', () => handleUserCardClick(loggedInUserId, travelDestinations, iframe));
+}
+
+function handleUserCardClick(loggedInUserId, travelDestinations, iframe) {
+    const filteredDestinations = travelDestinations.filter(destination => destination.userId === loggedInUserId);
+    
+    iframe.contentWindow.postMessage(
+        { action: 'visitedPlaces', travelDestinations: filteredDestinations },
+        '*'
+    );
+
+	document.querySelectorAll('#user-buttons button').forEach((btn) => btn.classList.remove('active'));
+	
+    hideSidebar();
+}
+
 // Highlight the logged in user button and send their travel destinations to the iframe
-function highlightLoggedInUser(button, travelDestinations, iframe, loggedInUserId) {
-    button.classList.add('active');
+function loadLoggedInUserDestinations(travelDestinations, iframe, loggedInUserId) {
     const myTravelDestinations = travelDestinations.filter((destination) => destination.userId === loggedInUserId);
     iframe.contentWindow.postMessage({ action: 'visitedPlaces', travelDestinations: myTravelDestinations }, '*');
 }

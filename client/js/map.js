@@ -49,8 +49,6 @@ function showCountryName() {
         path.addEventListener('mousemove', (event) => {
             const x = event.clientX;
             const y = event.clientY;
-            
-            console.log(`Country: ${country}`);
             textContainer.textContent = country;
             textContainer.style.left = `${x}px`; 
             textContainer.style.top = `${y}px`;
