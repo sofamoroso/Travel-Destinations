@@ -106,9 +106,7 @@ function handleUserButtonClick(user, travelDestinations, iframe, button) {
 		'*'
 	);
 
-	document
-		.querySelectorAll('#user-buttons button')
-		.forEach((btn) => btn.classList.remove('active'));
+	document.querySelectorAll('#user-buttons button').forEach((btn) => btn.classList.remove('active'));
 	button.classList.add('active');
 
 	hideSidebar();
@@ -122,13 +120,8 @@ function highlightLoggedInUser(
 	loggedInUserId
 ) {
 	button.classList.add('active');
-	const myTravelDestinations = travelDestinations.filter(
-		(destination) => destination.userId === loggedInUserId
-	);
-	iframe.contentWindow.postMessage(
-		{ action: 'visitedPlaces', travelDestinations: myTravelDestinations },
-		'*'
-	);
+	const myTravelDestinations = travelDestinations.filter((destination) => destination.userId === loggedInUserId);
+	iframe.contentWindow.postMessage({ action: 'visitedPlaces', travelDestinations: myTravelDestinations },'*');
 }
 
 // Function to show the sidebar with the clicked path = country name
@@ -152,12 +145,7 @@ async function showSidebar(path, countryCode) {
 	initializeSidebarContent(path, countryCode, username, travelDestinations);
 }
 
-function initializeSidebarContent(
-	path,
-	countryCode,
-	username,
-	travelDestinations
-) {
+function initializeSidebarContent(path,countryCode,username,travelDestinations) {
 	const sidebar = document.getElementById('right-sidebar');
 	const sidebarTitle = document.getElementById('sidebar-title');
 	const sidebarSubtitle = document.getElementById('sidebar-subtitle');
@@ -209,9 +197,7 @@ function displayDestinationCards(destination) {
 
 	cityName.textContent = destination.city;
 	cityDescription.textContent = destination.description;
-	dateVisited.textContent = `Visited on: ${new Date(
-		destination.date
-	).toLocaleDateString()}`;
+	dateVisited.textContent = `Visited on: ${new Date(destination.date).toLocaleDateString()}`;
 
 	for (let i = 0; i < maxStars; i++) {
 		const star = document.createElement('span');
@@ -224,9 +210,8 @@ function displayDestinationCards(destination) {
 	}
 
 	editButton.addEventListener('click', () => {
-		console.log(
-			`Editing destination: ${destination.city} from ${destination.country}`
-		);
+		console.log(`Editing destination: ${destination.city} from ${destination.country}`);
+		window.openEditDestinationDialog(destination);
 	});
 	sidebarContent.appendChild(card);
 	deleteDestination(deleteButton, destination, card);
@@ -235,9 +220,7 @@ function displayDestinationCards(destination) {
 async function deleteDestination(deleteButton, destination, card) {
 	deleteButton.addEventListener('click', async () => {
 		// Show confirmation dialog
-		const userConfirmed = confirm(
-			`Are you sure you want to delete ${destination.city}?`
-		);
+		const userConfirmed = confirm(`Are you sure you want to delete ${destination.city}?`);
 		if (!userConfirmed) {
 			// User clicked "Cancel", do nothing
 			return;
@@ -245,20 +228,13 @@ async function deleteDestination(deleteButton, destination, card) {
 
 		// Proceed with deletion
 		try {
-			const response = await fetch(
-				`/api/travel-destinations/${destination._id}`,
-				{
+			const response = await fetch(`/api/travel-destinations/${destination._id}`,{
 					method: 'DELETE',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				}
-			);
+					headers: {'Content-Type': 'application/json',},
+				});
 
 			if (response.ok) {
-				console.log(
-					`Deleted destination: ${destination.city} from ${destination.country}`
-				);
+				console.log(`Deleted destination: ${destination.city} from ${destination.country}`);
 				updateSidebarContent();
 			} else {
 				console.error('Failed to delete destination');

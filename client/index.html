@@ -166,7 +166,7 @@
 		<!-- Destination dialog -->
 		<dialog id="addDestinationDialog" class="modal rounded">
 			<form id="addDestinationForm">
-				<h1>Add a new travel destination</h1>
+				<h1 id="destinationDialogTitle">Add a new travel destination</h1>
 
 				<label for="country">Country:</label>
 				<select id="country" name="country" required></select>
@@ -178,12 +178,7 @@
 				<input type="date" id="date" name="date" required />
 
 				<label for="description">Description:</label>
-				<textarea
-					id="description"
-					name="description"
-					rows="3"
-					required
-				></textarea>
+				<textarea id="description" name="description" rows="3" required></textarea>
 
 				<label for="rating">Rating:</label>
 				<div id="stars" data-rating="0">
@@ -195,13 +190,14 @@
 				</div>
 				<input type="hidden" id="rating" name="rating" value="0" />
 
-				<button type="submit">Add</button>
-				<button id="addDestinationDialogClose">Close</button>
+				<!-- Add an ID to the submit button for dynamic text -->
+				<button type="submit" id="destinationDialogSubmitButton">Add</button>
+				<button id="addDestinationDialogClose">Cancel</button>
 			</form>
 		</dialog>
 
 		<script src="js/index.js"></script>
 		<script src="js/authHandler.js"></script>
-		<script src="js/addDestination.js"></script>
+		<script src="js/DestinationDialog.js"></script>
 	</body>
 </html>
