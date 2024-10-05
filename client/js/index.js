@@ -14,7 +14,7 @@ function initializeEventListeners() {
 	});
 
 	// Listen for the custom event destinationAdded to refresh the data
-	document.addEventListener('destinationAdded', () => {
+	document.addEventListener('destinationChanged', () => {
 		loadData();
 
 		// Dynamically update the sidebar content when a destination is added
@@ -209,40 +209,42 @@ function displayDestinationCards(destination) {
 		ratingDiv.appendChild(star);
 	}
 
-	editButton.addEventListener('click', () => {
+	editButton.addEventListener('click', async () => {
 		console.log(`Editing destination: ${destination.city} from ${destination.country}`);
-		window.openEditDestinationDialog(destination);
+		await window.openEditDestinationDialog(destination);
 	});
+
+	deleteButton.addEventListener('click', async () => {
+		await deleteDestination(destination);
+	});	
+
 	sidebarContent.appendChild(card);
-	deleteDestination(deleteButton, destination, card);
 }
 
-async function deleteDestination(deleteButton, destination, card) {
-	deleteButton.addEventListener('click', async () => {
-		// Show confirmation dialog
-		const userConfirmed = confirm(`Are you sure you want to delete ${destination.city}?`);
-		if (!userConfirmed) {
-			// User clicked "Cancel", do nothing
-			return;
+async function deleteDestination(destination) {
+	// Show confirmation dialog
+	const userConfirmed = confirm(`Are you sure you want to delete ${destination.city}?`);
+	if (!userConfirmed) {
+		// User clicked "Cancel", do nothing
+		return;
+	}
+	// Proceed with deletion
+	try {
+		const response = await fetch(`/api/travel-destinations/${destination._id}`,{
+				method: 'DELETE',
+				headers: {'Content-Type': 'application/json',},
+			});
+		if (response.ok) {
+			console.log(`Deleted destination: ${destination.city} from ${destination.country}`);
+			// Dispatch custom event destinationAdded
+			const event = new CustomEvent('destinationChanged', { detail: { action: 'delete' } });
+			document.dispatchEvent(event);
+		} else {
+			console.error('Failed to delete destination');
 		}
-
-		// Proceed with deletion
-		try {
-			const response = await fetch(`/api/travel-destinations/${destination._id}`,{
-					method: 'DELETE',
-					headers: {'Content-Type': 'application/json',},
-				});
-
-			if (response.ok) {
-				console.log(`Deleted destination: ${destination.city} from ${destination.country}`);
-				updateSidebarContent();
-			} else {
-				console.error('Failed to delete destination');
-			}
-		} catch (error) {
-			console.error('Error while deleting destination:', error);
-		}
-	});
+	} catch (error) {
+		console.error('Error while deleting destination:', error);
+	}
 }
 
 // Fetch all destinations for a specific user and country

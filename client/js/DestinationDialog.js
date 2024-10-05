@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				console.log('Destination updated:', data);
 
 				// Dispatch custom event to update the UI
-				const event = new CustomEvent('destinationUpdated');
+				const event = new CustomEvent('destinationChanged', { detail: { action: 'update' } });
 				document.dispatchEvent(event);
 			} else {
 				console.error('Error updating destination:', data);
@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				console.log('Destination added:', data);
 
 				// Dispatch custom event destinationAdded
-				const event = new CustomEvent('destinationAdded');
+				const event = new CustomEvent('destinationChanged', { detail: { action: 'add' } });
 				document.dispatchEvent(event);
 			} else {
 				console.error('Error adding destination:', data);
@@ -187,41 +187,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			console.error('Error adding destination:', error);
 		}
 	};
-	function openEditDestinationDialog(destination) {
-		isEditMode = true;
-		currentDestinationId = destination._id;
-
-		// Populate form fields with existing data
-		countrySelect.value = destination.country;
-		cityInput.value = destination.city;
-		dateInput.value = destination.date.split('T')[0]; // Format date
-		descriptionInput.value = destination.description;
-		ratingInput.value = destination.rating;
-		document
-			.querySelector('#stars')
-			.setAttribute('data-rating', destination.rating);
-
-		// Update stars display
-		starElements.forEach((star) => {
-			const value = parseInt(star.getAttribute('data-value'));
-			if (value <= destination.rating) {
-				star.classList.add('selected');
-			} else {
-				star.classList.remove('selected');
-			}
-		});
-
-		// Disable country select during edit
-		countrySelect.disabled = true;
-
-		// Update dialog title and button text
-		destinationDialogTitle.textContent = 'Edit travel destination';
-		destinationDialogSubmitButton.textContent = 'Save';
-
-		addDestinationDialog.showModal();
-	}
-
-
 
 	// Fetch country data from a JSON file and populate the dropdown
 	fetch('data/countries.json')
