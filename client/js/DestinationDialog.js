@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	let isEditMode = false;
 	let currentDestinationId = null;
+
 	const addDestinationForm = document.getElementById('addDestinationForm');
 	const addDestinationDialog = document.getElementById('addDestinationDialog');
 	const addDestinationDialogClose = document.getElementById('addDestinationDialogClose');
@@ -13,10 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	const dateInput = document.getElementById('date');
 	const descriptionInput = document.getElementById('description');
 	const ratingInput = document.getElementById('rating');
-
 	const starElements = document.querySelectorAll('#stars .star');
 
-	//Elements for dynamic title and buttons in deifferent dialogs
 	const destinationDialogTitle = document.getElementById('destinationDialogTitle');
 	const destinationDialogSubmitButton = document.getElementById('destinationDialogSubmitButton');
 
@@ -69,9 +68,8 @@ document.addEventListener('DOMContentLoaded', () => {
 						city,
 						date,
 						description,
-						rating,
-					}),
-				}
+						rating,}),
+					}
 			);
 
 			const data = await response.json();

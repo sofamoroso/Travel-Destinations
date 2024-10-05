@@ -39,7 +39,6 @@
 						</h3>
 						<p id="sidebar-subtitle"></p>
 						<img id="sidebar-flag" src="" alt="Country Flag" />
-						<!-- prettier-ignore -->
 						<button class="addDestinationBtn" id="add-destination-button-rightSidebar">+</button>
 					</div>
 					<div id="sidebar-content">
@@ -93,17 +92,9 @@
 				</div>
 				<div class="input-group">
 					<label for="password">Password</label>
-					<input
-						type="password"
-						id="password"
-						name="password"
-						required
-					/>
+					<input type="password" id="password" name="password" required/>
 				</div>
-				<span
-					id="loginErrorMessage"
-					style="color: var(--error-color)"
-				></span>
+				<span id="loginErrorMessage" style="color: var(--error-color)"></span>
 
 				<div id="button-container">
 					<button type="submit">Login</button>
@@ -123,34 +114,17 @@
 			<form id="registerForm">
 				<div class="input-group">
 					<label for="regUsername">Username</label>
-					<input
-						type="text"
-						id="regUsername"
-						name="regUsername"
-						required
-					/>
+					<input type="text" id="regUsername" name="regUsername" required/>
 				</div>
 				<div class="input-group">
 					<label for="regPassword">Password</label>
-					<input
-						type="password"
-						id="regPassword"
-						name="regPassword"
-						required
-					/>
+					<input type="password" id="regPassword" name="regPassword" required/>
 				</div>
 				<div class="input-group">
 					<label for="regEmail">Email</label>
-					<input
-						type="email"
-						id="regEmail"
-						name="regEmail"
-						required
-					/>
+					<input type="email" id="regEmail" name="regEmail" required/>
 				</div>
-				<span
-					id="registerErrorMessage"
-					style="color: var(--error-color)"
+				<span id="registerErrorMessage" style="color: var(--error-color)"
 				></span>
 
 				<div id="button-container">
@@ -190,7 +164,7 @@
 				</div>
 				<input type="hidden" id="rating" name="rating" value="0" />
 
-				<!-- Add an ID to the submit button for dynamic text -->
+				
 				<button type="submit" id="destinationDialogSubmitButton">Add</button>
 				<button id="addDestinationDialogClose">Cancel</button>
 			</form>
