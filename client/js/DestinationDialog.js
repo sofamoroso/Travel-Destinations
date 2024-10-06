@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
-	sessionStorage.getItem('selectedCountry')? sessionStorage.removeItem('selectedCountry'): null;
+	sessionStorage.getItem('selectedCountry') ? sessionStorage.removeItem('selectedCountry') : null;
 
 	let isEditMode = false;
 	let currentDestinationId = null;
 
-	const addDestinationForm = document.getElementById('addDestinationForm');
+	const addDestinationForm = document.getElementById('addDestinationFor');
 	const addDestinationDialog = document.getElementById('addDestinationDialog');
 	const addDestinationDialogClose = document.getElementById('addDestinationDialogClose');
 	const addDestinationButtons = document.querySelectorAll('.addDestinationBtn');
@@ -37,40 +37,27 @@ document.addEventListener('DOMContentLoaded', () => {
 	addDestinationForm.addEventListener('submit', (event) => {
 		event.preventDefault();
 		if (isEditMode) {
-			updateDestination(
-				currentDestinationId,
-				countrySelect.value,
-				cityInput.value,
-				dateInput.value,
-				descriptionInput.value,
-				ratingInput.value
-			);
+			updateDestination(currentDestinationId, countrySelect.value, cityInput.value, dateInput.value, descriptionInput.value, ratingInput.value);
 		} else {
-			addDestination(
-				countrySelect.value,
-				cityInput.value,
-				dateInput.value,
-				descriptionInput.value,
-				ratingInput.value
-			);
+			addDestination(countrySelect.value, cityInput.value, dateInput.value, descriptionInput.value, ratingInput.value);
 		}
 	});
 
-	const updateDestination = async (destinationId,country,city,date,description,rating) => {
+	const updateDestination = async (destinationId, country, city, date, description, rating) => {
 		const userId = sessionStorage.getItem('logged-_id');
 		try {
-			const response = await fetch(`/api/travel-destinations/${destinationId}`,{
-					method: 'PUT',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({
-						userId,
-						country,
-						city,
-						date,
-						description,
-						rating,}),
-					}
-			);
+			const response = await fetch(`/api/travel-destinations/${destinationId}`, {
+				method: 'PUT',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					userId,
+					country,
+					city,
+					date,
+					description,
+					rating,
+				}),
+			});
 
 			const data = await response.json();
 
@@ -80,7 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
 				console.log('Destination updated:', data);
 
 				// Dispatch custom event to update the UI
-				const event = new CustomEvent('destinationChanged', { detail: { action: 'update' } });
+				const event = new CustomEvent('destinationChanged', {
+					detail: { action: 'update' },
+				});
 				document.dispatchEvent(event);
 			} else {
 				console.error('Error updating destination:', data);
@@ -89,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			console.error('Error updating destination:', error);
 		}
 	};
-	
+
 	function openAddDestinationDialog() {
 		const selectedCountry = sessionStorage.getItem('selectedCountry');
 
@@ -176,7 +165,9 @@ document.addEventListener('DOMContentLoaded', () => {
 				console.log('Destination added:', data);
 
 				// Dispatch custom event destinationAdded
-				const event = new CustomEvent('destinationChanged', { detail: { action: 'add' } });
+				const event = new CustomEvent('destinationChanged', {
+					detail: { action: 'add' },
+				});
 				document.dispatchEvent(event);
 			} else {
 				console.error('Error adding destination:', data);
