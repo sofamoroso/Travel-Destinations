@@ -6,31 +6,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Listen for messages (travelDestinations) from the parent window
 window.addEventListener('message', (event) => {
-    if (event.data && event.data.action === 'visitedPlaces') {
-        const uniqueCountries = event.data.travelDestinations;
+	if (event.data && event.data.action === 'visitedPlaces') {
+		const uniqueCountries = event.data.travelDestinations;
 
-        const svg = document.querySelector('svg');
-        if (svg) {
-            // Ensure the SVG is fully loaded
-            if (document.readyState === 'complete' || document.readyState === 'interactive') {
-				console.log("Document state (SVG):", document.readyState);
-				
-                highlightVisitedPlaces(uniqueCountries);
-            } else {
-                window.addEventListener('load', () => {
-                    highlightVisitedPlaces(uniqueCountries);
-                });
-            }
-        } else {
-            console.error('SVG element not found');
-        }
-    }
-    if (event.data && event.data.action === 'removeClickedClass') {
-        const clickedPath = document.querySelector('.clicked');
-        if (clickedPath) {
-            clickedPath.classList.remove('clicked');
-        }
-    }
+		const svg = document.querySelector('svg');
+		if (svg) {
+			// Ensure the SVG is fully loaded
+			if (document.readyState === 'complete' || document.readyState === 'interactive') {
+				console.log('Document state (SVG):', document.readyState);
+
+				highlightVisitedPlaces(uniqueCountries);
+			} else {
+				window.addEventListener('load', () => {
+					highlightVisitedPlaces(uniqueCountries);
+				});
+			}
+		} else {
+			console.error('SVG element not found');
+		}
+	}
+	if (event.data && event.data.action === 'removeClickedClass') {
+		const clickedPath = document.querySelector('.clicked');
+		if (clickedPath) {
+			clickedPath.classList.remove('clicked');
+		}
+	}
 });
 
 function highlightVisitedPlaces(uniqueCountries) {
@@ -97,28 +97,17 @@ function initializeSVGPan() {
 	function pan(event) {
 		if (!isPanning) return;
 
-		const dx =
-			(event.clientX - startX) * (viewBoxValues[2] / svg.clientWidth);
-		const dy =
-			(event.clientY - startY) * (viewBoxValues[3] / svg.clientHeight);
+		const dx = (event.clientX - startX) * (viewBoxValues[2] / svg.clientWidth);
+		const dy = (event.clientY - startY) * (viewBoxValues[3] / svg.clientHeight);
 
 		let newViewBoxX = viewBoxValues[0] - dx;
 		let newViewBoxY = viewBoxValues[1] - dy;
 
 		// Apply limits to panning
-		newViewBoxX = Math.max(
-			minX,
-			Math.min(newViewBoxX, maxX - viewBoxValues[2])
-		);
-		newViewBoxY = Math.max(
-			minY,
-			Math.min(newViewBoxY, maxY - viewBoxValues[3])
-		);
+		newViewBoxX = Math.max(minX, Math.min(newViewBoxX, maxX - viewBoxValues[2]));
+		newViewBoxY = Math.max(minY, Math.min(newViewBoxY, maxY - viewBoxValues[3]));
 
-		svg.setAttribute(
-			'viewBox',
-			`${newViewBoxX} ${newViewBoxY} ${viewBoxValues[2]} ${viewBoxValues[3]}`
-		);
+		svg.setAttribute('viewBox', `${newViewBoxX} ${newViewBoxY} ${viewBoxValues[2]} ${viewBoxValues[3]}`);
 	}
 
 	// Function to stop panning
@@ -166,10 +155,7 @@ function initializeSVGZoom() {
 			const newViewBoxHeight = viewBoxHeight / zoomFactor;
 
 			// Check if the new dimensions are greater than the minimum allowed dimensions
-			if (
-				newViewBoxWidth >= minViewBoxWidth &&
-				newViewBoxHeight >= minViewBoxHeight
-			) {
+			if (newViewBoxWidth >= minViewBoxWidth && newViewBoxHeight >= minViewBoxHeight) {
 				viewBoxWidth = newViewBoxWidth;
 				viewBoxHeight = newViewBoxHeight;
 			}
@@ -179,10 +165,7 @@ function initializeSVGZoom() {
 			const newViewBoxHeight = viewBoxHeight * zoomFactor;
 
 			// Check if the new dimensions exceed the maximum allowed dimensions
-			if (
-				newViewBoxWidth <= maxViewBoxWidth &&
-				newViewBoxHeight <= maxViewBoxHeight
-			) {
+			if (newViewBoxWidth <= maxViewBoxWidth && newViewBoxHeight <= maxViewBoxHeight) {
 				viewBoxWidth = newViewBoxWidth;
 				viewBoxHeight = newViewBoxHeight;
 			}
@@ -190,28 +173,16 @@ function initializeSVGZoom() {
 
 		// Adjust viewBox to keep the mouse position as the focal point when zooming in
 		if (zoomIn) {
-			const newViewBoxX =
-				mouseX - (mouseX - viewBoxX) * (viewBoxWidth / viewBox[2]);
-			const newViewBoxY =
-				mouseY - (mouseY - viewBoxY) * (viewBoxHeight / viewBox[3]);
-			svg.setAttribute(
-				'viewBox',
-				[newViewBoxX, newViewBoxY, viewBoxWidth, viewBoxHeight].join(
-					' '
-				)
-			);
+			const newViewBoxX = mouseX - (mouseX - viewBoxX) * (viewBoxWidth / viewBox[2]);
+			const newViewBoxY = mouseY - (mouseY - viewBoxY) * (viewBoxHeight / viewBox[3]);
+			svg.setAttribute('viewBox', [newViewBoxX, newViewBoxY, viewBoxWidth, viewBoxHeight].join(' '));
 		} else {
 			// Center the SVG when zooming out
 			const centerX = viewBoxX + viewBox[2] / 2;
 			const centerY = viewBoxY + viewBox[3] / 2;
 			const newViewBoxX = centerX - viewBoxWidth / 2;
 			const newViewBoxY = centerY - viewBoxHeight / 2;
-			svg.setAttribute(
-				'viewBox',
-				[newViewBoxX, newViewBoxY, viewBoxWidth, viewBoxHeight].join(
-					' '
-				)
-			);
+			svg.setAttribute('viewBox', [newViewBoxX, newViewBoxY, viewBoxWidth, viewBoxHeight].join(' '));
 		}
 	});
 }

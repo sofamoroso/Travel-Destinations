@@ -40,13 +40,7 @@ async function loadData() {
 	if (users.length > 0) {
 		const loggedInUserId = sessionStorage.getItem('logged-_id');
 		sortUsers(users, loggedInUserId);
-		createUserButtons(
-			users,
-			travelDestinations,
-			userButtonsContainer,
-			iframe,
-			loggedInUserId
-		);
+		createUserButtons(users, travelDestinations, userButtonsContainer, iframe, loggedInUserId);
 	} else {
 		console.error('users array is not defined');
 	}
@@ -54,10 +48,7 @@ async function loadData() {
 
 // Function to fetch users and travel destinations from the backend
 async function fetchData() {
-	const [users, travelDestinations] = await Promise.all([
-		fetchUsers(),
-		fetchTravelDestinations(),
-	]);
+	const [users, travelDestinations] = await Promise.all([fetchUsers(), fetchTravelDestinations()]);
 	return [users, travelDestinations];
 }
 
@@ -66,34 +57,19 @@ function clearUserButtons(container) {
 }
 
 function sortUsers(users, loggedInUserId) {
-	users.sort((a, b) =>
-		a._id === loggedInUserId ? -1 : b._id === loggedInUserId ? 1 : 0
-	);
+	users.sort((a, b) => (a._id === loggedInUserId ? -1 : b._id === loggedInUserId ? 1 : 0));
 }
 
 // Function to create user buttons and send travel destinations to the iframe
-function createUserButtons(
-	users,
-	travelDestinations,
-	container,
-	iframe,
-	loggedInUserId
-) {
+function createUserButtons(users, travelDestinations, container, iframe, loggedInUserId) {
 	users.forEach((user) => {
 		const button = document.createElement('button');
 		button.textContent = user.username;
-		button.addEventListener('click', () =>
-			handleUserButtonClick(user, travelDestinations, iframe, button)
-		);
+		button.addEventListener('click', () => handleUserButtonClick(user, travelDestinations, iframe, button));
 		container.appendChild(button);
 
 		if (user._id === loggedInUserId) {
-			highlightLoggedInUser(
-				button,
-				travelDestinations,
-				iframe,
-				loggedInUserId
-			);
+			highlightLoggedInUser(button, travelDestinations, iframe, loggedInUserId);
 		}
 	});
 }
@@ -102,45 +78,28 @@ function handleUserButtonClick(user, travelDestinations, iframe, button) {
 	sessionStorage.setItem('selectedUser', user.username);
 	sessionStorage.setItem('selectedUserId', user._id);
 
-	const filteredDestinations = travelDestinations.filter(
-		(destination) => destination.userId === user._id
-	);
+	const filteredDestinations = travelDestinations.filter((destination) => destination.userId === user._id);
 
-	const uniqueCountries = new Set(filteredDestinations.map(destination => destination.country));
+	const uniqueCountries = new Set(filteredDestinations.map((destination) => destination.country));
 	console.log(uniqueCountries); // This will log the Set of unique countries
 
-	iframe.contentWindow.postMessage(
-		{ action: 'visitedPlaces', travelDestinations: uniqueCountries },
-		'*'
-	);
+	iframe.contentWindow.postMessage({ action: 'visitedPlaces', travelDestinations: uniqueCountries }, '*');
 
-	document
-		.querySelectorAll('#user-buttons button')
-		.forEach((btn) => btn.classList.remove('active'));
+	document.querySelectorAll('#user-buttons button').forEach((btn) => btn.classList.remove('active'));
 	button.classList.add('active');
 
 	hideSidebar();
 }
 
 // Highlight the logged in user button and send their travel destinations to the iframe
-function highlightLoggedInUser(
-	button,
-	travelDestinations,
-	iframe,
-	loggedInUserId
-) {
+function highlightLoggedInUser(button, travelDestinations, iframe, loggedInUserId) {
 	button.classList.add('active');
-	const myTravelDestinations = travelDestinations.filter(
-		(destination) => destination.userId === loggedInUserId
-	);
+	const myTravelDestinations = travelDestinations.filter((destination) => destination.userId === loggedInUserId);
 
-	const uniqueCountries = new Set(myTravelDestinations.map(destination => destination.country));
+	const uniqueCountries = new Set(myTravelDestinations.map((destination) => destination.country));
 	console.log(uniqueCountries); // This will log the Set of unique countries
 
-	iframe.contentWindow.postMessage(
-		{ action: 'visitedPlaces', travelDestinations: uniqueCountries },
-		'*'
-	);
+	iframe.contentWindow.postMessage({ action: 'visitedPlaces', travelDestinations: uniqueCountries }, '*');
 }
 
 // Function to show the sidebar with the clicked path = country name
@@ -151,10 +110,7 @@ async function showSidebar(path, countryCode) {
 	sessionStorage.setItem('selectedCountry', path);
 	sessionStorage.setItem('selectedCountryCode', countryCode);
 
-	const travelDestinations = await fetchTravelDestinationsByUserAndCountry(
-		userId,
-		path
-	);
+	const travelDestinations = await fetchTravelDestinationsByUserAndCountry(userId, path);
 
 	if (!travelDestinations) {
 		console.error('Failed to fetch travel destinations.');
@@ -164,12 +120,7 @@ async function showSidebar(path, countryCode) {
 	initializeSidebarContent(path, countryCode, username, travelDestinations);
 }
 
-function initializeSidebarContent(
-	path,
-	countryCode,
-	username,
-	travelDestinations
-) {
+function initializeSidebarContent(path, countryCode, username, travelDestinations) {
 	const sidebar = document.getElementById('right-sidebar');
 	const sidebarTitle = document.getElementById('sidebar-title');
 	const sidebarSubtitle = document.getElementById('sidebar-subtitle');
@@ -219,9 +170,7 @@ function displayDestinationCards(destination) {
 
 	cityName.textContent = destination.city;
 	cityDescription.textContent = destination.description;
-	dateVisited.textContent = `Visited on: ${new Date(
-		destination.date
-	).toLocaleDateString()}`;
+	dateVisited.textContent = `Visited on: ${new Date(destination.date).toLocaleDateString()}`;
 
 	for (let i = 0; i < maxStars; i++) {
 		const star = document.createElement('span');
@@ -239,9 +188,7 @@ function displayDestinationCards(destination) {
 // Fetch all destinations for a specific user and country
 async function fetchTravelDestinationsByUserAndCountry(userId, country) {
 	try {
-		const response = await fetch(
-			`/api/travel-destinations/${userId}/${country}`
-		);
+		const response = await fetch(`/api/travel-destinations/${userId}/${country}`);
 		if (!response.ok) {
 			throw new Error('Network response was not ok');
 		}
@@ -294,15 +241,7 @@ async function updateSidebarContent() {
 	const selectedCountryCode = sessionStorage.getItem('selectedCountryCode');
 	const username = sessionStorage.getItem('logged-username');
 	const userId = sessionStorage.getItem('logged-_id');
-	const travelDestinations = await fetchTravelDestinationsByUserAndCountry(
-		userId,
-		selectedCountry
-	);
+	const travelDestinations = await fetchTravelDestinationsByUserAndCountry(userId, selectedCountry);
 
-	initializeSidebarContent(
-		selectedCountry,
-		selectedCountryCode,
-		username,
-		travelDestinations
-	);
+	initializeSidebarContent(selectedCountry, selectedCountryCode, username, travelDestinations);
 }

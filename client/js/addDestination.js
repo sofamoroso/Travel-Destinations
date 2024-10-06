@@ -1,17 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
-	sessionStorage.getItem('selectedCountry')
-		? sessionStorage.removeItem('selectedCountry')
-		: null;
+	sessionStorage.getItem('selectedCountry') ? sessionStorage.removeItem('selectedCountry') : null;
 	const addDestinationForm = document.getElementById('addDestinationForm');
-	const addDestinationDialog = document.getElementById(
-		'addDestinationDialog'
-	);
-	const addDestinationDialogClose = document.getElementById(
-		'addDestinationDialogClose'
-	);
+	const addDestinationDialog = document.getElementById('addDestinationDialog');
+	const addDestinationDialogClose = document.getElementById('addDestinationDialogClose');
 
-	const addDestinationButtons =
-		document.querySelectorAll('.addDestinationBtn');
+	const addDestinationButtons = document.querySelectorAll('.addDestinationBtn');
 
 	const countrySelect = document.getElementById('country');
 	const cityInput = document.getElementById('city');
@@ -56,13 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	addDestinationForm.addEventListener('submit', (event) => {
 		event.preventDefault();
-		addDestination(
-			countrySelect.value,
-			cityInput.value,
-			dateInput.value,
-			descriptionInput.value,
-			ratingInput.value
-		);
+		addDestination(countrySelect.value, cityInput.value, dateInput.value, descriptionInput.value, ratingInput.value);
 	});
 
 	const addDestination = async (country, city, date, description, rating) => {
