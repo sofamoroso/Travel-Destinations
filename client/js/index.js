@@ -1,6 +1,7 @@
 const usersPerPage = 5; 
 let currentPage = 0;
-let updatedUsers = []; // Declare users globally to be accessible
+let communityUsers = [];
+let allTravelDestinations = [];
 
 // Load the navbar, data, and set up iframe communication
 document.addEventListener('DOMContentLoaded', () => {
@@ -40,18 +41,18 @@ async function loadData() {
 	const iframe = document.getElementById('worldMapIframe');
 	const loggedInUserId = sessionStorage.getItem('logged-_id');
 
-	clearUserButtons(userButtonsContainer);
-
+	//clearUserButtons(userButtonsContainer);
 
 	if (users.length > 0) {
 		const loggedInUserName = sessionStorage.getItem('logged-username');
 		const profileCard = document.getElementById('profile-card');
 
-		updatedUsers = users.filter((user) => user._id !== loggedInUserId);
+		communityUsers = users.filter((user) => user._id !== loggedInUserId);
+		allTravelDestinations = travelDestinations;
 		// sortUsers(users);
 		// createUserButtons(users, travelDestinations, userButtonsContainer, iframe, loggedInUserId);
 		populateUserCard(loggedInUserName, loggedInUserId, travelDestinations, profileCard, iframe);
-		createUserButtons(updatedUsers, travelDestinations, userButtonsContainer, iframe);
+		createUserButtons(communityUsers, travelDestinations, userButtonsContainer, iframe);
 	} else {
 		console.error('users array is not defined');
 	}
@@ -77,8 +78,7 @@ function clearUserButtons(container) {
 
 // Function to create user buttons and send travel destinations to the iframe
 function createUserButtons(users, travelDestinations, container, iframe) {
-    // Clear existing buttons
-    container.innerHTML = '';
+    clearUserButtons(container);
 
     // Calculate start and end index
     const start = currentPage * usersPerPage;
@@ -93,13 +93,13 @@ function createUserButtons(users, travelDestinations, container, iframe) {
     });
 
     // Enable/disable buttons based on the current page
-    document.getElementById('prevButton').disabled = currentPage === 0;
-    document.getElementById('nextButton').disabled = end >= users.length;
+    document.getElementById('prevButton').style.visibility  = currentPage === 0 ? 'hidden' : 'visible';
+    document.getElementById('nextButton').style.visibility  = end >= users.length ? 'hidden' : 'visible';
 }
 
 // Function to handle next button click
 function nextPage() {
-    if ((currentPage + 1) * usersPerPage < updatedUsers.length) {
+    if ((currentPage + 1) * usersPerPage < communityUsers.length) {
         currentPage++;
         updateUserButtons();
     }
@@ -117,8 +117,8 @@ function prevPage() {
 function updateUserButtons() {
     const userButtonsContainer = document.getElementById('user-buttons');
     const iframe = document.getElementById('worldMapIframe');
-    const travelDestinations = []; // Update this with your logic to fetch travel destinations
-    createUserButtons(updatedUsers, travelDestinations, userButtonsContainer, iframe);
+
+    createUserButtons(communityUsers, allTravelDestinations, userButtonsContainer, iframe);
 }
 
 // Event listeners for buttons
@@ -147,20 +147,18 @@ function populateUserCard(loggedInUserName, loggedInUserId, travelDestinations, 
 	const profileCountryCount = document.querySelector('#country-count span');
 
 	const filteredDestinations = travelDestinations.filter((destination) => destination.userId === loggedInUserId);
+	const uniqueCountries = new Set(filteredDestinations.map((destination) => destination.country));
 
 	profileName.textContent = loggedInUserName;
-	profileCountryCount.textContent = filteredDestinations.length;
+	profileCountryCount.textContent = uniqueCountries.size;
 
-	card.addEventListener('click', () => handleUserCardClick(loggedInUserId, loggedInUserName, travelDestinations, iframe));
+	card.addEventListener('click', () => handleUserCardClick(loggedInUserId, loggedInUserName, uniqueCountries, iframe));
 }
 
-function handleUserCardClick(loggedInUserId, loggedInUserName, travelDestinations, iframe) {
+function handleUserCardClick(loggedInUserId, loggedInUserName, uniqueCountries, iframe) {
 	sessionStorage.setItem('selectedUser', loggedInUserName);
 	sessionStorage.setItem('selectedUserId', loggedInUserId);
 
-	const filteredDestinations = travelDestinations.filter((destination) => destination.userId === loggedInUserId);
-
-	const uniqueCountries = new Set(filteredDestinations.map((destination) => destination.country));
 	console.log(uniqueCountries); // This will log the Set of unique countries
 
 	iframe.contentWindow.postMessage({ action: 'visitedPlaces', travelDestinations: uniqueCountries }, '*');
