@@ -25,6 +25,7 @@ function initializeAuth() {
 	const leftSidebar = document.querySelector('.left-sidebar');
 	const mainContent = document.querySelector('.main-content');
 	const logoutButton = document.getElementById('logoutButton');
+	const deleteAccountButton = document.getElementById('deleteAccountButton'); //adding the delete account btn
 
 	if (!loggedIn) {
 		showLoginModal(loginModal, leftSidebar, mainContent);
@@ -36,6 +37,7 @@ function initializeAuth() {
 	handleLoginFormSubmit(loginForm);
 	handleRegisterFormSubmit(registerForm);
 	initializeLogoutButton(logoutButton);
+	initializeDeleteAccountButton(deleteAccountButton, token);
 }
 
 function showLoginModal(loginModal, leftSidebar, mainContent) {
@@ -116,6 +118,79 @@ const handleLogout = () => {
 	sessionStorage.removeItem('selectedUser');
 	location.reload();
 };
+
+//function for handling own account deletion
+// function initializeDeleteAccountButton(deleteAccountButton, token) {
+
+// 	deleteAccountButton.addEventListener('click', async () => {
+// 		const confirmDeletion = confirm('Are you sure you want to delete you account?');
+
+// 		if (confirmDeletion) {
+// 			const token = sessionStorage.getItem('jwt-TravelDestination'); // Get the JWT token
+// 			console.log('Token:', token); // Log the token
+
+// 			try {
+// 				const response = await fetch(`http://localhost:3000/api/users/me`, {
+// 					method: 'DELETE',
+// 					headers: {
+// 						'Content-Type': 'application/json',
+// 						Authorization: `Bearer ${token}`, // Send the token in the Authorization header
+// 					},
+// 				});
+
+// 				if (response.ok) {
+// 					alert('Your account has been deleted successfully.');
+// 					handleLogout(); // to log the user out after deletion automatically (not on page reload)
+// 				} else {
+// 					const data = await response.json();
+// 					alert(data.message || 'An error occurred while deleting the account.');
+// 				}
+// 			} catch (error) {
+// 				console.error('Error deleting account:', error);
+// 			}
+// 		}
+// 	});
+// }
+
+function initializeDeleteAccountButton(deleteAccountButton, token) {
+	if (token) {
+		deleteAccountButton.style.display = 'block'; // Show delete button
+		deleteAccountButton.addEventListener('click', async (event) => {
+			event.preventDefault(); // Prevent default link behavior
+			handleDeleteAccount(); // Call delete account handler
+		});
+	} else {
+		deleteAccountButton.style.display = 'none'; // Hide delete button
+	}
+}
+
+async function handleDeleteAccount() {
+	const confirmDeletion = confirm('Are you sure you want to delete your account?');
+
+	if (confirmDeletion) {
+		const token = sessionStorage.getItem('jwt-TravelDestination'); // Get the JWT token
+
+		try {
+			const response = await fetch(`http://localhost:3000/api/users/me`, {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`, // Send the token in the Authorization header
+				},
+			});
+
+			if (response.ok) {
+				alert('Your account has been deleted successfully.');
+				handleLogout(); // Log the user out after deletion automatically
+			} else {
+				const data = await response.json();
+				alert(data.message || 'An error occurred while deleting the account.');
+			}
+		} catch (error) {
+			console.error('Error deleting account:', error);
+		}
+	}
+}
 
 const login = async (username, password) => {
 	try {

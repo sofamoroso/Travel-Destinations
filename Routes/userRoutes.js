@@ -113,7 +113,26 @@ router.post('/api/users', async (req, res) => {
 	}
 });
 
-//Delete a user - admin
+//Delete user - deleting own account
+router.delete('/api/users/me', async (req, res) => {
+	try {
+		const token = req.headers.authorization.split(' ')[1]; // Get the token from the Authorization header
+		if (!token) return res.status(401).send('Unauthorized');
+
+		const decoded = jwt.verify(token, process.env.SECRET_KEY); // Verify the token
+		const userId = decoded.userId;
+
+		// Find and delete the user
+		const user = await User.findByIdAndDelete(userId);
+		if (!user) return res.status(404).send('User not found');
+
+		return res.status(200).send('User deleted successfully');
+	} catch (error) {
+		return res.status(500).send('Internal Server Error');
+	}
+});
+
+//Delete user - admin
 router.delete('/api/users/:id', async (req, res) => {
 	//extract the id from the url
 	const { id } = req.params;
