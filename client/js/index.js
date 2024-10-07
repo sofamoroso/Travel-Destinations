@@ -31,30 +31,27 @@ function initializeEventListeners() {
 
 // Function to load data and create user buttons
 async function loadData() {
-    const [users, travelDestinations] = await fetchData();
-    const userButtonsContainer = document.getElementById('user-buttons');
-    const iframe = document.getElementById('worldMapIframe');
+	const [users, travelDestinations] = await fetchData();
+	const userButtonsContainer = document.getElementById('user-buttons');
+	const iframe = document.getElementById('worldMapIframe');
 	const loggedInUserId = sessionStorage.getItem('logged-_id');
 
 	clearUserButtons(userButtonsContainer);
 
-    if (users.length > 0) {
+	if (users.length > 0) {
 		const loggedInUserName = sessionStorage.getItem('logged-username');
 		const profileCard = document.getElementById('profile-card');
 
-		const updatedUsers = users.filter(user => user._id !== loggedInUserId);
-        // sortUsers(users);
-        // createUserButtons(users, travelDestinations, userButtonsContainer, iframe, loggedInUserId);
+		const updatedUsers = users.filter((user) => user._id !== loggedInUserId);
+		// sortUsers(users);
+		// createUserButtons(users, travelDestinations, userButtonsContainer, iframe, loggedInUserId);
 		createUserButtons(updatedUsers, travelDestinations, userButtonsContainer, iframe);
 		populateUserCard(loggedInUserName, loggedInUserId, travelDestinations, profileCard, iframe);
-
-    } else {
-        console.error('users array is not defined');
-    }
-
+	} else {
+		console.error('users array is not defined');
+	}
 
 	loadLoggedInUserDestinations(travelDestinations, iframe, loggedInUserId);
-
 }
 
 // Function to fetch users and travel destinations from the backend
@@ -75,13 +72,12 @@ function clearUserButtons(container) {
 
 // Function to create user buttons and send travel destinations to the iframe
 function createUserButtons(users, travelDestinations, container, iframe) {
-	
-    users.forEach((user) => {
-        const button = document.createElement('button');
-        button.textContent = user.username;
-        button.addEventListener('click', () => handleUserButtonClick(user, travelDestinations, iframe, button));
-        container.appendChild(button);
-    });
+	users.forEach((user) => {
+		const button = document.createElement('button');
+		button.textContent = user.username;
+		button.addEventListener('click', () => handleUserButtonClick(user, travelDestinations, iframe, button));
+		container.appendChild(button);
+	});
 }
 function handleUserButtonClick(user, travelDestinations, iframe, button) {
 	sessionStorage.setItem('selectedUser', user.username);
@@ -100,11 +96,11 @@ function handleUserButtonClick(user, travelDestinations, iframe, button) {
 	hideSidebar();
 }
 
-function populateUserCard(loggedInUserName, loggedInUserId, travelDestinations, card, iframe){
+function populateUserCard(loggedInUserName, loggedInUserId, travelDestinations, card, iframe) {
 	const profileName = document.querySelector('#profile-data h3');
 	const profileCountryCount = document.querySelector('#country-count span');
-	
-	const filteredDestinations = travelDestinations.filter(destination => destination.userId === loggedInUserId);
+
+	const filteredDestinations = travelDestinations.filter((destination) => destination.userId === loggedInUserId);
 
 	profileName.textContent = loggedInUserName;
 	profileCountryCount.textContent = filteredDestinations.length;
@@ -116,30 +112,26 @@ function handleUserCardClick(loggedInUserId, loggedInUserName, travelDestination
 	sessionStorage.setItem('selectedUser', loggedInUserName);
 	sessionStorage.setItem('selectedUserId', loggedInUserId);
 
-    const filteredDestinations = travelDestinations.filter(destination => destination.userId === loggedInUserId);
-    
+	const filteredDestinations = travelDestinations.filter((destination) => destination.userId === loggedInUserId);
+
 	const uniqueCountries = new Set(filteredDestinations.map((destination) => destination.country));
 	console.log(uniqueCountries); // This will log the Set of unique countries
 
-
-    iframe.contentWindow.postMessage(
-        { action: 'visitedPlaces', travelDestinations: uniqueCountries },
-        '*'
-    );
+	iframe.contentWindow.postMessage({ action: 'visitedPlaces', travelDestinations: uniqueCountries }, '*');
 
 	document.querySelectorAll('#user-buttons button').forEach((btn) => btn.classList.remove('active'));
-	
-    hideSidebar();
+
+	hideSidebar();
 }
 
 // Highlight the logged in user button and send their travel destinations to the iframe
 function loadLoggedInUserDestinations(travelDestinations, iframe, loggedInUserId) {
-    const myTravelDestinations = travelDestinations.filter((destination) => destination.userId === loggedInUserId);
+	const myTravelDestinations = travelDestinations.filter((destination) => destination.userId === loggedInUserId);
 
 	const uniqueCountries = new Set(myTravelDestinations.map((destination) => destination.country));
 	console.log(uniqueCountries); // This will log the Set of unique countries
 
-    iframe.contentWindow.postMessage({ action: 'visitedPlaces', travelDestinations: uniqueCountries }, '*');
+	iframe.contentWindow.postMessage({ action: 'visitedPlaces', travelDestinations: uniqueCountries }, '*');
 }
 
 // Function to show the sidebar with the clicked path = country name

@@ -52,11 +52,7 @@ router.put('/api/travel-destinations/:id', async (req, res) => {
 	const updates = req.body;
 
 	try {
-		const updatedDestination = await TravelDestination.findByIdAndUpdate(
-			id,
-			updates,
-			{ new: true }
-		);
+		const updatedDestination = await TravelDestination.findByIdAndUpdate(id, updates, { new: true });
 		if (!updatedDestination) {
 			return res.status(404).json({ message: 'Destination not found' });
 		}
@@ -72,8 +68,7 @@ router.put('/api/travel-destinations/:id', async (req, res) => {
 router.delete('/api/travel-destinations/:id', async (req, res) => {
 	const { id } = req.params;
 	try {
-		const deletedDestination =
-			await TravelDestination.findByIdAndDelete(id);
+		const deletedDestination = await TravelDestination.findByIdAndDelete(id);
 		if (!deletedDestination) {
 			return res.status(404).json({ message: 'Destination not found' });
 		}

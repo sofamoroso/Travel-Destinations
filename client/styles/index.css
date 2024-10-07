@@ -127,7 +127,7 @@ iframe {
 	display: block; /* Make sure it's treated as a block element */
 }
 
-#profile-card{
+#profile-card {
 	display: flex;
 	flex-direction: row;
 	gap: 1rem;
@@ -142,18 +142,17 @@ iframe {
 	transition: all 0.5s ease;
 }
 
-#profile-card:hover{
+#profile-card:hover {
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    cursor: pointer; 
+	cursor: pointer;
 	transform: translateY(-3%);
 }
 
-
-#profile-card img{
+#profile-card img {
 	max-height: 3rem;
 }
 
-#country-count{
+#country-count {
 	color: var(--text-color);
 	opacity: 80%;
 	font-style: italic;
@@ -178,4 +177,3 @@ iframe {
 	filter: blur(5px);
 	pointer-events: none;
 }
-

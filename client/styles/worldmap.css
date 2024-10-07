@@ -3,7 +3,6 @@ body {
 	overflow: hidden;
 	cursor: grab;
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
 }
 
 svg {
@@ -42,7 +41,7 @@ path:hover {
 	color: #fff;
 	padding: 5px;
 	border-radius: 3px;
-	pointer-events: none; 
-	display: none; 
-	z-index: 1000; 
+	pointer-events: none;
+	display: none;
+	z-index: 1000;
 }
