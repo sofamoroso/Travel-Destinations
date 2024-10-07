@@ -46,4 +46,41 @@ router.post('/api/travel-destinations', async (req, res) => {
 	}
 });
 
+// Update a travel destination
+router.put('/api/travel-destinations/:id', async (req, res) => {
+	const { id } = req.params;
+	const updates = req.body;
+
+	try {
+		const updatedDestination = await TravelDestination.findByIdAndUpdate(
+			id,
+			updates,
+			{ new: true }
+		);
+		if (!updatedDestination) {
+			return res.status(404).json({ message: 'Destination not found' });
+		}
+		res.status(200).json({
+			message: 'Destination updated successfully',
+			updatedDestination,
+		});
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
+});
+
+router.delete('/api/travel-destinations/:id', async (req, res) => {
+	const { id } = req.params;
+	try {
+		const deletedDestination =
+			await TravelDestination.findByIdAndDelete(id);
+		if (!deletedDestination) {
+			return res.status(404).json({ message: 'Destination not found' });
+		}
+		res.status(200).json({ message: 'Destination deleted successfully' });
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
+});
+
 export default router;

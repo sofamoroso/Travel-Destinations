@@ -1,6 +1,8 @@
 <!doctype html>
 <html lang="en">
 	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>My HTML Page</title>
 		<link rel="stylesheet" href="./styles/variables.css" />
 		<link rel="stylesheet" href="./styles/form.css" />
@@ -55,6 +57,12 @@
 				<!-- Template for destination cards -->
 				<template id="destination-card-template">
 					<div class="card">
+						<div class="card-actions">
+							<!-- prettier-ignore -->
+							<button class="edit-btn" aria-label="Edit destination">✏️</button>
+							<!-- prettier-ignore -->
+							<button class="delete-btn" aria-label="Delete destination">🗑️</button>
+						</div>
 						<p class="city-name"></p>
 						<p class="city-description"></p>
 						<p class="date-visited"></p>
@@ -129,7 +137,7 @@
 		<!-- Destination dialog -->
 		<dialog id="addDestinationDialog" class="modal rounded">
 			<form id="addDestinationForm">
-				<h1>Add a new travel destination</h1>
+				<h1 id="destinationDialogTitle">Add a new travel destination</h1>
 
 				<label for="country">Country:</label>
 				<select id="country" name="country" required></select>
@@ -153,13 +161,13 @@
 				</div>
 				<input type="hidden" id="rating" name="rating" value="0" />
 
-				<button type="submit">Add</button>
-				<button id="addDestinationDialogClose">Close</button>
+				<button type="submit" id="destinationDialogSubmitButton">Add</button>
+				<button id="addDestinationDialogClose">Cancel</button>
 			</form>
 		</dialog>
 
 		<script src="js/index.js"></script>
 		<script src="js/authHandler.js"></script>
-		<script src="js/addDestination.js"></script>
+		<script src="js/DestinationDialog.js"></script>
 	</body>
 </html>

@@ -99,16 +99,16 @@ function showCountryName() {
 
 // Listen for messages from the parent window
 window.addEventListener('message', (event) => {
-    if (event.data && event.data.action === 'visitedPlaces') {
-        highlightVisitedPlaces(event.data.travelDestinations);
-    }
+	if (event.data && event.data.action === 'visitedPlaces') {
+		highlightVisitedPlaces(event.data.travelDestinations);
+	}
 
-    if (event.data && event.data.action === 'removeClickedClass') {
-        const clickedPath = document.querySelector('.clicked');
-        if (clickedPath) {
-            clickedPath.classList.remove('clicked');
-        }
-    }
+	if (event.data && event.data.action === 'removeClickedClass') {
+		const clickedPath = document.querySelector('.clicked');
+		if (clickedPath) {
+			clickedPath.classList.remove('clicked');
+		}
+	}
 });
 
 function initializeSVGPan() {
