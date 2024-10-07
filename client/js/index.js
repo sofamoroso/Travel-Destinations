@@ -42,10 +42,10 @@ async function loadData() {
 		const loggedInUserName = sessionStorage.getItem('logged-username');
 		const profileCard = document.getElementById('profile-card');
 
-		const updatedUsers = users.filter((user) => user._id !== loggedInUserId);
+		const communityUsers = users.filter((user) => user._id !== loggedInUserId);
 		// sortUsers(users);
 		// createUserButtons(users, travelDestinations, userButtonsContainer, iframe, loggedInUserId);
-		createUserButtons(updatedUsers, travelDestinations, userButtonsContainer, iframe);
+		createUserButtons(communityUsers, travelDestinations, userButtonsContainer, iframe);
 		populateUserCard(loggedInUserName, loggedInUserId, travelDestinations, profileCard, iframe);
 	} else {
 		console.error('users array is not defined');
