@@ -113,4 +113,25 @@ router.post('/api/users', async (req, res) => {
 	}
 });
 
+//Delete a user - admin
+router.delete('/api/users/:id', async (req, res) => {
+	//extract the id from the url
+	const { id } = req.body;
+
+	try {
+		//deleting the user
+		const deleteUser = await User.findByIdAndDelete(id);
+
+		//if e.g. an user doesnt exist with this id
+		if (!deleteUser) {
+			return res.status(404).json({ message: 'user not found' });
+		}
+
+		//then display status code info
+		res.status(200).json({ message: 'user deleted successfully' });
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
+});
+
 export default router;
