@@ -177,3 +177,22 @@ iframe {
 	filter: blur(5px);
 	pointer-events: none;
 }
+
+#buttons-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+.arrow {
+	background-color: lightgray; /* Button background color */
+	color: var(--text-color); /* Button text color */
+	border: none; /* Remove border */
+	border-radius: 50%;
+	cursor: pointer; /* Pointer cursor on hover */
+	transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+	margin-top: 1rem;
+}
+
+.arrow:hover {
+	background-color: var(--primary-color); /* Darker blue on hover */
+}

@@ -1,3 +1,7 @@
+const usersPerPage = 5; 
+let currentPage = 0;
+let updatedUsers = []; // Declare users globally to be accessible
+
 // Load the navbar, data, and set up iframe communication
 document.addEventListener('DOMContentLoaded', () => {
 	const token = sessionStorage.getItem('jwt-TravelDestination');
@@ -38,15 +42,16 @@ async function loadData() {
 
 	clearUserButtons(userButtonsContainer);
 
+
 	if (users.length > 0) {
 		const loggedInUserName = sessionStorage.getItem('logged-username');
 		const profileCard = document.getElementById('profile-card');
 
-		const updatedUsers = users.filter((user) => user._id !== loggedInUserId);
+		updatedUsers = users.filter((user) => user._id !== loggedInUserId);
 		// sortUsers(users);
 		// createUserButtons(users, travelDestinations, userButtonsContainer, iframe, loggedInUserId);
-		createUserButtons(updatedUsers, travelDestinations, userButtonsContainer, iframe);
 		populateUserCard(loggedInUserName, loggedInUserId, travelDestinations, profileCard, iframe);
+		createUserButtons(updatedUsers, travelDestinations, userButtonsContainer, iframe);
 	} else {
 		console.error('users array is not defined');
 	}
@@ -72,13 +77,54 @@ function clearUserButtons(container) {
 
 // Function to create user buttons and send travel destinations to the iframe
 function createUserButtons(users, travelDestinations, container, iframe) {
-	users.forEach((user) => {
-		const button = document.createElement('button');
-		button.textContent = user.username;
-		button.addEventListener('click', () => handleUserButtonClick(user, travelDestinations, iframe, button));
-		container.appendChild(button);
-	});
+    // Clear existing buttons
+    container.innerHTML = '';
+
+    // Calculate start and end index
+    const start = currentPage * usersPerPage;
+    const end = start + usersPerPage;
+    const paginatedUsers = users.slice(start, end);
+
+    paginatedUsers.forEach((user) => {
+        const button = document.createElement('button');
+        button.textContent = user.username;
+        button.addEventListener('click', () => handleUserButtonClick(user, travelDestinations, iframe, button));
+        container.appendChild(button);
+    });
+
+    // Enable/disable buttons based on the current page
+    document.getElementById('prevButton').disabled = currentPage === 0;
+    document.getElementById('nextButton').disabled = end >= users.length;
 }
+
+// Function to handle next button click
+function nextPage() {
+    if ((currentPage + 1) * usersPerPage < updatedUsers.length) {
+        currentPage++;
+        updateUserButtons();
+    }
+}
+
+// Function to handle previous button click
+function prevPage() {
+    if (currentPage > 0) {
+        currentPage--;
+        updateUserButtons();
+    }
+}
+
+// Function to update user buttons based on current page
+function updateUserButtons() {
+    const userButtonsContainer = document.getElementById('user-buttons');
+    const iframe = document.getElementById('worldMapIframe');
+    const travelDestinations = []; // Update this with your logic to fetch travel destinations
+    createUserButtons(updatedUsers, travelDestinations, userButtonsContainer, iframe);
+}
+
+// Event listeners for buttons
+document.getElementById('nextButton').addEventListener('click', nextPage);
+document.getElementById('prevButton').addEventListener('click', prevPage);
+
 function handleUserButtonClick(user, travelDestinations, iframe, button) {
 	sessionStorage.setItem('selectedUser', user.username);
 	sessionStorage.setItem('selectedUserId', user._id);
@@ -92,9 +138,6 @@ function handleUserButtonClick(user, travelDestinations, iframe, button) {
 
 	document.querySelectorAll('#user-buttons button').forEach((btn) => btn.classList.remove('active'));
 	button.classList.add('active');
-
-	const addDestinationButtons = document.querySelectorAll('.addDestinationBtn');
-	toggleButtonVisibility(Array.from(addDestinationButtons));
 
 	hideSidebar();
 }
@@ -123,9 +166,6 @@ function handleUserCardClick(loggedInUserId, loggedInUserName, travelDestination
 	iframe.contentWindow.postMessage({ action: 'visitedPlaces', travelDestinations: uniqueCountries }, '*');
 
 	document.querySelectorAll('#user-buttons button').forEach((btn) => btn.classList.remove('active'));
-
-	const addDestinationButtons = document.querySelectorAll('.addDestinationBtn');
-	toggleButtonVisibility(Array.from(addDestinationButtons));
 
 	hideSidebar();
 }
@@ -221,9 +261,6 @@ function displayDestinationCards(destination) {
 		star.textContent = '★';
 		ratingDiv.appendChild(star);
 	}
-
-	// Display edit and delete buttons for the logged in user only
-	toggleButtonVisibility([editButton, deleteButton]);
 
 	editButton.addEventListener('click', async () => {
 		console.log(`Editing destination: ${destination.city} from ${destination.country}`);
@@ -322,16 +359,4 @@ async function updateSidebarContent() {
 	const travelDestinations = await fetchTravelDestinationsByUserAndCountry(userId, selectedCountry);
 
 	initializeSidebarContent(selectedCountry, selectedCountryCode, username, travelDestinations);
-}
-
-// Function to toggle the visibility of the add/edit/delete destination button
-function toggleButtonVisibility(buttons) {
-	const selectedUser = sessionStorage.getItem('selectedUser');
-	const loggedinUser = sessionStorage.getItem('logged-username');
-
-	if (selectedUser === loggedinUser) {
-		buttons.forEach((button) => (button.style.display = 'block'));
-	} else {
-		buttons.forEach((button) => (button.style.display = 'none'));
-	}
 }

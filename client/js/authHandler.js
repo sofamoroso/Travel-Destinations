@@ -9,12 +9,6 @@ function initializeAuth() {
 
 	const loggedIn = !!token;
 
-	// Ensure that the selected user is the same as logged in user on page refresh
-	if (loggedIn && username) {
-		sessionStorage.setItem('selectedUser', username);
-		sessionStorage.setItem('selectedUserId', _id);
-	}
-
 	console.log(loggedIn, username, _id);
 
 	const loginModal = document.getElementById('modal');
@@ -129,6 +123,8 @@ const login = async (username, password) => {
 		const data = await response.json();
 
 		if (response.ok) {
+			loggedIn = true;
+
 			// Store JWT token in session storage
 			sessionStorage.setItem('jwt-TravelDestination', data.token);
 			sessionStorage.setItem('logged-username', data.username);
