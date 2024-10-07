@@ -9,6 +9,12 @@ function initializeAuth() {
 
 	const loggedIn = !!token;
 
+	// Ensure that the selected user is the same as logged in user on page refresh
+	if (loggedIn && username) {
+		sessionStorage.setItem('selectedUser', username);
+		sessionStorage.setItem('selectedUserId', _id);
+	}
+
 	console.log(loggedIn, username, _id);
 
 	const loginModal = document.getElementById('modal');
@@ -45,6 +51,12 @@ function handleLoginModalClose(loginModal, loggedIn, leftSidebar, mainContent) {
 			mainContent.classList.remove('blur');
 		}
 	});
+	// Prevent closing the modal when ESC key is pressed
+    loginModal.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            event.preventDefault();
+        }
+    });
 }
 
 function switchAuthModals(authLinks, loginModal, registerModal) {
@@ -123,8 +135,10 @@ const login = async (username, password) => {
 		const data = await response.json();
 
 		if (response.ok) {
-			loggedIn = true;
-
+			// Show popup after successful registration
+			showPopupMessage('Login successful!', 3000);
+			console.log(data);
+			
 			// Store JWT token in session storage
 			sessionStorage.setItem('jwt-TravelDestination', data.token);
 			sessionStorage.setItem('logged-username', data.username);
@@ -133,10 +147,13 @@ const login = async (username, password) => {
 			sessionStorage.setItem('selectedUser', data.username);
 			sessionStorage.setItem('selectedUserId', data._id);
 
-			window.location.reload();
+			setTimeout(() => {
+				window.location.reload();
+			}, 1500);
+			
 			//loginModal.close();
 		} else {
-			alert(data.message);
+			showPopupMessage(data.message, 3000, true);
 		}
 	} catch (error) {
 		console.error('Error logging in:', error);
@@ -158,13 +175,52 @@ const register = async (username, password, email) => {
 		const data = await response.json();
 
 		if (response.ok) {
-			console.log('User registered:', data);
+			showPopupMessage('Register successful!', 3000);
 			registerModal.close();
 			loginModal.showModal();
 		} else {
-			alert(data.message);
+			showPopupMessage(data.message, 3000, true);
 		}
 	} catch (error) {
 		console.error('Error registering user:', error);
 	}
 };
+
+
+function showPopupMessage(message, duration = 3000, error) {
+    // Create the popup container
+    const popup = document.createElement('div');
+    popup.textContent = message;
+    
+    // Style the popup
+    popup.style.position = 'fixed';
+    popup.style.top = '50px'; // Position 50px from the top
+    popup.style.left = '50%'; // Center horizontally
+    popup.style.transform = 'translateX(-50%)'; // Shift left by 50% of its width to align center
+    popup.style.padding = '15px 30px';
+    error ? popup.style.backgroundColor = '#FF6347' : popup.style.backgroundColor = '#32CD32';
+    popup.style.color = 'white';
+    popup.style.fontSize = '16px';
+    popup.style.borderRadius = '5px';
+    popup.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.2)';
+    popup.style.zIndex = '1000';
+    popup.style.opacity = '0';
+    popup.style.transition = 'opacity 0.5s ease-in-out';
+
+    // Append the popup to the body
+    document.body.appendChild(popup);
+
+    // Make the popup visible
+    setTimeout(() => {
+        popup.style.opacity = '1';
+    }, 10);
+
+    // Remove the popup after the specified duration
+    setTimeout(() => {
+        popup.style.opacity = '0';
+        // Remove the popup from the DOM after the fade-out transition
+        setTimeout(() => {
+            document.body.removeChild(popup);
+        }, 500); // 500ms matches the transition duration
+    }, duration);
+}

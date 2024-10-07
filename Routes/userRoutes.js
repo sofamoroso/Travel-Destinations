@@ -33,7 +33,7 @@ router.post('/api/register', async (req, res) => {
 		const oldUser = await User.findOne({ username });
 
 		if (oldUser) {
-			return res.status(409).send('Username already in use');
+			return res.status(409).json({ message: 'Username already exists' });
 		}
 
 		//Encrypt user password

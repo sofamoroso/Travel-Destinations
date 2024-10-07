@@ -1,3 +1,5 @@
+import { deleteDestination, fetchTravelDestinationsByUserAndCountry, fetchUsers, fetchTravelDestinations } from './dataService.js';
+
 const usersPerPage = 5; 
 let currentPage = 0;
 let communityUsers = [];
@@ -139,6 +141,9 @@ function handleUserButtonClick(user, travelDestinations, iframe, button) {
 	document.querySelectorAll('#user-buttons button').forEach((btn) => btn.classList.remove('active'));
 	button.classList.add('active');
 
+	const addDestinationButtons = document.querySelectorAll('.addDestinationBtn');
+	toggleButtonVisibility(Array.from(addDestinationButtons));
+
 	hideSidebar();
 }
 
@@ -164,6 +169,9 @@ function handleUserCardClick(loggedInUserId, loggedInUserName, uniqueCountries, 
 	iframe.contentWindow.postMessage({ action: 'visitedPlaces', travelDestinations: uniqueCountries }, '*');
 
 	document.querySelectorAll('#user-buttons button').forEach((btn) => btn.classList.remove('active'));
+
+	const addDestinationButtons = document.querySelectorAll('.addDestinationBtn');
+	toggleButtonVisibility(Array.from(addDestinationButtons));
 
 	hideSidebar();
 }
@@ -260,6 +268,9 @@ function displayDestinationCards(destination) {
 		ratingDiv.appendChild(star);
 	}
 
+	// Display edit and delete buttons for the logged in user only
+	toggleButtonVisibility([editButton, deleteButton]);
+
 	editButton.addEventListener('click', async () => {
 		console.log(`Editing destination: ${destination.city} from ${destination.country}`);
 		await window.openEditDestinationDialog(destination);
@@ -272,83 +283,7 @@ function displayDestinationCards(destination) {
 	sidebarContent.appendChild(card);
 }
 
-async function deleteDestination(destination) {
-	// Show confirmation dialog
-	const userConfirmed = confirm(`Are you sure you want to delete ${destination.city}?`);
-	if (!userConfirmed) {
-		// User clicked "Cancel", do nothing
-		return;
-	}
-	// Proceed with deletion
-	try {
-		const response = await fetch(`/api/travel-destinations/${destination._id}`, {
-			method: 'DELETE',
-			headers: { 'Content-Type': 'application/json' },
-		});
-		if (response.ok) {
-			console.log(`Deleted destination: ${destination.city} from ${destination.country}`);
-			// Dispatch custom event destinationAdded
-			const event = new CustomEvent('destinationChanged', { detail: { action: 'delete' } });
-			document.dispatchEvent(event);
-		} else {
-			console.error('Failed to delete destination');
-		}
-	} catch (error) {
-		console.error('Error while deleting destination:', error);
-	}
-}
-
-// Fetch all destinations for a specific user and country
-async function fetchTravelDestinationsByUserAndCountry(userId, country) {
-	try {
-		const response = await fetch(`/api/travel-destinations/${userId}/${country}`);
-		if (!response.ok) {
-			throw new Error('Network response was not ok');
-		}
-		const travelDestinations = await response.json();
-		console.log('trvDestinationsByUserAndCountry', travelDestinations);
-
-		return travelDestinations;
-	} catch (error) {
-		console.error('Error fetching visited places:', error);
-		return [];
-	}
-}
-
-// Function to fetch users from the backend
-async function fetchUsers() {
-	try {
-		const response = await fetch('/api/users');
-		if (!response.ok) {
-			throw new Error('Network response was not ok');
-		}
-		const users = await response.json();
-		console.log(users);
-
-		return users;
-	} catch (error) {
-		console.error('Error fetching users:', error);
-		return [];
-	}
-}
-
-// Function to fetch visited places from the backend
-async function fetchTravelDestinations() {
-	try {
-		const response = await fetch('/api/travel-destinations');
-		if (!response.ok) {
-			throw new Error('Network response was not ok');
-		}
-		const travelDestinations = await response.json();
-		console.log(travelDestinations);
-
-		return travelDestinations;
-	} catch (error) {
-		console.error('Error fetching visited places:', error);
-		return [];
-	}
-}
-
+// Function to update the sidebar content when a destination is added
 async function updateSidebarContent() {
 	const selectedCountry = sessionStorage.getItem('selectedCountry');
 	const selectedCountryCode = sessionStorage.getItem('selectedCountryCode');
@@ -357,4 +292,15 @@ async function updateSidebarContent() {
 	const travelDestinations = await fetchTravelDestinationsByUserAndCountry(userId, selectedCountry);
 
 	initializeSidebarContent(selectedCountry, selectedCountryCode, username, travelDestinations);
+}
+
+// Function to toggle the visibility of the add/edit/delete destination button
+function toggleButtonVisibility(buttons) {
+	const selectedUser = sessionStorage.getItem('selectedUser');
+	const loggedinUser = sessionStorage.getItem('logged-username');
+	if (selectedUser === loggedinUser) {
+		buttons.forEach((button) => (button.style.display = 'block'));
+	} else {
+		buttons.forEach((button) => (button.style.display = 'none'));
+	}
 }
