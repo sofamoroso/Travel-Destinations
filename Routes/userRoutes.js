@@ -97,9 +97,7 @@ router.post('/api/users', async (req, res) => {
 			$or: [{ email }, { username }],
 		});
 		if (existingUser) {
-			return res
-				.status(400)
-				.json({ error: 'Username or email already exists' });
+			return res.status(400).json({ error: 'Username or email already exists' });
 		}
 
 		const user = new User({

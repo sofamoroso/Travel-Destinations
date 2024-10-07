@@ -46,10 +46,7 @@ app.get('/test', (req, res) => {
 	res.sendFile(path.join(__dirname, 'client', 'test.html'));
 });
 
-const mongoURI =
-	process.env.NODE_ENV === 'development'
-		? process.env.MONGO_URI_REMOTE
-		: process.env.MONGO_URI_LOCAL;
+const mongoURI = process.env.NODE_ENV === 'development' ? process.env.MONGO_URI_REMOTE : process.env.MONGO_URI_LOCAL;
 
 const connectToDatabase = async () => {
 	try {

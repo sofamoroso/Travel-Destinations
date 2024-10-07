@@ -1,11 +1,15 @@
 // Load the navbar, data, and set up iframe communication
 document.addEventListener('DOMContentLoaded', () => {
-	loadData();
-	initializeEventListeners();
+	const token = sessionStorage.getItem('jwt-TravelDestination');
+
+	if (token) {
+		loadData();
+		initializeEventListeners();
+	}
 });
 
 function initializeEventListeners() {
-    // Listen for messages from the iframe (gets info about the path clicked)
+	// Listen for messages from the iframe (gets info about the path clicked)
 	window.addEventListener('message', (event) => {
 		console.log('Message received from MAP:', event.data);
 		if (event.data && event.data.action === 'countryClicked') {
@@ -14,7 +18,7 @@ function initializeEventListeners() {
 	});
 
 	// Listen for the custom event destinationAdded to refresh the data
-    document.addEventListener('destinationAdded', () => {
+	document.addEventListener('destinationAdded', () => {
 		loadData();
 
 		// Dynamically update the sidebar content when a destination is added
@@ -32,7 +36,7 @@ async function loadData() {
     const iframe = document.getElementById('worldMapIframe');
 	const loggedInUserId = sessionStorage.getItem('logged-_id');
 
-    clearUserButtons(userButtonsContainer);
+	clearUserButtons(userButtonsContainer);
 
     if (users.length > 0) {
 		const loggedInUserName = sessionStorage.getItem('logged-username');
@@ -55,15 +59,12 @@ async function loadData() {
 
 // Function to fetch users and travel destinations from the backend
 async function fetchData() {
-    const [users, travelDestinations] = await Promise.all([
-        fetchUsers(),
-        fetchTravelDestinations(),
-    ]);
-    return [users, travelDestinations];
+	const [users, travelDestinations] = await Promise.all([fetchUsers(), fetchTravelDestinations()]);
+	return [users, travelDestinations];
 }
 
 function clearUserButtons(container) {
-    container.innerHTML = '';
+	container.innerHTML = '';
 }
 
 // function sortUsers(users, loggedInUserId) {
@@ -83,16 +84,20 @@ function createUserButtons(users, travelDestinations, container, iframe) {
     });
 }
 function handleUserButtonClick(user, travelDestinations, iframe, button) {
-    sessionStorage.setItem('selectedUser', user.username);
-    sessionStorage.setItem('selectedUserId', user._id);
+	sessionStorage.setItem('selectedUser', user.username);
+	sessionStorage.setItem('selectedUserId', user._id);
 
-    const filteredDestinations = travelDestinations.filter((destination) => destination.userId === user._id);
-    iframe.contentWindow.postMessage({ action: 'visitedPlaces', travelDestinations: filteredDestinations }, '*');
+	const filteredDestinations = travelDestinations.filter((destination) => destination.userId === user._id);
 
-    document.querySelectorAll('#user-buttons button').forEach((btn) => btn.classList.remove('active'));
-    button.classList.add('active');
+	const uniqueCountries = new Set(filteredDestinations.map((destination) => destination.country));
+	console.log(uniqueCountries); // This will log the Set of unique countries
 
-    hideSidebar();
+	iframe.contentWindow.postMessage({ action: 'visitedPlaces', travelDestinations: uniqueCountries }, '*');
+
+	document.querySelectorAll('#user-buttons button').forEach((btn) => btn.classList.remove('active'));
+	button.classList.add('active');
+
+	hideSidebar();
 }
 
 function populateUserCard(loggedInUserName, loggedInUserId, travelDestinations, card, iframe){
@@ -104,14 +109,21 @@ function populateUserCard(loggedInUserName, loggedInUserId, travelDestinations, 
 	profileName.textContent = loggedInUserName;
 	profileCountryCount.textContent = filteredDestinations.length;
 
-	card.addEventListener('click', () => handleUserCardClick(loggedInUserId, travelDestinations, iframe));
+	card.addEventListener('click', () => handleUserCardClick(loggedInUserId, loggedInUserName, travelDestinations, iframe));
 }
 
-function handleUserCardClick(loggedInUserId, travelDestinations, iframe) {
+function handleUserCardClick(loggedInUserId, loggedInUserName, travelDestinations, iframe) {
+	sessionStorage.setItem('selectedUser', loggedInUserName);
+	sessionStorage.setItem('selectedUserId', loggedInUserId);
+
     const filteredDestinations = travelDestinations.filter(destination => destination.userId === loggedInUserId);
     
+	const uniqueCountries = new Set(filteredDestinations.map((destination) => destination.country));
+	console.log(uniqueCountries); // This will log the Set of unique countries
+
+
     iframe.contentWindow.postMessage(
-        { action: 'visitedPlaces', travelDestinations: filteredDestinations },
+        { action: 'visitedPlaces', travelDestinations: uniqueCountries },
         '*'
     );
 
@@ -123,49 +135,53 @@ function handleUserCardClick(loggedInUserId, travelDestinations, iframe) {
 // Highlight the logged in user button and send their travel destinations to the iframe
 function loadLoggedInUserDestinations(travelDestinations, iframe, loggedInUserId) {
     const myTravelDestinations = travelDestinations.filter((destination) => destination.userId === loggedInUserId);
-    iframe.contentWindow.postMessage({ action: 'visitedPlaces', travelDestinations: myTravelDestinations }, '*');
+
+	const uniqueCountries = new Set(myTravelDestinations.map((destination) => destination.country));
+	console.log(uniqueCountries); // This will log the Set of unique countries
+
+    iframe.contentWindow.postMessage({ action: 'visitedPlaces', travelDestinations: uniqueCountries }, '*');
 }
 
 // Function to show the sidebar with the clicked path = country name
 async function showSidebar(path, countryCode) {
-    const userId = sessionStorage.getItem('selectedUserId');
-    const username = sessionStorage.getItem('selectedUser');
+	const userId = sessionStorage.getItem('selectedUserId');
+	const username = sessionStorage.getItem('selectedUser');
 
-    sessionStorage.setItem('selectedCountry', path);
+	sessionStorage.setItem('selectedCountry', path);
 	sessionStorage.setItem('selectedCountryCode', countryCode);
 
-    const travelDestinations = await fetchTravelDestinationsByUserAndCountry(userId, path);
+	const travelDestinations = await fetchTravelDestinationsByUserAndCountry(userId, path);
 
 	if (!travelDestinations) {
 		console.error('Failed to fetch travel destinations.');
 		return;
 	}
 
-    initializeSidebarContent(path, countryCode, username, travelDestinations);
+	initializeSidebarContent(path, countryCode, username, travelDestinations);
 }
 
 function initializeSidebarContent(path, countryCode, username, travelDestinations) {
-    const sidebar = document.getElementById('right-sidebar');
-    const sidebarTitle = document.getElementById('sidebar-title');
-    const sidebarSubtitle = document.getElementById('sidebar-subtitle');
-    const sideBarFlag = document.getElementById('sidebar-flag');
-    const sidebarContent = document.getElementById('sidebar-content');
+	const sidebar = document.getElementById('right-sidebar');
+	const sidebarTitle = document.getElementById('sidebar-title');
+	const sidebarSubtitle = document.getElementById('sidebar-subtitle');
+	const sideBarFlag = document.getElementById('sidebar-flag');
+	const sidebarContent = document.getElementById('sidebar-content');
 	const sidebarCloseButton = document.getElementById('close-sidebar-button');
 
-    sideBarFlag.src = `https://flagsapi.com/${countryCode}/shiny/64.png`;
+	sideBarFlag.src = `https://flagsapi.com/${countryCode}/shiny/64.png`;
 
-    sidebarContent.innerHTML = '';
-    sidebarTitle.innerHTML = `You clicked on ${path}.`;
-    sidebarSubtitle.innerHTML = `${username} visited ${travelDestinations.length} places in this country.`;
+	sidebarContent.innerHTML = '';
+	sidebarTitle.innerHTML = `You clicked on ${path}.`;
+	sidebarSubtitle.innerHTML = `${username} visited ${travelDestinations.length} places in this country.`;
 
-    if (travelDestinations.length > 0) {
-        travelDestinations.forEach(displayDestinationCards);
-    } else {
-        const noCitiesMessage = document.createElement('p');
+	if (travelDestinations.length > 0) {
+		travelDestinations.forEach(displayDestinationCards);
+	} else {
+		const noCitiesMessage = document.createElement('p');
 		noCitiesMessage.textContent = 'No cities visited in this country.';
 		sidebarContent.appendChild(noCitiesMessage);
-    }
-	
+	}
+
 	sidebarCloseButton.addEventListener('click', hideSidebar);
 	sidebar.classList.add('show');
 }
@@ -194,9 +210,7 @@ function displayDestinationCards(destination) {
 
 	cityName.textContent = destination.city;
 	cityDescription.textContent = destination.description;
-	dateVisited.textContent = `Visited on: ${new Date(
-		destination.date
-	).toLocaleDateString()}`;
+	dateVisited.textContent = `Visited on: ${new Date(destination.date).toLocaleDateString()}`;
 
 	for (let i = 0; i < maxStars; i++) {
 		const star = document.createElement('span');
@@ -214,9 +228,7 @@ function displayDestinationCards(destination) {
 // Fetch all destinations for a specific user and country
 async function fetchTravelDestinationsByUserAndCountry(userId, country) {
 	try {
-		const response = await fetch(
-			`/api/travel-destinations/${userId}/${country}`
-		);
+		const response = await fetch(`/api/travel-destinations/${userId}/${country}`);
 		if (!response.ok) {
 			throw new Error('Network response was not ok');
 		}
