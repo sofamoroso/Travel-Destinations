@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	let isEditMode = false;
 	let currentDestinationId = null;
 
-	const addDestinationForm = document.getElementById('addDestinationFor');
+	const addDestinationForm = document.getElementById('addDestinationForm');
 	const addDestinationDialog = document.getElementById('addDestinationDialog');
 	const addDestinationDialogClose = document.getElementById('addDestinationDialogClose');
 	const addDestinationButtons = document.querySelectorAll('.addDestinationBtn');
