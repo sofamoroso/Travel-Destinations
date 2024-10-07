@@ -148,6 +148,9 @@ const login = async (username, password) => {
 };
 
 const register = async (username, password, email) => {
+	const registerModal = document.getElementById('registerModal');
+	const loginModal = document.getElementById('modal');
+
 	try {
 		const response = await fetch('http://localhost:3000/api/register', {
 			method: 'POST',
