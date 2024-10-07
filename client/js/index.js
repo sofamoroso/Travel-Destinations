@@ -93,6 +93,9 @@ function handleUserButtonClick(user, travelDestinations, iframe, button) {
 	document.querySelectorAll('#user-buttons button').forEach((btn) => btn.classList.remove('active'));
 	button.classList.add('active');
 
+	const addDestinationButtons = document.querySelectorAll('.addDestinationBtn');
+	toggleButtonVisibility(Array.from(addDestinationButtons));
+
 	hideSidebar();
 }
 
@@ -120,6 +123,9 @@ function handleUserCardClick(loggedInUserId, loggedInUserName, travelDestination
 	iframe.contentWindow.postMessage({ action: 'visitedPlaces', travelDestinations: uniqueCountries }, '*');
 
 	document.querySelectorAll('#user-buttons button').forEach((btn) => btn.classList.remove('active'));
+
+	const addDestinationButtons = document.querySelectorAll('.addDestinationBtn');
+	toggleButtonVisibility(Array.from(addDestinationButtons));
 
 	hideSidebar();
 }
@@ -215,6 +221,9 @@ function displayDestinationCards(destination) {
 		star.textContent = '★';
 		ratingDiv.appendChild(star);
 	}
+
+	// Display edit and delete buttons for the logged in user only
+	toggleButtonVisibility([editButton, deleteButton]);
 
 	editButton.addEventListener('click', async () => {
 		console.log(`Editing destination: ${destination.city} from ${destination.country}`);
@@ -315,4 +324,16 @@ async function updateSidebarContent() {
 	const travelDestinations = await fetchTravelDestinationsByUserAndCountry(userId, selectedCountry);
 
 	initializeSidebarContent(selectedCountry, selectedCountryCode, username, travelDestinations);
+}
+
+// Function to toggle the visibility of the add/edit/delete destination button
+function toggleButtonVisibility(buttons) {
+	const selectedUser = sessionStorage.getItem('selectedUser');
+	const loggedinUser = sessionStorage.getItem('logged-username');
+
+	if (selectedUser === loggedinUser) {
+		buttons.forEach((button) => (button.style.display = 'block'));
+	} else {
+		buttons.forEach((button) => (button.style.display = 'none'));
+	}
 }
