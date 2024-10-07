@@ -116,9 +116,11 @@ router.post('/api/users', async (req, res) => {
 //Delete a user - admin
 router.delete('/api/users/:id', async (req, res) => {
 	//extract the id from the url
-	const { id } = req.body;
+	const { id } = req.params;
 
 	try {
+		console.log('ID to be deleted: ', id);
+
 		//deleting the user
 		const deleteUser = await User.findByIdAndDelete(id);
 
