@@ -53,6 +53,12 @@ function handleLoginModalClose(loginModal, loggedIn, leftSidebar, mainContent) {
 			mainContent.classList.remove('blur');
 		}
 	});
+	// Prevent closing the modal when ESC key is pressed
+    loginModal.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            event.preventDefault();
+        }
+    });
 }
 
 function switchAuthModals(authLinks, loginModal, registerModal) {
@@ -119,39 +125,6 @@ const handleLogout = () => {
 	location.reload();
 };
 
-//function for handling own account deletion
-// function initializeDeleteAccountButton(deleteAccountButton, token) {
-
-// 	deleteAccountButton.addEventListener('click', async () => {
-// 		const confirmDeletion = confirm('Are you sure you want to delete you account?');
-
-// 		if (confirmDeletion) {
-// 			const token = sessionStorage.getItem('jwt-TravelDestination'); // Get the JWT token
-// 			console.log('Token:', token); // Log the token
-
-// 			try {
-// 				const response = await fetch(`http://localhost:3000/api/users/me`, {
-// 					method: 'DELETE',
-// 					headers: {
-// 						'Content-Type': 'application/json',
-// 						Authorization: `Bearer ${token}`, // Send the token in the Authorization header
-// 					},
-// 				});
-
-// 				if (response.ok) {
-// 					alert('Your account has been deleted successfully.');
-// 					handleLogout(); // to log the user out after deletion automatically (not on page reload)
-// 				} else {
-// 					const data = await response.json();
-// 					alert(data.message || 'An error occurred while deleting the account.');
-// 				}
-// 			} catch (error) {
-// 				console.error('Error deleting account:', error);
-// 			}
-// 		}
-// 	});
-// }
-
 function initializeDeleteAccountButton(deleteAccountButton, token) {
 	if (token) {
 		deleteAccountButton.style.display = 'block'; // Show delete button
@@ -171,7 +144,7 @@ async function handleDeleteAccount() {
 		const token = sessionStorage.getItem('jwt-TravelDestination'); // Get the JWT token
 
 		try {
-			const response = await fetch(`http://localhost:3000/api/users/me`, {
+			const response = await fetch(`/api/users/account`, {
 				method: 'DELETE',
 				headers: {
 					'Content-Type': 'application/json',
@@ -204,6 +177,10 @@ const login = async (username, password) => {
 		const data = await response.json();
 
 		if (response.ok) {
+			// Show popup after successful registration
+			showPopupMessage('Login successful!', 3000);
+			console.log(data);
+			
 			// Store JWT token in session storage
 			sessionStorage.setItem('jwt-TravelDestination', data.token);
 			sessionStorage.setItem('logged-username', data.username);
@@ -212,10 +189,13 @@ const login = async (username, password) => {
 			sessionStorage.setItem('selectedUser', data.username);
 			sessionStorage.setItem('selectedUserId', data._id);
 
-			window.location.reload();
+			setTimeout(() => {
+				window.location.reload();
+			}, 1500);
+			
 			//loginModal.close();
 		} else {
-			alert(data.message);
+			showPopupMessage(data.message, 3000, true);
 		}
 	} catch (error) {
 		console.error('Error logging in:', error);
@@ -237,13 +217,52 @@ const register = async (username, password, email) => {
 		const data = await response.json();
 
 		if (response.ok) {
-			console.log('User registered:', data);
+			showPopupMessage(data.message, 3000);
 			registerModal.close();
 			loginModal.showModal();
 		} else {
-			alert(data.message);
+			showPopupMessage(data.message, 3000, true);
 		}
 	} catch (error) {
 		console.error('Error registering user:', error);
 	}
 };
+
+
+function showPopupMessage(message, duration = 3000, error) {
+    // Create the popup container
+    const popup = document.createElement('div');
+    popup.textContent = message;
+    
+    // Style the popup
+    popup.style.position = 'fixed';
+    popup.style.top = '50px'; // Position 50px from the top
+    popup.style.left = '50%'; // Center horizontally
+    popup.style.transform = 'translateX(-50%)'; // Shift left by 50% of its width to align center
+    popup.style.padding = '15px 30px';
+    error ? popup.style.backgroundColor = '#FF6347' : popup.style.backgroundColor = '#32CD32';
+    popup.style.color = 'white';
+    popup.style.fontSize = '16px';
+    popup.style.borderRadius = '5px';
+    popup.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.2)';
+    popup.style.zIndex = '1000';
+    popup.style.opacity = '0';
+    popup.style.transition = 'opacity 0.5s ease-in-out';
+
+    // Append the popup to the body
+    document.body.appendChild(popup);
+
+    // Make the popup visible
+    setTimeout(() => {
+        popup.style.opacity = '1';
+    }, 10);
+
+    // Remove the popup after the specified duration
+    setTimeout(() => {
+        popup.style.opacity = '0';
+        // Remove the popup from the DOM after the fade-out transition
+        setTimeout(() => {
+            document.body.removeChild(popup);
+        }, 500); // 500ms matches the transition duration
+    }, duration);
+}

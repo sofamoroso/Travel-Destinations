@@ -28,12 +28,16 @@ router.post('/api/register', async (req, res) => {
 			return res.status(400).send('All input are required');
 		}
 
-		// checks if user already exist
-		// Validates if user exist in our database
-		const oldUser = await User.findOne({ username });
+		// Check if username already exists
+		const existingUsername = await User.findOne({ username });
+		if (existingUsername) {
+			return res.status(409).json({ message: 'This username is already taken, please use another one' });
+		}
 
-		if (oldUser) {
-			return res.status(409).send('Username already in use');
+		// Check if email already exists
+		const existingEmail = await User.findOne({ email });
+		if (existingEmail) {
+			return res.status(409).json({ message: 'Another account is using this email' });
 		}
 
 		//Encrypt user password
@@ -47,7 +51,7 @@ router.post('/api/register', async (req, res) => {
 		});
 
 		// return new user
-		return res.status(201).json(user);
+		return res.status(201).json({ message: 'User registered successfully' });
 	} catch (error) {
 		console.log({ error: error.message });
 	}
@@ -114,7 +118,7 @@ router.post('/api/users', async (req, res) => {
 });
 
 //Delete user - deleting own account
-router.delete('/api/users/me', async (req, res) => {
+router.delete('/api/users/account', async (req, res) => {
 	try {
 		const token = req.headers.authorization.split(' ')[1]; // Get the token from the Authorization header
 		if (!token) return res.status(401).send('Unauthorized');
