@@ -174,7 +174,7 @@ iframe {
 	background-color: var(--accent-color);
 }
 
-.blur {
+.blur *:not(dialog):not(dialog *) {
 	filter: blur(5px);
 	pointer-events: none;
 }

@@ -22,16 +22,16 @@ function initializeAuth() {
 	const authLinks = document.querySelectorAll('.authLink');
 	const loginForm = document.getElementById('loginForm');
 	const registerForm = document.getElementById('registerForm');
-	const leftSidebar = document.querySelector('.left-sidebar');
-	const mainContent = document.querySelector('.main-content');
 	const logoutButton = document.getElementById('logoutButton');
 	const deleteAccountButton = document.getElementById('deleteAccountButton'); //adding the delete account btn
 
+	const documentBody = document.querySelector('body'); // Used to add/remove blur effect
+
 	if (!loggedIn) {
-		showLoginModal(loginModal, leftSidebar, mainContent);
+		showLoginModal(loginModal, documentBody);
 	}
 
-	handleLoginModalClose(loginModal, loggedIn, leftSidebar, mainContent);
+	handleLoginModalClose(loginModal, loggedIn, documentBody);
 	switchAuthModals(authLinks, loginModal, registerModal);
 	handleRegisterModalCancel(registerModal, loginModal);
 	handleLoginFormSubmit(loginForm);
@@ -40,17 +40,15 @@ function initializeAuth() {
 	initializeDeleteAccountButton(deleteAccountButton, token);
 }
 
-function showLoginModal(loginModal, leftSidebar, mainContent) {
+function showLoginModal(loginModal, documentBody) {
 	loginModal.showModal();
-	leftSidebar.classList.add('blur');
-	mainContent.classList.add('blur');
+	documentBody.classList.add('blur');
 }
 
-function handleLoginModalClose(loginModal, loggedIn, leftSidebar, mainContent) {
+function handleLoginModalClose(loginModal, loggedIn, documentBody) {
 	loginModal.addEventListener('close', () => {
 		if (loggedIn) {
-			leftSidebar.classList.remove('blur');
-			mainContent.classList.remove('blur');
+			documentBody.classList.remove('blur');
 		}
 	});
 	// Prevent closing the modal when ESC key is pressed
