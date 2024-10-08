@@ -114,7 +114,7 @@ button:active {
 	color: var(--accent-hover-color); /* Change color on hover */
 }
 
-#status-message {
+#login-status-message, #register-status-message {
 	color: var(--error-color); /* Error color */
 	text-align: center; /* Center text */
 	visibility: hidden;

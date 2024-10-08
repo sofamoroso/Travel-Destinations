@@ -25,19 +25,19 @@ router.post('/api/register', async (req, res) => {
 
 		// Validate user input
 		if (!(username && email && password)) {
-			return res.status(400).send('All input are required');
+			return res.status(400).json({ error: 'All inputs are required'});
 		}
 
 		// Check if username already exists
 		const existingUsername = await User.findOne({ username });
 		if (existingUsername) {
-			return res.status(409).json({ message: 'This username is already taken, please use another one' });
+			return res.status(409).json({ error: 'This username is already taken, please use another one' });
 		}
 
 		// Check if email already exists
 		const existingEmail = await User.findOne({ email });
 		if (existingEmail) {
-			return res.status(409).json({ message: 'Another account is using this email' });
+			return res.status(409).json({ error: 'Another account is using this email' });
 		}
 
 		//Encrypt user password
@@ -53,7 +53,7 @@ router.post('/api/register', async (req, res) => {
 		// return new user
 		return res.status(201).json({ message: 'User registered successfully' });
 	} catch (error) {
-		console.log({ error: error.message });
+		return res.status(400).json({ error: error.message });
 	}
 });
 
@@ -65,7 +65,7 @@ router.post('/api/login', async (req, res) => {
 
 		// Validate user input
 		if (!(username && password)) {
-			res.status(400).send('All inputs are required');
+			return res.status(400).json({ error: 'All inputs are required'});
 		}
 		// Validate if user exist in our database
 		const user = await User.findOne({ username });
@@ -85,7 +85,7 @@ router.post('/api/login', async (req, res) => {
 			const { password, ...userWithoutPassword } = user._doc;
 			return res.status(200).json({ ...userWithoutPassword, token });
 		}
-		return res.status(400).json({ message: 'Invalid Credentials' });
+		return res.status(400).json({ error: 'Invalid Credentials' });
 	} catch (error) {
 		return res.status(400).json({ error: error.message });
 	}
