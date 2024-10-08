@@ -3,6 +3,7 @@ import Router from 'express';
 const router = Router();
 
 import User from '../Model/User.js';
+import TravelDestination from '../Model/TravelDestination.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
@@ -129,6 +130,8 @@ router.delete('/api/users/account', async (req, res) => {
 		// Find and delete the user
 		const user = await User.findByIdAndDelete(userId);
 		if (!user) return res.status(404).send('User not found');
+		//Delete all the destinations connected to the user
+		await TravelDestination.deleteMany({ userId });
 
 		return res.status(200).send('User deleted successfully');
 	} catch (error) {
