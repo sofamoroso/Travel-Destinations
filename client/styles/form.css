@@ -70,7 +70,6 @@ h1 {
 /* Button styling */
 #button-container button {
 	width: 40%; /* Button takes content width */
-	margin-top: 1rem;
 	padding: 1rem 1.2rem;
 	background-color: var(--primary-color);
 	color: #fff; /* White text */
@@ -94,7 +93,7 @@ button:active {
 
 #button-container {
 	text-align: center; /* Center button and text */
-	margin-top: 1rem; /* Space above button */
+	margin-top: 1rem;
 }
 
 /* Styling for the "No account? Register" link */
@@ -115,11 +114,11 @@ button:active {
 	color: var(--accent-hover-color); /* Change color on hover */
 }
 
-#error-message {
+#status-message {
 	color: var(--error-color); /* Error color */
-	margin-top: 10px; /* Space above */
 	text-align: center; /* Center text */
-	display: none; /* Hidden by default */
+	visibility: hidden;
+	margin: 0;
 }
 
 /* Centering content */

@@ -175,11 +175,11 @@ const register = async (username, password, email) => {
 		const data = await response.json();
 
 		if (response.ok) {
-			showPopupMessage(data.message, 3000);
+			showPopupMessage(data.message, 3000, true);
 			registerModal.close();
 			loginModal.showModal();
 		} else {
-			showPopupMessage(data.message, 3000, true);
+			showPopupMessage(data.message, 3000, false);
 		}
 	} catch (error) {
 		console.error('Error registering user:', error);
@@ -189,35 +189,21 @@ const register = async (username, password, email) => {
 
 function showPopupMessage(message, duration = 3000, error) {
     // Create the popup container
-    const popup = document.createElement('div');
-    popup.textContent = message;
-    
-    // Style the popup
-    popup.style.position = 'fixed';
-    popup.style.top = '50px'; // Position 50px from the top
-    popup.style.left = '50%'; // Center horizontally
-    popup.style.transform = 'translateX(-50%)'; // Shift left by 50% of its width to align center
-    popup.style.padding = '15px 30px';
-    error ? popup.style.backgroundColor = '#FF6347' : popup.style.backgroundColor = '#32CD32';
-    popup.style.color = 'white';
-    popup.style.fontSize = '16px';
-    popup.style.borderRadius = '5px';
-    popup.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.2)';
-    popup.style.zIndex = '1000';
-    popup.style.opacity = '0';
-    popup.style.transition = 'opacity 0.5s ease-in-out';
+    const statusMessage = document.querySelector("#status-message")
+    statusMessage.textContent = message;
 
-    // Append the popup to the body
-    document.body.appendChild(popup);
+	if(error !== true){
+		statusMessage.style.color  = "green";
+	}
 
     // Make the popup visible
     setTimeout(() => {
-        popup.style.opacity = '1';
+        statusMessage.style.visibility = "visible";
     }, 10);
 
     // Remove the popup after the specified duration
     setTimeout(() => {
-        popup.style.opacity = '0';
+        statusMessage.style.visibility = "hidden";
         // Remove the popup from the DOM after the fade-out transition
         setTimeout(() => {
             document.body.removeChild(popup);
