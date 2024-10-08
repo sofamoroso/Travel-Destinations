@@ -175,7 +175,7 @@ const register = async (username, password, email) => {
 		const data = await response.json();
 
 		if (response.ok) {
-			showPopupMessage('Register successful!', 3000);
+			showPopupMessage(data.message, 3000);
 			registerModal.close();
 			loginModal.showModal();
 		} else {
