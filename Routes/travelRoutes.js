@@ -78,4 +78,59 @@ router.delete('/api/travel-destinations/:id', async (req, res) => {
 	}
 });
 
+router.get('/api/top-countries', async (req, res) => {
+    try {
+        const topCountries = await TravelDestination.aggregate([
+            {
+                $group: {
+                    _id: '$country',
+                    count: { $sum: 1 }
+                }
+            },
+            { $sort: { count: -1 } },
+            { $limit: 5 }
+        ]);
+        res.json(topCountries);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+router.get('/api/top-users', async (req, res) => {
+    try {
+        const topUsers = await TravelDestination.aggregate([
+            {
+                $group: {
+                    _id: '$userId',
+                    count: { $sum: 1 }
+                }
+            },
+            { $sort: { count: -1 } },
+            { $limit: 5 },
+            {
+                $lookup: {
+                    from: 'users', // The name of the User collection
+                    localField: '_id',
+                    foreignField: '_id',
+                    as: 'user'
+                }
+            },
+            {
+                $unwind: '$user'
+            },
+            {
+                $project: {
+                    _id: 0,
+                    userId: '$_id',
+                    count: 1,
+                    username: '$user.username'
+                }
+            }
+        ]);
+        res.json(topUsers);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 export default router;

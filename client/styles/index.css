@@ -197,3 +197,25 @@ iframe {
 .arrow:hover {
 	background-color: var(--primary-color); /* Darker blue on hover */
 }
+
+
+
+.community-features {
+	margin-bottom: 30px;
+}
+
+.community-features button {
+	width: 100%;
+	margin-bottom: 5px;
+}
+
+.expandable-button.expanded {
+	height: auto;
+}
+.expandable-content {
+	display: none;
+	margin-top: 10px;
+}
+.expandable-button.expanded .expandable-content {
+	display: block;
+}

@@ -37,7 +37,22 @@
 						<p id="country-count"><span>0</span> countries</p>
 					</div>
 				</div>
+				
 				<h2>Community</h2>
+
+				<div class="community-features">
+					<button id="top-countries-btn" class="expandable-button">Top 5 countries
+						<div class="expandable-content">
+							<!-- Content for Top 5 countries will be dynamically inserted here -->
+						</div>
+					</button>
+					<button id="top-users-btn" class="expandable-button">Top 5 active users
+						<div class="expandable-content">
+							<!-- Content for Top 5 active users will be dynamically inserted here -->
+						</div>
+					</button>
+				</div>
+
 				<div id="user-buttons"></div>
 				<div id="pagination-container">
 					<button id="prevButton" class="arrow">🡐</button>
@@ -170,6 +185,7 @@
 			</form>
 		</dialog>
 
+		<script type="module" src="js/features.js"></script>
 		<script type="module" src="js/index.js"></script>
 		<script type="module" src="js/authHandler.js"></script>
 		<script type="module" src="js/destinationDialog.js"></script>
