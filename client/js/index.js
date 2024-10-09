@@ -1,6 +1,6 @@
 import { deleteDestination, fetchTravelDestinationsByUserAndCountry, fetchUsers, fetchTravelDestinations } from './dataService.js';
 
-const usersPerPage = 5; 
+const usersPerPage = 5;
 let currentPage = 0;
 let communityUsers = [];
 let allTravelDestinations = [];
@@ -80,47 +80,47 @@ function clearUserButtons(container) {
 
 // Function to create user buttons and send travel destinations to the iframe
 function createUserButtons(users, travelDestinations, container, iframe) {
-    clearUserButtons(container);
+	clearUserButtons(container);
 
-    // Calculate start and end index
-    const start = currentPage * usersPerPage;
-    const end = start + usersPerPage;
-    const paginatedUsers = users.slice(start, end);
+	// Calculate start and end index
+	const start = currentPage * usersPerPage;
+	const end = start + usersPerPage;
+	const paginatedUsers = users.slice(start, end);
 
-    paginatedUsers.forEach((user) => {
-        const button = document.createElement('button');
-        button.textContent = user.username;
-        button.addEventListener('click', () => handleUserButtonClick(user, travelDestinations, iframe, button));
-        container.appendChild(button);
-    });
+	paginatedUsers.forEach((user) => {
+		const button = document.createElement('button');
+		button.textContent = user.username;
+		button.addEventListener('click', () => handleUserButtonClick(user, travelDestinations, iframe, button));
+		container.appendChild(button);
+	});
 
-    // Enable/disable buttons based on the current page
-    document.getElementById('prevButton').style.visibility  = currentPage === 0 ? 'hidden' : 'visible';
-    document.getElementById('nextButton').style.visibility  = end >= users.length ? 'hidden' : 'visible';
+	// Enable/disable buttons based on the current page
+	document.getElementById('prevButton').style.visibility = currentPage === 0 ? 'hidden' : 'visible';
+	document.getElementById('nextButton').style.visibility = end >= users.length ? 'hidden' : 'visible';
 }
 
 // Function to handle next button click
 function nextPage() {
-    if ((currentPage + 1) * usersPerPage < communityUsers.length) {
-        currentPage++;
-        updateUserButtons();
-    }
+	if ((currentPage + 1) * usersPerPage < communityUsers.length) {
+		currentPage++;
+		updateUserButtons();
+	}
 }
 
 // Function to handle previous button click
 function prevPage() {
-    if (currentPage > 0) {
-        currentPage--;
-        updateUserButtons();
-    }
+	if (currentPage > 0) {
+		currentPage--;
+		updateUserButtons();
+	}
 }
 
 // Function to update user buttons based on current page
 function updateUserButtons() {
-    const userButtonsContainer = document.getElementById('user-buttons');
-    const iframe = document.getElementById('worldMapIframe');
+	const userButtonsContainer = document.getElementById('user-buttons');
+	const iframe = document.getElementById('worldMapIframe');
 
-    createUserButtons(communityUsers, allTravelDestinations, userButtonsContainer, iframe);
+	createUserButtons(communityUsers, allTravelDestinations, userButtonsContainer, iframe);
 }
 
 // Event listeners for buttons
