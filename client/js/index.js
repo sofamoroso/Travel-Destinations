@@ -158,41 +158,36 @@ function handleUserButtonClick(user, travelDestinations, iframe, button) {
 	toggleButtonVisibility(Array.from(addDestinationButtons));
 
 	// Expand/collapse button content
-	const expandableContent = button.querySelector('.expandable-content');
 	toggleButtonContent(button, (expandableContent) => loadUserDestinations(uniqueCountries, expandableContent));
 
 	hideSidebar();
 }
 
-//this is added to follow the state of what i expanded and what not
-let currentlyExpandedButton = null;
-
 // Function to expand/collapse the user button
 function toggleButtonContent(button, contentLoader) {
-	const expandableContent = button.querySelector('.expandable-content');
-	// is the button currently expanded
 	const isExpanded = button.classList.contains('expanded');
+	const expandableContent = button.querySelector('.expandable-content');
 
-	// Collapse the currently expanded button if it exists and isn't the one being clicked
-	if (currentlyExpandedButton && currentlyExpandedButton !== button) {
-		console.log('Currently expanded button:', currentlyExpandedButton);
-
-		const previousExpandableContent = currentlyExpandedButton.querySelector('.expandable-content');
-		previousExpandableContent.style.display = 'none';
-		currentlyExpandedButton.classList.remove('expanded');
-	}
+	// Collapse all other buttons except the current one
+	document.querySelectorAll('#user-buttons .expandable-button.expanded').forEach((btn) => {
+		if (btn !== button) {
+			btn.classList.remove('expanded');
+			btn.querySelector('.expandable-content').style.display = 'none';
+			btn.setAttribute('data-expanded', 'false');
+		}
+	});
 
 	// Toggle the clicked button's state
 	if (isExpanded) {
 		expandableContent.style.display = 'none';
 		button.classList.remove('expanded');
-		currentlyExpandedButton = null; // No button is expanded
+		button.setAttribute('data-expanded', 'false');
 	} else {
 		expandableContent.style.display = 'block';
 		button.classList.add('expanded');
-		currentlyExpandedButton = button; // Update the currently expanded button
+		button.setAttribute('data-expanded', 'true');
 
-		// Load content if the contentLoader function is provided
+		// Load content if a contentLoader function is provided
 		if (typeof contentLoader === 'function') {
 			contentLoader(expandableContent);
 		}
@@ -231,13 +226,13 @@ function handleUserCardClick(loggedInUserId, loggedInUserName, uniqueCountries, 
 	iframe.contentWindow.postMessage({ action: 'visitedPlaces', travelDestinations: uniqueCountries }, '*');
 
 	profileCard.classList.add('active');
-	document.querySelectorAll('#user-buttons button').forEach((btn) => btn.classList.remove('active'));
 
-	// Collapse the currently expanded button if it exists
-	if (currentlyExpandedButton) {
-		toggleButtonContent(currentlyExpandedButton, null); // Collapse it
-		document.querySelectorAll('#user-buttons button').forEach((btn) => btn.classList.remove('expandable-button'));
-	}
+	document.querySelectorAll('#user-buttons button').forEach((btn) => {
+		//close the user buttons and deselect them
+		btn.classList.remove('active', 'expanded');
+		const expandableContent = btn.querySelector('.expandable-content');
+		if (expandableContent) expandableContent.style.display = 'none';
+	});
 
 	const addDestinationButtons = document.querySelectorAll('.addDestinationBtn');
 	toggleButtonVisibility(Array.from(addDestinationButtons));
