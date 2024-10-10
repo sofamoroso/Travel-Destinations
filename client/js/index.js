@@ -72,12 +72,6 @@ function clearUserButtons(container) {
 	container.innerHTML = '';
 }
 
-// function sortUsers(users, loggedInUserId) {
-//     users.sort((a, b) =>
-//         a._id === loggedInUserId ? -1 : b._id === loggedInUserId ? 1 : 0
-//     );
-// }
-
 // Function to create user buttons and send travel destinations to the iframe
 function createUserButtons(users, travelDestinations, container, iframe) {
 	clearUserButtons(container);
@@ -89,7 +83,12 @@ function createUserButtons(users, travelDestinations, container, iframe) {
 
 	paginatedUsers.forEach((user) => {
 		const button = document.createElement('button');
-		button.textContent = user.username;
+		// button.textContent = user.username; - in order to be able to add both username and countries
+
+		const filteredDestinations = travelDestinations.filter((destination) => destination.userId === user._id);
+		const uniqueCountries = new Set(filteredDestinations.map((destination) => destination.country));
+		button.textContent = `${user.username} (${uniqueCountries.size} countries)`;
+
 		button.addEventListener('click', () => handleUserButtonClick(user, travelDestinations, iframe, button));
 		container.appendChild(button);
 	});
@@ -127,12 +126,12 @@ function updateUserButtons() {
 document.getElementById('nextButton').addEventListener('click', nextPage);
 document.getElementById('prevButton').addEventListener('click', prevPage);
 
+// When a user button is clicked
 function handleUserButtonClick(user, travelDestinations, iframe, button) {
 	sessionStorage.setItem('selectedUser', user.username);
 	sessionStorage.setItem('selectedUserId', user._id);
 
 	const filteredDestinations = travelDestinations.filter((destination) => destination.userId === user._id);
-
 	const uniqueCountries = new Set(filteredDestinations.map((destination) => destination.country));
 	console.log(uniqueCountries); // This will log the Set of unique countries
 
@@ -147,6 +146,7 @@ function handleUserButtonClick(user, travelDestinations, iframe, button) {
 	hideSidebar();
 }
 
+// populate logged in user card
 function populateUserCard(loggedInUserName, loggedInUserId, travelDestinations, card, iframe) {
 	const profileName = document.querySelector('#profile-data h3');
 	const profileCountryCount = document.querySelector('#country-count span');
@@ -160,6 +160,7 @@ function populateUserCard(loggedInUserName, loggedInUserId, travelDestinations, 
 	card.addEventListener('click', () => handleUserCardClick(loggedInUserId, loggedInUserName, uniqueCountries, iframe));
 }
 
+// making sure the user card is also clickable and shows data
 function handleUserCardClick(loggedInUserId, loggedInUserName, uniqueCountries, iframe) {
 	sessionStorage.setItem('selectedUser', loggedInUserName);
 	sessionStorage.setItem('selectedUserId', loggedInUserId);
