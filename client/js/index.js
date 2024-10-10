@@ -86,9 +86,6 @@ function createUserButtons(users, travelDestinations, container, iframe) {
 		//adding this class in order to expand the content of the user button
 		button.classList.add('expandable-button');
 
-		const filteredDestinations = travelDestinations.filter((destination) => destination.userId === user._id);
-		// const uniqueCountries = new Set(filteredDestinations.map((destination) => destination.country));
-		// button.textContent = `${user.username} (${uniqueCountries.size} countries)`;
 		button.textContent = user.username;
 
 		// Create an expandable-content div and attach it to the button
@@ -196,7 +193,7 @@ function toggleButtonContent(button, contentLoader) {
 
 function loadUserDestinations(uniqueCountries, container) {
 	// Create the content for the expanded view
-	let content = `<strong>Countries Visited:</strong><br> ${uniqueCountries.size}`;
+	let content = `<strong>Countries Visited:</strong><br> [ ${uniqueCountries.size} ]`;
 
 	container.innerHTML = content;
 }
