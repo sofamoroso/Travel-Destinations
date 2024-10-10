@@ -21,6 +21,11 @@ main {
 	padding: 1rem 2rem;
 }
 
+#deleteAccountButton {
+	color: var(--text-color);
+	background-color: var(--input-bg-color);
+}
+
 button {
 	width: auto; /* Full width of the sidebar */
 	padding: 10px 15px; /* Padding for comfort */
