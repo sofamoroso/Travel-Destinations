@@ -135,6 +135,7 @@ document.getElementById('prevButton').addEventListener('click', prevPage);
 
 // When a user button is clicked
 function handleUserButtonClick(user, travelDestinations, iframe, button) {
+	console.log('Button clicked:', user.username); // Add this line
 	sessionStorage.setItem('selectedUser', user.username);
 	sessionStorage.setItem('selectedUserId', user._id);
 
@@ -174,6 +175,8 @@ function toggleButtonContent(button, contentLoader) {
 
 	// Collapse the currently expanded button if it exists and isn't the one being clicked
 	if (currentlyExpandedButton && currentlyExpandedButton !== button) {
+		console.log('Currently expanded button:', currentlyExpandedButton);
+
 		const previousExpandableContent = currentlyExpandedButton.querySelector('.expandable-content');
 		previousExpandableContent.style.display = 'none';
 		currentlyExpandedButton.classList.remove('expanded');
@@ -223,13 +226,18 @@ function handleUserCardClick(loggedInUserId, loggedInUserName, uniqueCountries, 
 	sessionStorage.setItem('selectedUserId', loggedInUserId);
 	const profileCard = document.getElementById('profile-card');
 
-
 	console.log(uniqueCountries); // This will log the Set of unique countries
 
 	iframe.contentWindow.postMessage({ action: 'visitedPlaces', travelDestinations: uniqueCountries }, '*');
-	
+
 	profileCard.classList.add('active');
 	document.querySelectorAll('#user-buttons button').forEach((btn) => btn.classList.remove('active'));
+
+	// Collapse the currently expanded button if it exists
+	if (currentlyExpandedButton) {
+		toggleButtonContent(currentlyExpandedButton, null); // Collapse it
+		document.querySelectorAll('#user-buttons button').forEach((btn) => btn.classList.remove('expandable-button'));
+	}
 
 	const addDestinationButtons = document.querySelectorAll('.addDestinationBtn');
 	toggleButtonVisibility(Array.from(addDestinationButtons));
