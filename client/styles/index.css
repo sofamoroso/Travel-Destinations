@@ -66,7 +66,6 @@ button {
 .navbar a {
 	color: white;
 	text-decoration: none;
-	margin: 0 1.2rem;
 	font-weight: bold;
 }
 
@@ -203,25 +202,6 @@ iframe {
 	background-color: var(--primary-color); /* Darker blue on hover */
 }
 
-/* .community-features button {
-	width: 100%;
-	margin-bottom: 5px;
-}
-
-.expandable-button.expanded {
-	height: auto;
-	background-color: #fff;
-	color: var(--text-color);
-}
-
-.expandable-content {
-	display: none;
-	margin-top: 10px;
-}
-.expandable-button.expanded .expandable-content {
-	display: block;
-} */
-
 /* Main container for buttons */
 .community-features {
 	display: flex;
@@ -267,4 +247,11 @@ iframe {
 }
 .expandable-button.expanded #menu-arrow::after {
 	color: var(--primary-color);
+}
+
+@media only screen and (max-width: 600px) {
+	main {
+		display: flex;
+		flex-direction: column;
+	}
 }

@@ -45,3 +45,9 @@ path:hover {
 	display: none;
 	z-index: 1000;
 }
+
+@media only screen and (max-width: 600px) {
+	body {
+		padding: 0;
+	}
+}
