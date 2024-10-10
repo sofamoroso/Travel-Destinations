@@ -52,7 +52,6 @@ async function loadData() {
 		communityUsers = users.filter((user) => user._id !== loggedInUserId);
 		allTravelDestinations = travelDestinations;
 		// sortUsers(users);
-		// createUserButtons(users, travelDestinations, userButtonsContainer, iframe, loggedInUserId);
 		populateUserCard(loggedInUserName, loggedInUserId, travelDestinations, profileCard, iframe);
 		createUserButtons(communityUsers, travelDestinations, userButtonsContainer, iframe);
 	} else {
@@ -83,11 +82,18 @@ function createUserButtons(users, travelDestinations, container, iframe) {
 
 	paginatedUsers.forEach((user) => {
 		const button = document.createElement('button');
-		// button.textContent = user.username; - in order to be able to add both username and countries
+		//adding this class in order to expand the content of the user button
+		button.classList.add('expandable-button');
 
 		const filteredDestinations = travelDestinations.filter((destination) => destination.userId === user._id);
-		const uniqueCountries = new Set(filteredDestinations.map((destination) => destination.country));
-		button.textContent = `${user.username} (${uniqueCountries.size} countries)`;
+		// const uniqueCountries = new Set(filteredDestinations.map((destination) => destination.country));
+		// button.textContent = `${user.username} (${uniqueCountries.size} countries)`;
+		button.textContent = user.username;
+
+		// Create an expandable-content div and attach it to the button
+		const expandableContent = document.createElement('div');
+		expandableContent.classList.add('expandable-content');
+		button.appendChild(expandableContent);
 
 		button.addEventListener('click', () => handleUserButtonClick(user, travelDestinations, iframe, button));
 		container.appendChild(button);
@@ -135,15 +141,61 @@ function handleUserButtonClick(user, travelDestinations, iframe, button) {
 	const uniqueCountries = new Set(filteredDestinations.map((destination) => destination.country));
 	console.log(uniqueCountries); // This will log the Set of unique countries
 
+	//sending the data to the iframe
 	iframe.contentWindow.postMessage({ action: 'visitedPlaces', travelDestinations: uniqueCountries }, '*');
 
 	document.querySelectorAll('#user-buttons button').forEach((btn) => btn.classList.remove('active'));
 	button.classList.add('active');
 
+	// Show/hide destination-specific buttons
 	const addDestinationButtons = document.querySelectorAll('.addDestinationBtn');
 	toggleButtonVisibility(Array.from(addDestinationButtons));
 
+	// Expand/collapse button content
+	const expandableContent = button.querySelector('.expandable-content');
+	toggleButtonContent(button, (expandableContent) => loadUserDestinations(uniqueCountries, expandableContent));
+
 	hideSidebar();
+}
+
+//this is added to follow the state of what i expanded and what not
+let currentlyExpandedButton = null;
+
+// Function to expand/collapse the user button
+function toggleButtonContent(button, contentLoader) {
+	const expandableContent = button.querySelector('.expandable-content');
+	// is the button currently expanded
+	const isExpanded = button.classList.contains('expanded');
+
+	// Collapse the currently expanded button if it exists and isn't the one being clicked
+	if (currentlyExpandedButton && currentlyExpandedButton !== button) {
+		const previousExpandableContent = currentlyExpandedButton.querySelector('.expandable-content');
+		previousExpandableContent.style.display = 'none';
+		currentlyExpandedButton.classList.remove('expanded');
+	}
+
+	// Toggle the clicked button's state
+	if (isExpanded) {
+		expandableContent.style.display = 'none';
+		button.classList.remove('expanded');
+		currentlyExpandedButton = null; // No button is expanded
+	} else {
+		expandableContent.style.display = 'block';
+		button.classList.add('expanded');
+		currentlyExpandedButton = button; // Update the currently expanded button
+
+		// Load content if the contentLoader function is provided
+		if (typeof contentLoader === 'function') {
+			contentLoader(expandableContent);
+		}
+	}
+}
+
+function loadUserDestinations(uniqueCountries, container) {
+	// Create the content for the expanded view
+	let content = `<strong>Countries Visited:</strong><br> ${uniqueCountries.size}`;
+
+	container.innerHTML = content;
 }
 
 // populate logged in user card
