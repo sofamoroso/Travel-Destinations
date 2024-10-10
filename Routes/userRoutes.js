@@ -22,7 +22,10 @@ router.post('/api/register', async (req, res) => {
 	// Our register logic starts here
 	try {
 		// Get user input
-		const { username, password, email } = req.body;
+		let { username, password, email } = req.body;
+
+		// Sanitize username
+        username = username.toLowerCase();
 
 		// Validate user input
 		if (!(username && email && password)) {
@@ -62,7 +65,10 @@ router.post('/api/register', async (req, res) => {
 router.post('/api/login', async (req, res) => {
 	try {
 		// Get user input
-		const { username, password } = req.body;
+		let { username, password } = req.body;
+
+		// Sanitize username
+        username = username.toLowerCase();
 
 		// Validate user input
 		if (!(username && password)) {

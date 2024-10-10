@@ -119,6 +119,13 @@ button:active {
 	text-align: center; /* Center text */
 	visibility: hidden;
 	margin: 0;
+	opacity: 0;
+	transition: visibility 0s, opacity 0.5s ease-in-out;
+}
+
+#login-status-message.visible, #register-status-message.visible {
+    visibility: visible;
+    opacity: 1;
 }
 
 /* Centering content */
