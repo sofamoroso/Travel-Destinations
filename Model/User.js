@@ -8,6 +8,22 @@ const userSchema = new Schema({
         required: [true, 'Username is required'],
         minlength: [3, 'Username must be at least 3 characters long'],
         maxlength: [30, 'Username must be at most 30 characters long'],
+        validate: [
+            {
+                validator: function (v) {
+                    // Prevent spaces in the username
+                    return !/\s/.test(v);
+                },
+                message: props => 'Username should not contain spaces',
+            },
+            {
+                validator: function (v) {
+                    // Allow only alphanumeric characters and underscores
+                    return /^[a-zA-Z0-9_]+$/.test(v);
+                },
+                message: props => 'Username should contain only letters, numbers, and underscores',
+            }
+        ]    
     },
     password: {
         type: String,
