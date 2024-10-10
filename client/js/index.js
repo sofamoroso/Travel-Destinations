@@ -1,6 +1,6 @@
 import { deleteDestination, fetchTravelDestinationsByUserAndCountry, fetchUsers, fetchTravelDestinations } from './dataService.js';
 
-const usersPerPage = 5; 
+const usersPerPage = 5;
 let currentPage = 0;
 let communityUsers = [];
 let allTravelDestinations = [];
@@ -53,7 +53,6 @@ async function loadData() {
 		communityUsers = users.filter((user) => user._id !== loggedInUserId);
 		allTravelDestinations = travelDestinations;
 		// sortUsers(users);
-		// createUserButtons(users, travelDestinations, userButtonsContainer, iframe, loggedInUserId);
 		populateUserCard(loggedInUserName, loggedInUserId, travelDestinations, profileCard, iframe);
 		createUserButtons(communityUsers, travelDestinations, userButtonsContainer, iframe);
 	} else {
@@ -73,61 +72,68 @@ function clearUserButtons(container) {
 	container.innerHTML = '';
 }
 
-// function sortUsers(users, loggedInUserId) {
-//     users.sort((a, b) =>
-//         a._id === loggedInUserId ? -1 : b._id === loggedInUserId ? 1 : 0
-//     );
-// }
-
 // Function to create user buttons and send travel destinations to the iframe
 function createUserButtons(users, travelDestinations, container, iframe) {
-    clearUserButtons(container);
+	clearUserButtons(container);
 
-    // Calculate start and end index
-    const start = currentPage * usersPerPage;
-    const end = start + usersPerPage;
-    const paginatedUsers = users.slice(start, end);
+	// Calculate start and end index
+	const start = currentPage * usersPerPage;
+	const end = start + usersPerPage;
+	const paginatedUsers = users.slice(start, end);
 
-    paginatedUsers.forEach((user) => {
-        const button = document.createElement('button');
-        button.textContent = user.username;
-        button.addEventListener('click', () => handleUserButtonClick(user, travelDestinations, iframe, button));
-        container.appendChild(button);
-    });
+	paginatedUsers.forEach((user) => {
+		const button = document.createElement('button');
+		//adding this class in order to expand the content of the user button
+		button.classList.add('expandable-button');
 
-    // Enable/disable buttons based on the current page
-    document.getElementById('prevButton').style.visibility  = currentPage === 0 ? 'hidden' : 'visible';
-    document.getElementById('nextButton').style.visibility  = end >= users.length ? 'hidden' : 'visible';
+		const filteredDestinations = travelDestinations.filter((destination) => destination.userId === user._id);
+		// const uniqueCountries = new Set(filteredDestinations.map((destination) => destination.country));
+		// button.textContent = `${user.username} (${uniqueCountries.size} countries)`;
+		button.textContent = user.username;
+
+		// Create an expandable-content div and attach it to the button
+		const expandableContent = document.createElement('div');
+		expandableContent.classList.add('expandable-content');
+		button.appendChild(expandableContent);
+
+		button.addEventListener('click', () => handleUserButtonClick(user, travelDestinations, iframe, button));
+		container.appendChild(button);
+	});
+
+	// Enable/disable buttons based on the current page
+	document.getElementById('prevButton').style.visibility = currentPage === 0 ? 'hidden' : 'visible';
+	document.getElementById('nextButton').style.visibility = end >= users.length ? 'hidden' : 'visible';
 }
 
 // Function to handle next button click
 function nextPage() {
-    if ((currentPage + 1) * usersPerPage < communityUsers.length) {
-        currentPage++;
-        updateUserButtons();
-    }
+	if ((currentPage + 1) * usersPerPage < communityUsers.length) {
+		currentPage++;
+		updateUserButtons();
+	}
 }
 
 // Function to handle previous button click
 function prevPage() {
-    if (currentPage > 0) {
-        currentPage--;
-        updateUserButtons();
-    }
+	if (currentPage > 0) {
+		currentPage--;
+		updateUserButtons();
+	}
 }
 
 // Function to update user buttons based on current page
 function updateUserButtons() {
-    const userButtonsContainer = document.getElementById('user-buttons');
-    const iframe = document.getElementById('worldMapIframe');
+	const userButtonsContainer = document.getElementById('user-buttons');
+	const iframe = document.getElementById('worldMapIframe');
 
-    createUserButtons(communityUsers, allTravelDestinations, userButtonsContainer, iframe);
+	createUserButtons(communityUsers, allTravelDestinations, userButtonsContainer, iframe);
 }
 
 // Event listeners for buttons
 document.getElementById('nextButton').addEventListener('click', nextPage);
 document.getElementById('prevButton').addEventListener('click', prevPage);
 
+// When a user button is clicked
 function handleUserButtonClick(user, travelDestinations, iframe, button) {
 	sessionStorage.setItem('selectedUser', user.username);
 	sessionStorage.setItem('selectedUserId', user._id);
@@ -138,6 +144,7 @@ function handleUserButtonClick(user, travelDestinations, iframe, button) {
 	const uniqueCountries = new Set(filteredDestinations.map((destination) => destination.country));
 	console.log(uniqueCountries); // This will log the Set of unique countries
 
+	//sending the data to the iframe
 	iframe.contentWindow.postMessage({ action: 'visitedPlaces', travelDestinations: uniqueCountries }, '*');
 
 	profileCard.classList.remove('active');
@@ -145,12 +152,58 @@ function handleUserButtonClick(user, travelDestinations, iframe, button) {
 	document.querySelectorAll('#user-buttons button').forEach((btn) => btn.classList.remove('active'));
 	button.classList.add('active');
 
+	// Show/hide destination-specific buttons
 	const addDestinationButtons = document.querySelectorAll('.addDestinationBtn');
 	toggleButtonVisibility(Array.from(addDestinationButtons));
+
+	// Expand/collapse button content
+	const expandableContent = button.querySelector('.expandable-content');
+	toggleButtonContent(button, (expandableContent) => loadUserDestinations(uniqueCountries, expandableContent));
 
 	hideSidebar();
 }
 
+//this is added to follow the state of what i expanded and what not
+let currentlyExpandedButton = null;
+
+// Function to expand/collapse the user button
+function toggleButtonContent(button, contentLoader) {
+	const expandableContent = button.querySelector('.expandable-content');
+	// is the button currently expanded
+	const isExpanded = button.classList.contains('expanded');
+
+	// Collapse the currently expanded button if it exists and isn't the one being clicked
+	if (currentlyExpandedButton && currentlyExpandedButton !== button) {
+		const previousExpandableContent = currentlyExpandedButton.querySelector('.expandable-content');
+		previousExpandableContent.style.display = 'none';
+		currentlyExpandedButton.classList.remove('expanded');
+	}
+
+	// Toggle the clicked button's state
+	if (isExpanded) {
+		expandableContent.style.display = 'none';
+		button.classList.remove('expanded');
+		currentlyExpandedButton = null; // No button is expanded
+	} else {
+		expandableContent.style.display = 'block';
+		button.classList.add('expanded');
+		currentlyExpandedButton = button; // Update the currently expanded button
+
+		// Load content if the contentLoader function is provided
+		if (typeof contentLoader === 'function') {
+			contentLoader(expandableContent);
+		}
+	}
+}
+
+function loadUserDestinations(uniqueCountries, container) {
+	// Create the content for the expanded view
+	let content = `<strong>Countries Visited:</strong><br> ${uniqueCountries.size}`;
+
+	container.innerHTML = content;
+}
+
+// populate logged in user card
 function populateUserCard(loggedInUserName, loggedInUserId, travelDestinations, card, iframe) {
 	const profileName = document.querySelector('#profile-data h3');
 	const profileCountryCount = document.querySelector('#country-count span');
@@ -164,6 +217,7 @@ function populateUserCard(loggedInUserName, loggedInUserId, travelDestinations, 
 	card.addEventListener('click', () => handleUserCardClick(loggedInUserId, loggedInUserName, uniqueCountries, iframe));
 }
 
+// making sure the user card is also clickable and shows data
 function handleUserCardClick(loggedInUserId, loggedInUserName, uniqueCountries, iframe) {
 	sessionStorage.setItem('selectedUser', loggedInUserName);
 	sessionStorage.setItem('selectedUserId', loggedInUserId);

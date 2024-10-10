@@ -166,7 +166,7 @@ async function handleDeleteAccount() {
 const login = async (username, password) => {
 	const LOGIN = "login";
 	try {
-		const response = await fetch('http://localhost:3000/api/login', {
+		const response = await fetch('/api/login', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -177,7 +177,7 @@ const login = async (username, password) => {
 
 		if (response.ok) {
 			// Show popup after successful registration
-			showPopupMessage('Login successful!', 3000, LOGIN, !!data.error);
+			showPopupMessage('Login successful!', LOGIN, !!data.error);
 			console.log(data);
 			
 			// Store JWT token in session storage
@@ -196,7 +196,7 @@ const login = async (username, password) => {
 		} else {
 			console.log(data);
 			
-			showPopupMessage(data.error, 3000, LOGIN, !!data.error);
+			showPopupMessage(data.error, LOGIN, !!data.error);
 		}
 	} catch (error) {
 		console.error('Error logging in:', error);
@@ -209,7 +209,7 @@ const register = async (username, password, email) => {
 	const REGISTER = "register";
 
 	try {
-		const response = await fetch('http://localhost:3000/api/register', {
+		const response = await fetch('/api/register', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -219,7 +219,7 @@ const register = async (username, password, email) => {
 		const data = await response.json();
 
 		if (response.ok) {
-			showPopupMessage(data.message, 3000, REGISTER, !!data.error);
+			showPopupMessage(data.message, REGISTER, !!data.error);
 			// Add a delay before closing the register modal and showing the login modal
 			setTimeout(() => {
 				registerModal.close();
@@ -227,7 +227,7 @@ const register = async (username, password, email) => {
 			}, 1500);
 			
 		} else {			
-			showPopupMessage(data.error, 3000, REGISTER, !!data.error);
+			showPopupMessage(data.error, REGISTER, !!data.error);
 		}
 	} catch (error) {
 		console.error('Error registering user:', error);
@@ -235,7 +235,7 @@ const register = async (username, password, email) => {
 };
 
 
-function showPopupMessage(message, duration = 3000, formType, error) {
+function showPopupMessage(message, formType, error) {
     // Create the popup container
 	let statusMessage = null;
 
@@ -244,7 +244,8 @@ function showPopupMessage(message, duration = 3000, formType, error) {
 	} else if (formType === "register") {
 		statusMessage = document.querySelector("#register-status-message")
 	}
-
+	
+	// Set the new message
 	statusMessage.textContent = message;
 
 	if(error !== true){
@@ -252,10 +253,12 @@ function showPopupMessage(message, duration = 3000, formType, error) {
 	}
 
 	// Display the popup
-    statusMessage.style.visibility = "visible";
+    statusMessage.classList.add("visible");
 
-    // Remove the popup after the specified duration
-    setTimeout(() => {
-        statusMessage.style.visibility = "hidden";
-    }, duration);
+    // Remove the popup after the specified duration only if error is not true
+    if (!error) {
+        setTimeout(() => {
+            statusMessage.classList.remove("visible");
+        }, 3000);
+    }
 }
