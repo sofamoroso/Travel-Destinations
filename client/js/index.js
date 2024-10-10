@@ -49,6 +49,7 @@ async function loadData() {
 		const loggedInUserName = sessionStorage.getItem('logged-username');
 		const profileCard = document.getElementById('profile-card');
 
+		profileCard.classList.add('active');
 		communityUsers = users.filter((user) => user._id !== loggedInUserId);
 		allTravelDestinations = travelDestinations;
 		// sortUsers(users);
@@ -132,11 +133,14 @@ function handleUserButtonClick(user, travelDestinations, iframe, button) {
 	sessionStorage.setItem('selectedUserId', user._id);
 
 	const filteredDestinations = travelDestinations.filter((destination) => destination.userId === user._id);
+	const profileCard = document.getElementById('profile-card');
 
 	const uniqueCountries = new Set(filteredDestinations.map((destination) => destination.country));
 	console.log(uniqueCountries); // This will log the Set of unique countries
 
 	iframe.contentWindow.postMessage({ action: 'visitedPlaces', travelDestinations: uniqueCountries }, '*');
+
+	profileCard.classList.remove('active');
 
 	document.querySelectorAll('#user-buttons button').forEach((btn) => btn.classList.remove('active'));
 	button.classList.add('active');
@@ -163,11 +167,14 @@ function populateUserCard(loggedInUserName, loggedInUserId, travelDestinations, 
 function handleUserCardClick(loggedInUserId, loggedInUserName, uniqueCountries, iframe) {
 	sessionStorage.setItem('selectedUser', loggedInUserName);
 	sessionStorage.setItem('selectedUserId', loggedInUserId);
+	const profileCard = document.getElementById('profile-card');
+
 
 	console.log(uniqueCountries); // This will log the Set of unique countries
 
 	iframe.contentWindow.postMessage({ action: 'visitedPlaces', travelDestinations: uniqueCountries }, '*');
-
+	
+	profileCard.classList.add('active');
 	document.querySelectorAll('#user-buttons button').forEach((btn) => btn.classList.remove('active'));
 
 	const addDestinationButtons = document.querySelectorAll('.addDestinationBtn');

@@ -144,7 +144,12 @@ iframe {
 }
 
 #profile-card:hover {
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	cursor: pointer;
+	transform: translateY(-3%);
+}
+
+#profile-card.active {
+	box-shadow: var(--primary-color) 0px 0px 12px;
 	cursor: pointer;
 	transform: translateY(-3%);
 }
@@ -197,8 +202,6 @@ iframe {
 .arrow:hover {
 	background-color: var(--primary-color); /* Darker blue on hover */
 }
-
-
 
 .community-features {
 	margin-bottom: 30px;
