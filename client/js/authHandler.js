@@ -166,7 +166,7 @@ async function handleDeleteAccount() {
 const login = async (username, password) => {
 	const LOGIN = "login";
 	try {
-		const response = await fetch('http://localhost:3000/api/login', {
+		const response = await fetch('/api/login', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -209,7 +209,7 @@ const register = async (username, password, email) => {
 	const REGISTER = "register";
 
 	try {
-		const response = await fetch('http://localhost:3000/api/register', {
+		const response = await fetch('/api/register', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
