@@ -3,10 +3,201 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Travel Destinations</title>
+		<title>Documentation</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				line-height: 1.6;
+				background-color: #f4f4f4;
+				padding: 20px;
+			}
+			header,
+			section {
+				background: #fff;
+				border-radius: 5px;
+				box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+				margin-bottom: 20px;
+				padding: 20px;
+			}
+			header {
+				text-align: center;
+				background-color: #3f51b5;
+				color: white;
+				padding: 20px 0;
+			}
+			h1,
+			h2,
+			h3 {
+				margin-top: 0;
+			}
+			pre {
+				background: #2d2d2d;
+				color: #f8f8f2;
+				padding: 15px;
+				overflow: auto;
+				border-radius: 5px;
+			}
+			.code {
+				margin-bottom: 20px;
+			}
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				margin-top: 10px;
+			}
+			th,
+			td {
+				border: 1px solid #ddd;
+				padding: 8px;
+				text-align: left;
+			}
+			th {
+				background-color: #3f51b5;
+				color: white;
+			}
+			.method {
+				font-weight: bold;
+				background-color: #007bff;
+				color: white;
+				padding: 2px 6px;
+				border-radius: 4px;
+			}
+		</style>
 	</head>
 	<body>
-		<h1>Travel Destinations</h1>
-		<p>Documenation here!</p>
+		<header>
+			<h1>Travel Destination</h1>
+		</header>
+
+		<section>
+			<h2>Group Members</h2>
+			<ul>
+				<li>Andrian Enachi</li>
+				<li>Sofia Amoroso</li>
+				<li>Kamarini Moragianni</li>
+				<li>Evgenia</li>
+			</ul>
+		</section>
+
+		<section>
+			<h2>Database Diagram</h2>
+			<img src="assets/database-diagram.png" alt="Database Diagram" style="max-width: 100%; height: auto" />
+		</section>
+
+		<section>
+			<h2>Features and Code Examples</h2>
+			<h3>Feature 1: [Feature Name]</h3>
+			<p>[Short description of what this feature does.]</p>
+			<div class="code">
+				<pre>
+// Example code snippet for the feature (e.g., a route, a function)
+app.get('/api/items', (req, res) => {
+    Item.find()
+        .then(items => res.json(items))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+            </pre
+				>
+			</div>
+
+			<h3>Feature 2: [Feature Name]</h3>
+			<p>[Short description of what this feature does.]</p>
+			<div class="code">
+				<pre>
+// Example code snippet for another feature (e.g., a controller function)
+const createUser = async (req, res) => {
+    try {
+        const user = new User(req.body);
+        await user.save();
+        res.status(201).json(user);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
+            </pre
+				>
+			</div>
+		</section>
+
+		<section>
+			<h2>API Endpoints</h2>
+			<p>Here are the main API endpoints used in our project:</p>
+
+			<h3>TravelRoutes</h3>
+			<table>
+				<thead>
+					<tr>
+						<th>Method</th>
+						<th>Path</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><span class="method">GET</span></td>
+						<td>/api/travel</td>
+						<td>Get all travel destinations.</td>
+					</tr>
+					<tr>
+						<td><span class="method">GET</span></td>
+						<td>/api/travel/:id</td>
+						<td>Get a travel destination by ID.</td>
+					</tr>
+					<tr>
+						<td><span class="method">POST</span></td>
+						<td>/api/travel</td>
+						<td>Create a new travel destination.</td>
+					</tr>
+					<tr>
+						<td><span class="method">PUT</span></td>
+						<td>/api/travel/:id</td>
+						<td>Update a travel destination by ID.</td>
+					</tr>
+					<tr>
+						<td><span class="method">DELETE</span></td>
+						<td>/api/travel/:id</td>
+						<td>Delete a travel destination by ID.</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>UserRoutes</h3>
+			<table>
+				<thead>
+					<tr>
+						<th>Method</th>
+						<th>Path</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><span class="method">GET</span></td>
+						<td>/api/users</td>
+						<td>Get all users.</td>
+					</tr>
+					<tr>
+						<td><span class="method">GET</span></td>
+						<td>/api/users/:id</td>
+						<td>Get a user by ID.</td>
+					</tr>
+					<tr>
+						<td><span class="method">POST</span></td>
+						<td>/api/users</td>
+						<td>Create a new user.</td>
+					</tr>
+					<tr>
+						<td><span class="method">PUT</span></td>
+						<td>/api/users/:id</td>
+						<td>Update a user by ID.</td>
+					</tr>
+					<tr>
+						<td><span class="method">DELETE</span></td>
+						<td>/api/users/:id</td>
+						<td>Delete a user by ID.</td>
+					</tr>
+				</tbody>
+			</table>
+		</section>
 	</body>
 </html>
