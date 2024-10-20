@@ -85,39 +85,100 @@
 		</section>
 
 		<section>
-			<h2>Features and Code Examples</h2>
-			<h3>Feature 1: [Feature Name]</h3>
-			<p>[Short description of what this feature does.]</p>
+
+			<h3>Serving Static Files</h3>
+			<p>The express.static middleware is used to serve static files from the client directory. This middleware allows you to serve HTML, CSS, JavaScript, images, and other static assets directly from the specified directory.</p>
 			<div class="code">
 				<pre>
-// Example code snippet for the feature (e.g., a route, a function)
-app.get('/api/items', (req, res) => {
-    Item.find()
-        .then(items => res.json(items))
-        .catch(err => res.status(400).json('Error: ' + err));
-});
-            </pre
-				>
+app.use(express.static(path.join(__dirname, 'client')));
+           	 	</pre>
 			</div>
 
-			<h3>Feature 2: [Feature Name]</h3>
-			<p>[Short description of what this feature does.]</p>
+			<h3>Routing for HTML Pages</h3>
+			<p>Define routes for different HTML pages</p>
 			<div class="code">
 				<pre>
-// Example code snippet for another feature (e.g., a controller function)
-const createUser = async (req, res) => {
-    try {
-        const user = new User(req.body);
-        await user.save();
-        res.status(201).json(user);
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
-};
-            </pre
-				>
+app.get('/', (req, res) => {
+	res.sendFile(path.join(__dirname, 'client', 'index.html'));
+});
+
+app.get('/docs', (req, res) => {
+	res.sendFile(path.join(__dirname, 'client', 'docs.html'));
+});
+           	 	</pre>
 			</div>
 		</section>
+
+		<section>
+			<h2>Embedding worldMap.html Inside index.html using iframe </h2>
+			<h3>HTML Code in index.html:</h3>
+			<div class="code">
+				<pre>
+&#60;iframe title="mapFrame" id="worldMapIframe" src="worldMap.html"&#62&#60;/iframe&#62
+
+<iframe title="mapFrame" id="worldMapIframe" src="worldMap.html"></iframe>
+           	 	</pre>
+			</div>
+
+			<h3>Communication Between Parent HTML and Embedded Iframe</h3>
+			<p>Window: postMessage() method</p>
+			<div class="code">
+				<pre>
+index.js
+
+<i>//sending the data to the iframe</i>
+
+const iframe = document.getElementById('worldMapIframe');
+iframe.contentWindow.postMessage({ action: 'visitedPlaces', travelDestinations: uniqueCountries }, '*');
+           	 	</pre>
+			</div>
+
+			<div class="code">
+				<pre>
+map.js
+					
+<i>//iframe receiving the data from the parent window</i>
+
+window.addEventListener('message', (event) => {
+	if (event.data && event.data.action === 'visitedPlaces') {
+		const uniqueCountries = event.data.travelDestinations;
+		highlightVisitedPlaces(uniqueCountries);
+	}
+});
+           	 	</pre>
+			</div>
+
+			<br>
+			<h3>Showing the side bar.</h3>
+			<div class="code">
+				<pre>
+map.js
+
+<i>//sending the data to the parent window</i>
+
+function addClickListenersToCountries() {
+	....//.....//......
+	 blablabla
+	....//.....//......
+
+	window.parent.postMessage({ action: 'countryClicked', path: country, countryCode: path.id }, '*');
+}
+           	 	</pre>
+			</div>
+
+			<div class="code">
+				<pre>
+index.js
+					
+<i>//parent window receiving the data from the iframe</i>
+
+window.addEventListener('message', (event) => {
+	if (event.data && event.data.action === 'countryClicked') {
+		<u>showSidebar(event.data.path, event.data.countryCode);</u>
+	}
+});
+           	 	</pre>
+			</div>
 
 		<section>
 			<h2>API Endpoints</h2>
@@ -135,27 +196,32 @@ const createUser = async (req, res) => {
 				<tbody>
 					<tr>
 						<td><span class="method">GET</span></td>
-						<td>/api/travel</td>
+						<td>/api/travel-desinations</td>
 						<td>Get all travel destinations.</td>
 					</tr>
 					<tr>
 						<td><span class="method">GET</span></td>
-						<td>/api/travel/:id</td>
-						<td>Get a travel destination by ID.</td>
+						<td>/api/travel-destinations/:userId/:country</td>
+						<td>Get all destinations for a specific user and country.</td>
+					</tr>
+					<tr>
+						<td><span class="method">GET</span></td>
+						<td>/api/top-countries</td>
+						<td>Get the top 5 countries with the most travel destinations.</td>
 					</tr>
 					<tr>
 						<td><span class="method">POST</span></td>
-						<td>/api/travel</td>
+						<td>/api/travel-desinations</td>
 						<td>Create a new travel destination.</td>
 					</tr>
 					<tr>
 						<td><span class="method">PUT</span></td>
-						<td>/api/travel/:id</td>
+						<td>/api/travel-desinations/:id</td>
 						<td>Update a travel destination by ID.</td>
 					</tr>
 					<tr>
 						<td><span class="method">DELETE</span></td>
-						<td>/api/travel/:id</td>
+						<td>/api/travel-desinations/:id</td>
 						<td>Delete a travel destination by ID.</td>
 					</tr>
 				</tbody>
@@ -177,24 +243,19 @@ const createUser = async (req, res) => {
 						<td>Get all users.</td>
 					</tr>
 					<tr>
-						<td><span class="method">GET</span></td>
-						<td>/api/users/:id</td>
-						<td>Get a user by ID.</td>
+						<td><span class="method">POST</span></td>
+						<td>/api/login</td>
+						<td>Login.</td>
 					</tr>
 					<tr>
 						<td><span class="method">POST</span></td>
-						<td>/api/users</td>
-						<td>Create a new user.</td>
-					</tr>
-					<tr>
-						<td><span class="method">PUT</span></td>
-						<td>/api/users/:id</td>
-						<td>Update a user by ID.</td>
+						<td>/api/register</td>
+						<td>Register.</td>
 					</tr>
 					<tr>
 						<td><span class="method">DELETE</span></td>
-						<td>/api/users/:id</td>
-						<td>Delete a user by ID.</td>
+						<td>/api/users/account</td>
+						<td>Delete own account.</td>
 					</tr>
 				</tbody>
 			</table>

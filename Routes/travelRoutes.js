@@ -78,6 +78,7 @@ router.delete('/api/travel-destinations/:id', async (req, res) => {
 	}
 });
 
+// Get the top 5 countries with the most travel destinations
 router.get('/api/top-countries', async (req, res) => {
     try {
         const topCountries = await TravelDestination.aggregate([
