@@ -1,0 +1,13 @@
+# Ignore the data folder
+data/
+
+# Other ignores...
+node_modules
+*.log
+.env
+
+.idea/
+.vscode/
+
+tmp/
+*.tmp

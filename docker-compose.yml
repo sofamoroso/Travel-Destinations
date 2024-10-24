@@ -1,0 +1,27 @@
+version: '3'
+services:
+  app:
+    build: .
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "3000:3000"
+    command: npm start
+    environment:
+      NODE_ENV: development
+      MONGO_URI_REMOTE: mongodb://mongodb:27017/Travel
+      SECRET_KEY: superSecretKey
+
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data:/data/db
+
+# docker-compose up -d
+# docker-compose down
+
+# MongoDB connection string
+# mongodb://host.docker.internal:27017 
